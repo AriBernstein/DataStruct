@@ -1,39 +1,48 @@
 using System;
-using DataStruct;
-
-namespace DataStruct
-{
+namespace Fractional_Cascading {
     public class Utils {
+
+        private string sep = "\n-----\n";
+
         // A utility function tocprint array of size n */
-        public void printStringArray(int[] arr) {
+        public void printStringArray(string[] arr) {
             int n = arr.Length;
-            for (int i = 0; i < n; ++i)
-                Console.Write(arr[i] + " ");
-            Console.WriteLine();
+            string s = "";
+            for (int i = 0; i < (n-1); ++i)
+                s = s + (arr[i] + ", ");
+            s = s + arr[n-1] + sep;
+            Console.WriteLine(s);
         }
 
-        public void printCoordNodeArray(CoordinateNode[] arr) {
+        public void printIntArray(int[] arr) {
+            int n = arr.Length;
+            string s = "";
+            for (int i = 0; i < (n-1); ++i)
+                s = s + (arr[i] + ", ");
+            s = s + arr[n-1] + sep;
+            Console.WriteLine(s);
+        }
+
+        public void printDataLocationArray(int[] arr) {
+            int n = arr.Length;
+            string s = "";
+            for (int i = 0; i < (n-1); ++i)
+                s = s + "located in dimension " + (i + 1) + " at " + arr[i] + ", ";
+            s = s + "located in dimension " + n + " at: " + arr[n-1] + ", " + sep;
+            Console.WriteLine(s);
+        }
+
+        public void printNodeArray(Node[] arr) {
             string s = "";
             int n = arr.Length;
             for (int i = 0; i < (n-1); i++) {
                 s = s + (arr[i] + "\n");
             }
-            s = s + (arr[n-1] + "\n-----\n");
+            s = s + (arr[n-1] + sep);
             Console.WriteLine(s);
         }
-
-        public void printFCNodeArray(FractionalCascadingNode[] arr) {
-            String s = "";
-            int n = arr.Length;
-            for (int i = 0; i < (n-1); i++) {
-                s = s + (arr[i] + "\n");
-            }
-            s = s +(arr[n-1] + "\n-----\n");
-            Console.WriteLine(s);
-        }
-
-        public void printFCNodeMatrix(FractionalCascadingNode[][] matrx) {
-            for(int i = 0; i < matrx.Length; i++) printFCNodeArray(matrx[i]);
+        public void printNodeMatrix(Node[][] matrx) {
+            for(int i = 0; i < matrx.Length; i++) printNodeArray(matrx[i]);
         }
     }
 }

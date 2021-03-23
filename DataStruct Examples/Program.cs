@@ -6,11 +6,14 @@ namespace DataStruct_Examples
     {
         static void Main(string[] args)
         {
+            FractionalCascading.Demo();
+
             Console.WriteLine("Welcome to the data structure demos!");
             Console.WriteLine("Please select a demo:");
             Console.WriteLine("1. Timeline (Confluently persistent temporal data structure)");
             Console.WriteLine("2. TODO");
             int selection = Int32.Parse(Console.ReadLine());
+            Console.WriteLine("dbfsjdfsdj");
             switch (selection) {
                 case 0:
                     Environment.Exit(0);

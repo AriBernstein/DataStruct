@@ -1,13 +1,14 @@
 using System;
 
-namespace DataStruct
-{
+namespace Fractional_Cascading {
     // C# program for using Binary Search to find location of a
     // fractional cascading node in a list by a given attribute
     public class BinarySearchNodes {
+        public int binarySearchNode(Node[] nodeArray, int searchValue, int attrCode) {
+            return binarySearchNode(nodeArray, 0, nodeArray.Length-1, searchValue, attrCode);
+        }
 
-        private int binarySearchFCNode(FractionalCascadingNode[] nodeArray,
-                                       int l, int r, int data, int attrCode) {
+        private int binarySearchNode(Node[] nodeArray, int l, int r, int data, int attrCode) {
             // Base case
             String xNotInArrException =
                 "data: " + data + " cannot be found in FC Node array during binary search";                                                  
@@ -21,15 +22,10 @@ namespace DataStruct
             if(data == dataAtMid) return m;
 
             // Data less than element at mid, search left side
-            else if(data < dataAtMid) return binarySearchFCNode(nodeArray, l, m-1, data, attrCode);
+            else if(data < dataAtMid) return binarySearchNode(nodeArray, l, m-1, data, attrCode);
 
             // Data greater than element at mid, search right side
-            else return binarySearchFCNode(nodeArray, m+1, r, data, attrCode);
-        }
-
-        public int binarySearchFCNode(FractionalCascadingNode[] nodeArray,
-                                      int searchValue, int attrCode) {
-            return binarySearchFCNode(nodeArray, 0, nodeArray.Length-1, searchValue, attrCode);
+            else return binarySearchNode(nodeArray, m+1, r, data, attrCode);
         }
     }
 }
