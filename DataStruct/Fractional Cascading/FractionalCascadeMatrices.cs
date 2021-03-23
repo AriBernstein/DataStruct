@@ -51,7 +51,7 @@ namespace Fractional_Cascading {
                 FractionalCascadingNode currNode = fcNodeListAugmented[i];
                 for(int j = i-1; j >= 0; j--) {
                     FractionalCascadingNode prevNode = fcNodeListAugmented[j];
-                    if(prevNode.dimension != currNode.dimension) {
+                    if(prevNode.getDimension() != currNode.getDimension()) {
                         currNode.setPrevPointer(prevNode);
                         break;
                     }
@@ -63,7 +63,7 @@ namespace Fractional_Cascading {
                 FractionalCascadingNode currNode = fcNodeListAugmented[i];
                 for(int j = i + 1; j < fcNodeListAugmented.Length; j++) {
                     FractionalCascadingNode nextNode = fcNodeListAugmented[j];
-                    if(nextNode.dimension != currNode.dimension) {
+                    if(nextNode.getDimension() != currNode.getDimension()) {
                         currNode.setNextPointer(nextNode);
                         break;
                     }
@@ -214,18 +214,18 @@ namespace Fractional_Cascading {
             // -> start with matrix of coordNodes sorted by their location (xLoc)
             Console.WriteLine("CoordinateMatrix - input");
             setCoordMatrix();
-            if(print) u.printCoordMatrix(inputCoordMatrix);
+            if(print) u.printNodeMatrix(inputCoordMatrix);
 
             // Sort each array in coordinate matrix on its data value and set it
             sortCordMatrixOnData(inputCoordMatrix);
             setFCMatrixFromCordMatrix(inputCoordMatrix);
             Console.WriteLine("NodeMatrix");
-            if(print) u.printFCNodeMatrix(nodeMatrix);
+            if(print) u.printNodeMatrix(nodeMatrix);
 
             // Build and assign nodeMatrixPrime from just-assigned nodeMatrix
             setFCPrimeMatrix(unitFracDen);
             Console.WriteLine("NodeMatrixPrime");
-            if(print) u.printFCNodeMatrix(nodeMatrixPrime);
+            if(print) u.printNodeMatrix(nodeMatrixPrime);
         }
     }
 }

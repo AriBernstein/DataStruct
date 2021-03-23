@@ -26,7 +26,7 @@ namespace Fractional_Cascading {
             BinarySearchNodes bsn = new BinarySearchNodes();
             for(int i = 0; i < k; i++) {
                 CoordinateNode[] arr = inputCoordMatrix[i];
-                int indx = bsn.binarySearchCoordNode(arr, data, 0);
+                int indx = bsn.binarySearchNode(arr, data, 0);
                 int locAtIndex = arr[indx].getAttr(1);
                 locationsOfData[i] = locAtIndex;
             }

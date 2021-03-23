@@ -32,7 +32,7 @@ namespace Fractional_Cascading {
             Console.WriteLine(s);
         }
 
-        public void printCoordNodeArray(CoordinateNode[] arr) {
+        public void printNodeArray(Node[] arr) {
             string s = "";
             int n = arr.Length;
             for (int i = 0; i < (n-1); i++) {
@@ -41,22 +41,8 @@ namespace Fractional_Cascading {
             s = s + (arr[n-1] + sep);
             Console.WriteLine(s);
         }
-        public void printCoordMatrix(CoordinateNode[][] matrx) {
-            for(int i = 0; i < matrx.Length; i++) printCoordNodeArray(matrx[i]);
-        }
-
-        public void printFCNodeArray(FractionalCascadingNode[] arr) {
-            String s = "";
-            int n = arr.Length;
-            for (int i = 0; i < (n-1); i++) {
-                s = s + (arr[i] + "\n");
-            }
-            s = s +(arr[n-1] + sep);
-            Console.WriteLine(s);
-        }
-
-        public void printFCNodeMatrix(FractionalCascadingNode[][] matrx) {
-            for(int i = 0; i < matrx.Length; i++) printFCNodeArray(matrx[i]);
+        public void printNodeMatrix(Node[][] matrx) {
+            for(int i = 0; i < matrx.Length; i++) printNodeArray(matrx[i]);
         }
     }
 }
