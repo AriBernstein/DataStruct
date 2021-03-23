@@ -6,22 +6,24 @@ namespace DataStruct
 {
     public class Graph<T, TGraphNode> where TGraphNode : GraphNode<T>, new()
     {
-        LinkedList<GraphNode<T>> nodes;
+        public LinkedList<GraphNode<T>> Nodes;
+        private TGraphNode baseNode;
+        public TGraphNode BaseNode { get { return baseNode; } }
         public Graph()
         {
-            nodes = new LinkedList<GraphNode<T>>();
+            Nodes = new LinkedList<GraphNode<T>>();
         }
 
         public Graph(T baseNodeData)
         {
-            nodes = new LinkedList<GraphNode<T>>(new GraphNode<T>(baseNodeData));
+            Nodes = new LinkedList<GraphNode<T>>(new GraphNode<T>(baseNodeData));
         }
 
         public TGraphNode Add(T data)
         {
             TGraphNode newNode = new TGraphNode();
             newNode.SetData(data);
-            nodes.Add(newNode);
+            Nodes.Add(newNode);
             return newNode;
         }
 
