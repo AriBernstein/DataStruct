@@ -24,6 +24,8 @@ namespace DataStruct
             this.data = data;
         }
 
+        public T Data { get { return this.data; } }
+
         public void LinkTo(GraphNode<T> target)
         {
             this.connectedNodes.Add(target);
