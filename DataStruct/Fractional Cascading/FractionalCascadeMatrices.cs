@@ -6,21 +6,20 @@ namespace Fractional_Cascading {
     value in k lists (dimensions) with complexity of O(log(n) + k)
 
     For each list starting at list i = k-1, build list i'
-    -> these lists are  referred to as augmented or prime lists.
+    -> these lists are  referred to as promoted or prime lists.
     -> list i' contains all elements of list k-1 and every second element
        of list k.
-    -> elements from list i-1' are "augmented" into list i to build list i'
+    -> elements from list i-1' are "promoted" into list i to build list i'
     -> list 0' is sized ~2n 
     */
     public class FractionalCascadingMatrices {
         Utils u = new Utils();
-        
         private CoordinateNode[][] inputCoordMatrix;
         // Matrix of k lists of FractionalCascadingNodes, each of size n
         private FractionalCascadingNode[][] nodeMatrix;
        
         // Matrix of k-1 lists of FractionalCascadingNodes, each except for
-        // the lastaugmented from the previous list
+        // the lastPromoted from the previous list
         private FractionalCascadingNode[][] nodeMatrixPrime;
         private int n; // number of elements in each list in nodeMatrix
         private int k; // number of lists
@@ -34,24 +33,29 @@ namespace Fractional_Cascading {
         public FractionalCascadingNode[][] getFractionalCascadingNodeMatixPrime() {
             return nodeMatrixPrime;
         }
-
-        private void setPointers(FractionalCascadingNode[] fcNodeListAugmented) {
+        
+        private void setPointers(FractionalCascadingNode[] primeList) {
             /**
-            For each node in the fcNodeListAugmented, assign a previous and next
-            pointer to the previous and next nodes in the list of a different 
-            dimension.
+            primeList represents the augmented list primeList(i). It contains 
+            FractionalCascadingNodes from both the intial list(i) and
+            primeList(i - 1).
 
-            Parameter fcNodeListAugmented - list of FractionalCascadingNodes 
+            For each node in primeList(i), assign a previous and next
+            pointer to the previous and next nodes in the list that were
+            not promoted from primeList(i - 1).
+
+            Parameter primeList
+             - list of FractionalCascadingNodes 
                       containing FractionalCascadingNodes from lists of 
                       higher dimensions, ordered by the data attribute
             */
             
             // Handle previous node pointers
-            for(int i = 1; i < fcNodeListAugmented.Length; i++) {
-                FractionalCascadingNode currNode = fcNodeListAugmented[i];
+            for(int i = 1; i < primeList.Length; i++) {
+                FractionalCascadingNode currNode = primeList[i];
                 for(int j = i-1; j >= 0; j--) {
-                    FractionalCascadingNode prevNode = fcNodeListAugmented[j];
-                    if(prevNode.getDimension() != currNode.getDimension()) {
+                    FractionalCascadingNode prevNode = primeList[j];
+                    if(prevNode.isPromoted() != currNode.isPromoted()) {
                         currNode.setPrevPointer(prevNode);
                         break;
                     }
@@ -59,11 +63,12 @@ namespace Fractional_Cascading {
             }
 
             // Handle next node pointers
-            for(int i = 0; i < fcNodeListAugmented.Length - 1; i++) {
-                FractionalCascadingNode currNode = fcNodeListAugmented[i];
-                for(int j = i + 1; j < fcNodeListAugmented.Length; j++) {
-                    FractionalCascadingNode nextNode = fcNodeListAugmented[j];
-                    if(nextNode.getDimension() != currNode.getDimension()) {
+            for(int i = 0; i < primeList
+            .Length - 1; i++) {
+                FractionalCascadingNode currNode = primeList[i];
+                for(int j = i + 1; j < primeList.Length; j++) {
+                    FractionalCascadingNode nextNode = primeList[j];
+                    if(nextNode.isPromoted() != currNode.isPromoted()) {
                         currNode.setNextPointer(nextNode);
                         break;
                     }
@@ -71,7 +76,7 @@ namespace Fractional_Cascading {
             }
         }
 
-        private void setFCMatrixFromCordMatrix(CoordinateNode[][] coordNodeMatrix) {
+        private void setNodeMatrixFromCoordMatrix(CoordinateNode[][] coordNodeMatrix) {
             // Convert 2D array of CoordinateNodes into 2D array of
             // FractionalCascadingNodes. Set as nodeMatrix
             nodeMatrix = new FractionalCascadingNode[k][];
@@ -88,15 +93,15 @@ namespace Fractional_Cascading {
         }
 
         private int getPrimeListSize(double fraction, int prevPrimeListLen) {
-            // Calculate the size of a prime list, or one augmented using
+            // Calculate the size of a prime list, or one  using
             // the current list of FractinoalCascadingNodes and the previous
-            // augmented list of FractinoalCascadingNodes
+            // promoted list of FractinoalCascadingNodes
             return Convert.ToInt32(n + Math.Ceiling(prevPrimeListLen * fraction));
         }
 
         private FractionalCascadingNode[] buildListPrime(FractionalCascadingNode[] FCNodeList1,
                                                          FractionalCascadingNode[] FCNodeList2,
-                                                         int unitFracDen, int prevPrimeListLen) {
+                                                         int unitFracDen) {
             /**
             Combine all elements from fcNodeListOne and a fraction of the values from fcNodeListTwo
             to a new list of FractionalCascadingNodes. 
@@ -112,64 +117,66 @@ namespace Fractional_Cascading {
 
             double fraction = 1 / (double)unitFracDen;  // get the unit fraction
             
-            // Instantiate augmented list
-            int primeListSize = getPrimeListSize(fraction, prevPrimeListLen);       
-            FractionalCascadingNode[] fcNodeListAugmented = new FractionalCascadingNode[primeListSize];
+            // Instantiate promoted list
+            int primeListSize = getPrimeListSize(fraction, FCNodeList2.Length);       
+            FractionalCascadingNode[] primeList = new FractionalCascadingNode[primeListSize];
 
             // Build list of elements from FCNodeList2 to augment with FCNodeList1
-            FractionalCascadingNode[] fcNodeList2AugmentedNodes =
-                    new FractionalCascadingNode[(int)Math.Ceiling(prevPrimeListLen * fraction)];
+            FractionalCascadingNode[] nodesToPromote =
+                    new FractionalCascadingNode[(int)Math.Ceiling(FCNodeList2.Length * fraction)];
             
-            int c = 0; // index counter for fcNodeList2AugmentedNodes
+            int c = 0; // index counter for nodesToPromote
             for(int i = 0; i < FCNodeList2.Length; i += unitFracDen) {
-                fcNodeList2AugmentedNodes[c++] = FCNodeList2[i].makeCopy();
+                // It is essential that nodes be copied from here because this is the only
+                // state at which we can store the location in the previous list
+                nodesToPromote[c++] = FCNodeList2[i].makeCopy(true, i);
             }
             
-            // Combine elements from fcNodeList2AugmentedNodes and FCNodeList1 into fcNodeListAugmented
+            // Combine elements from nodesToPromote and FCNodeList1 into primeList
             // Maintain order
-            c = 0;      // index counter for fcNodeList2AugmentedNodes
+            c = 0;      // index counter for Fractional_Cascading
             int d = 0;  // index counter for FCNodeList1
-            int j = 0;  // index counter for fcNodeListAugmented
+            int j = 0;  // index counter for primeList
             
-            while(c < fcNodeList2AugmentedNodes.Length && d < prevPrimeListLen) {
-                if (FCNodeList1[d].getAttr(0) < fcNodeList2AugmentedNodes[c].getAttr(0)) {
-                    fcNodeListAugmented[j] = FCNodeList1[d++].makeCopy();
-                } else fcNodeListAugmented[j] = fcNodeList2AugmentedNodes[c++].makeCopy();
+            while(c < nodesToPromote.Length && d < FCNodeList2.Length) {
+                if (FCNodeList1[d].getAttr(0) < nodesToPromote[c].getAttr(0)) {
+                    primeList[j] = FCNodeList1[d++].makeCopy();
+                } else primeList[j] = nodesToPromote[c++];
                 j++;
             }
 
             // Add leftover values:
-            while(c < fcNodeList2AugmentedNodes.Length) {
-                fcNodeListAugmented[j++] = fcNodeList2AugmentedNodes[c++].makeCopy();
+            while(c < nodesToPromote.Length) {
+                primeList[j++] = nodesToPromote[c++];
             }
             while(d < n) {
-                fcNodeListAugmented[j++] = FCNodeList1[d++].makeCopy();
+                primeList[j++] = FCNodeList1[d++].makeCopy();
             }
             
             // Set elements new elements to prime, assign pointers
             // TODO- Make this more efficient
-            foreach(FractionalCascadingNode f in fcNodeListAugmented) f.prime = true;
-            setPointers(fcNodeListAugmented);
+            foreach(FractionalCascadingNode f in primeList) f.setPrime();
+            setPointers(primeList);
             
-            return fcNodeListAugmented;
+            return primeList;
         }
 
-        private void setFCPrimeMatrix(int unitFracDen) {
-            // re. k-1 size of nodeMatrixPrime d1, augmented lists are in terms of d and d-1
+        private void setNodeMatrixPrime(int unitFracDen) {
+            // re. k-1 size of nodeMatrixPrime d1, promoted lists are in terms of d and d-1
             // st. primes of every list total at k-1 lists
             nodeMatrixPrime = new FractionalCascadingNode[k-1][];
             
-            // build list(k') - only augmented list build using 2 non-augmented lists
-            FractionalCascadingNode[] dim1FCNodelist = nodeMatrix[k-2];
-            FractionalCascadingNode[] dim2PrimeFCNodelist = nodeMatrix[k-1];
-            nodeMatrixPrime[k-2] = buildListPrime(dim1FCNodelist, dim2PrimeFCNodelist, unitFracDen, n);
+            // build list(k-1)' - only promoted list build using 2 non-promoted lists
+            nodeMatrixPrime[k-2] = buildListPrime(nodeMatrix[k-2], nodeMatrix[k-1], unitFracDen);
 
-            // build the remaining augmented lists by nodes from list(i - 1') into list(i)
+            // build the remaining promoted lists by nodes from list(i - 1') into list(i)
             for(int i = k-3; i >= 0; i--) {
-                dim1FCNodelist = nodeMatrix[i];
-                dim2PrimeFCNodelist = nodeMatrixPrime[i + 1];
-                nodeMatrixPrime[i] = buildListPrime(dim1FCNodelist, dim2PrimeFCNodelist,
-                                                    unitFracDen, dim2PrimeFCNodelist.Length);
+                FractionalCascadingNode[] nonAugmentedNodeListI = nodeMatrix[i];
+                FractionalCascadingNode[] augmentedNodeListIPlusOne = nodeMatrixPrime[i + 1];
+
+                nodeMatrixPrime[i] = buildListPrime(nonAugmentedNodeListI,
+                                                    augmentedNodeListIPlusOne,
+                                                    unitFracDen);
             }
         }
 
@@ -198,9 +205,8 @@ namespace Fractional_Cascading {
                                 -> unitFracDen=2 -> augment using every second value st. list i' contains all
                                                     of the values from list i and 1/2 if the values from
                                                     list i-1'
-                print:          this is a demo afterall
+                print:          for demoing
             */
-
             n = numValsPerList;
             k = numLists;
             
@@ -212,20 +218,25 @@ namespace Fractional_Cascading {
             
             // Convert coordNodeMatrix to one of FractionalCascadingNodes, assign as nodeMatrix
             // -> start with matrix of coordNodes sorted by their location (xLoc)
-            Console.WriteLine("CoordinateMatrix - input");
             setCoordMatrix();
-            if(print) u.printNodeMatrix(inputCoordMatrix);
+            if(print) {
+                Console.WriteLine("CoordinateMatrix - input");
+                u.printNodeMatrix(inputCoordMatrix);
+            }
 
             // Sort each array in coordinate matrix on its data value and set it
             sortCordMatrixOnData(inputCoordMatrix);
-            setFCMatrixFromCordMatrix(inputCoordMatrix);
-            Console.WriteLine("NodeMatrix");
-            if(print) u.printNodeMatrix(nodeMatrix);
+            setNodeMatrixFromCoordMatrix(inputCoordMatrix);
+            // Console.WriteLine("NodeMatrix");
+            // if(print) u.printNodeMatrix(nodeMatrix);
 
             // Build and assign nodeMatrixPrime from just-assigned nodeMatrix
-            setFCPrimeMatrix(unitFracDen);
-            Console.WriteLine("NodeMatrixPrime");
-            if(print) u.printNodeMatrix(nodeMatrixPrime);
+            setNodeMatrixPrime(unitFracDen);
+
+            if(print) {
+                Console.WriteLine("NodeMatrixPrime");
+                u.printNodeMatrix(nodeMatrixPrime);
+            }
         }
     }
 }

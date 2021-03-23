@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+
 namespace Fractional_Cascading {
     public class Utils {
 
@@ -23,12 +25,15 @@ namespace Fractional_Cascading {
             Console.WriteLine(s);
         }
 
-        public void printDataLocationArray(int[] arr) {
-            int n = arr.Length;
+        public void printDataLocationDict(Dictionary<int, int> dict, String val = "") {
+            int n = dict.Count;
+            if(val != "") val = val + ' ';
             string s = "";
             for (int i = 0; i < (n-1); ++i)
-                s = s + "located in dimension " + (i + 1) + " at " + arr[i] + ", ";
-            s = s + "located in dimension " + n + " at: " + arr[n-1] + ", " + sep;
+                s = s + val + "located in dimension " + (i + 1) + " at: \t" + 
+                    dict[i + 1] + '\n';
+
+            s = s + val + "located in dimension " + n + " at: \t" + dict[n] + sep;
             Console.WriteLine(s);
         }
 

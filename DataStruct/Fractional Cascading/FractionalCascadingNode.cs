@@ -4,12 +4,14 @@ using System.Collections.Generic;
 namespace Fractional_Cascading {
     public class FractionalCascadingNode : Node {        
         private CoordinateNode data; // attr codes [0, 3]
-        private int index; // attr code 4 
+        private int index; // attr code 4
         private int dimension; // k value of list where nodes are stored
                               // attr code 5
         private FractionalCascadingNode previousNode;
         private FractionalCascadingNode nextNode;
-        public bool prime;
+        private bool prime;
+        private bool promoted = false;
+        private int previousAugmentedListIndx;
 
         private static HashSet<int> coordNodeAttributesCodes = new HashSet<int>{0, 1, 2, 3};
         
@@ -21,13 +23,17 @@ namespace Fractional_Cascading {
         }
 
         public FractionalCascadingNode(CoordinateNode cordNode, int coordDimension,
-                                       int coordIndex, bool isPrime = false) {
+                                       int coordIndex, bool isPrime=false,
+                                       bool isPromoted=false, int prevAugListIndx = -1) {
             // Only relevant for fractional cascading example with lists
             data = cordNode;
             index = coordIndex;
             dimension = coordDimension;
             prime = isPrime;
+            promoted = isPromoted;
+            previousAugmentedListIndx = prevAugListIndx;
         }
+        
         public FractionalCascadingNode(CoordinateNode cordNode, bool isPrime = false) {
             data = cordNode;
             prime = isPrime;
@@ -37,13 +43,29 @@ namespace Fractional_Cascading {
             return data.getAttr(0);
         }
 
-        public  int getDimension() {
+        public int getDimension() {
             return dimension;
         }
 
+        public bool isPrime() {
+            return prime;
+        }
+        public void setPrime() {
+            prime = true;
+        }
+        public bool isPromoted() {
+            return promoted;
+        }
+        public int getPreviouslyAugmentedIndex() {
+            return previousAugmentedListIndx;
+        }
+
         public int coordNodeLocation(int dim=1) {
-            if(dim < 1 || dim > 3) throw new Exception("Invalid dimension parameter " +
-                                                       "when calling coordNodeLocation");
+            if(dim < 1 || dim > 3) {
+                string excStr = "Invalid dimension parameter " +
+                                "when calling coordNodeLocation";
+                throw new Exception(excStr);
+                }
             return data.getAttr(dim);
         }
 
@@ -61,9 +83,11 @@ namespace Fractional_Cascading {
             return nextNode;
         }
 
-        public FractionalCascadingNode makeCopy() {
+        public FractionalCascadingNode makeCopy(bool setPromoted=false,
+                                                int prevAugmentedIndex = -1) {
             FractionalCascadingNode ret = 
-                new FractionalCascadingNode(data, dimension, index, prime);
+                new FractionalCascadingNode(data, dimension, index, prime,
+                                            setPromoted, prevAugmentedIndex);
             ret.nextNode = nextNode;
             ret.previousNode = previousNode;
             return ret;
