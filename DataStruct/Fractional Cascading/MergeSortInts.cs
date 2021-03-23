@@ -1,7 +1,8 @@
 // C# program for Merge Sort
 using System;
 
-namespace Fractional_Cascading {
+namespace DataStruct
+{
     public class MergeSortInts {
     
         // Merges two subarrays of []arr.

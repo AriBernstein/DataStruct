@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 
-namespace Fractional_Cascading {
+namespace DataStruct 
+{
     public class CoordinateNodeListGenerator {
         public int[] randomUniqueIntsList(int count, int min=1, int max=100) {
             Random random = new Random();

@@ -1,6 +1,7 @@
 using System;
 
-namespace Fractional_Cascading {
+namespace DataStruct 
+{
     /**
     Fractional Cascading implementation of search for location of values in
     k dimensions with complexity of O(log(n) + k)

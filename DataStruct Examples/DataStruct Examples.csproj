@@ -4,6 +4,12 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>DataStruct_Examples</RootNamespace>
+    <GenerateProgramFile>false</GenerateProgramFile>
+    <StartupObject>DataStruct_Examples.Program</StartupObject>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DataStruct\DataStruct.csproj" />
+  </ItemGroup>
 
 </Project>

@@ -1,6 +1,7 @@
 using System;
 
-namespace Fractional_Cascading {
+namespace DataStruct
+{
     // C# program for using Binary Search to find location of a
     // fractional cascading node in a list by a given attribute
     public class BinarySearchNodes {

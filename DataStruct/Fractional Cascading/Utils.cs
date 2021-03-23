@@ -1,5 +1,8 @@
 using System;
-namespace Fractional_Cascading {
+using DataStruct;
+
+namespace DataStruct
+{
     public class Utils {
         // A utility function tocprint array of size n */
         public void printStringArray(int[] arr) {
