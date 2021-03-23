@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic; 
 
-namespace DataStruct 
-{
+namespace Fractional_Cascading {
     public class FractionalCascadingNode {        
         public CoordinateNode data; // attr codes [0, 3]
         public int index; // attr code 4 

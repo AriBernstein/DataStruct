@@ -1,8 +1,7 @@
 // C# program for Merge Sorting lists of CoordinateNode objects by a given dimension
 using System;
 
-namespace DataStruct
-{
+namespace Fractional_Cascading {
     public class MergeSortNodes {
     
         // Merges two subarrays of []arr.
@@ -55,24 +54,24 @@ namespace DataStruct
         }
     
         // Main function that sorts arr[l..r] using merge()
-        private void startSort(CoordinateNode[] unsortedArr, int lIndex, int rIndex, int sortDim) {
+        private void startSort(CoordinateNode[] unsortedArr, int lIndex, int rIndex, int sortAttr) {
             if (lIndex < rIndex) {
                 // Find the middle point
-                int mIndex = lIndex+ (rIndex-lIndex)/2;
+                int mIndex = lIndex + (rIndex-lIndex)/2;
     
                 // Sort first and second halves
-                startSort(unsortedArr, lIndex, mIndex, sortDim);
-                startSort(unsortedArr, mIndex + 1, rIndex, sortDim);
+                startSort(unsortedArr, lIndex, mIndex, sortAttr);
+                startSort(unsortedArr, mIndex + 1, rIndex, sortAttr);
     
                 // Merge the sorted halves
-                merge(unsortedArr, lIndex, mIndex, rIndex, sortDim);
+                merge(unsortedArr, lIndex, mIndex, rIndex, sortAttr);
             }
         }
 
-        public void sort(CoordinateNode[] unsortedArr, int sortDimension) {
+        public void sort(CoordinateNode[] unsortedArr, int sortAttributeCode) {
             int lIndex = 0;
             int rIndex = unsortedArr.Length - 1;
-            startSort(unsortedArr, lIndex, rIndex, sortDimension); 
+            startSort(unsortedArr, lIndex, rIndex, sortAttributeCode); 
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using DataStruct;
 
@@ -14,8 +14,10 @@ namespace DataStruct_Examples
             // Console.WriteLine();
             // msn.sort(nodeList, 2);
             // u.printNodeArray(nodeList);
-            FractionalCascadingLists fcl = new FractionalCascadingLists(5, 5);
-            
+            Console.WriteLine("testy");
+            // FractionalCascadingMatrices fcl = new FractionalCascadingMatrices(6, 5);
+            FractionalCascadeMatricesQuery fclq = new FractionalCascadeMatricesQuery(6, 5);
+        }
         }
     }
 }

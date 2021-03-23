@@ -1,6 +1,5 @@
 ﻿using System;
-namespace DataStruct
-{
+namespace Fractional_Cascading {
     public class CoordinateNode {
         private int data; // attr code 0
 

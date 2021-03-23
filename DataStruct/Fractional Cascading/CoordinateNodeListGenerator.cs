@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DataStruct 
-{
+namespace Fractional_Cascading {
     public class CoordinateNodeListGenerator {
         public int[] randomUniqueIntsList(int count, int min=1, int max=100) {
             Random random = new Random();
@@ -63,7 +62,7 @@ namespace DataStruct
 
             if(sort) {
                 MergeSortNodes msn = new MergeSortNodes();
-                msn.sort(nodeList, 0);
+                msn.sort(nodeList, 1);
             }
             
             return nodeList;
