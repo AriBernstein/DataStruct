@@ -18,10 +18,8 @@ namespace Fractional_Cascading {
             int i, j;
     
             // Copy data to temp arrays
-            for (i = 0; i < n1; ++i)
-                left_side_array[i] = initial_array[l_index + i];
-            for (j = 0; j < n2; ++j)
-                right_side_array[j] = initial_array[m_index + 1 + j];
+            for (i = 0; i < n1; ++i) left_side_array[i] = initial_array[l_index + i];
+            for (j = 0; j < n2; ++j) right_side_array[j] = initial_array[m_index + 1 + j];
     
             // Merge the temp arrays
     
@@ -35,8 +33,7 @@ namespace Fractional_Cascading {
                 if (left_side_array[i] <= right_side_array[j]) {
                     initial_array[k] = left_side_array[i];
                     i++;
-                }
-                else {
+                } else {
                     initial_array[k] = right_side_array[j];
                     j++;
                 }
@@ -80,11 +77,9 @@ namespace Fractional_Cascading {
         }
     
         // A utility function tocprint array of size n */
-        public void printArray(int[] arr)
-        {
+        public void printArray(int[] arr) {
             int n = arr.Length;
-            for (int i = 0; i < n; ++i)
-                Console.Write(arr[i] + " ");
+            for (int i = 0; i < n; ++i) Console.Write(arr[i] + " ");
             Console.WriteLine();
         }
     }

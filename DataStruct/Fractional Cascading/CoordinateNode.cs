@@ -1,12 +1,12 @@
 ﻿using System;
 namespace Fractional_Cascading {
-    public class CoordinateNode : Node {
+    public class CoordNode : Node {
         private int data; // attr code 0
 
         // attr codes 1, 2, 3
         private int xLoc = -1, yLoc = -1, zLoc = -1;
 
-        public CoordinateNode(int dataVal, int xVal, int yVal, int zVal) {
+        public CoordNode(int dataVal, int xVal, int yVal, int zVal) {
             // 3-dimensional constructor
             xLoc = xVal;
             yLoc = yVal;
@@ -14,14 +14,14 @@ namespace Fractional_Cascading {
             data = dataVal;
         }
 
-        public CoordinateNode(int dataVal, int xVal, int yVal) {
+        public CoordNode(int dataVal, int xVal, int yVal) {
             // 2-dimensional constructor
             xLoc = xVal;
             yLoc = yVal;
             data = dataVal;
         }
 
-        public CoordinateNode(int dataVal, int xVal) {
+        public CoordNode(int dataVal, int xVal) {
             // 1-dimenstional constructor
             xLoc = xVal;
             data = dataVal;

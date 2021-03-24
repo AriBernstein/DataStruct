@@ -34,10 +34,10 @@ namespace Fractional_Cascading {
             return result.ToArray();
         }
 
-        public CoordinateNode[] getCoordinateNodeList(int size, bool sort=true, int sortAttributeCode=0,
+        public CoordNode[] getCoordinateNodeList(int size, bool sort=true, int sortAttributeCode=0,
                                                       int dimensions=1, bool randomizeRadomSeed=false,
                                                       int randomSeed=10) {
-            CoordinateNode[] nodeList = new CoordinateNode[size];
+            CoordNode[] nodeList = new CoordNode[size];
             int[] x_list = randomUniqueIntsList(size);
             int[] y_list = randomUniqueIntsList(size);
             int[] z_list = randomUniqueIntsList(size);
@@ -51,11 +51,11 @@ namespace Fractional_Cascading {
             int nodeData = random.Next(0, 10000);
             for(int i = 0; i < size; i++) {
                 if(dimensions == 1) {
-                    nodeList[i] = new CoordinateNode(nodeData, x_list[i]);
+                    nodeList[i] = new CoordNode(nodeData, x_list[i]);
                 } else if(dimensions == 2) {
-                    nodeList[i] = new CoordinateNode(nodeData, x_list[i], y_list[i]);
+                    nodeList[i] = new CoordNode(nodeData, x_list[i], y_list[i]);
                 } else if(dimensions == 3) {
-                    nodeList[i] = new CoordinateNode(nodeData, x_list[i], y_list[i], z_list[i]);
+                    nodeList[i] = new CoordNode(nodeData, x_list[i], y_list[i], z_list[i]);
                 }
                 nodeData++;
             } 
