@@ -39,8 +39,8 @@ namespace Fractional_Cascading {
             if (dimension == 1)         xLoc = location;
             else if (dimension == 2)    yLoc = location;
             else if (dimension == 3)    zLoc = location;
-            else throw new Exception("invalid dimension when calling" +
-                                     " setLoc on coordNode");
+            else throw new Exception("invalid dimension parameter when " +
+                                     "calling setLoc on coordNode");
         }
 
         public int dimensionality() {
@@ -55,18 +55,18 @@ namespace Fractional_Cascading {
             switch (d) {
                 case 1:
                     return "Data: " + data + 
-                           " (x: " + xLoc + ")";
+                           " (x: "  + xLoc + ")";
 
                 case 2:
                     return "Data: " + data +
                            ", (x: " + xLoc + 
-                           ", y: " + yLoc + ")";
+                           ", y: "  + yLoc + ")";
 
                 case 3:
                     return "Data: " + data +
                            ", (x: " + xLoc + 
-                           ", y: " + yLoc + 
-                           ", z: " + zLoc + ")";
+                           ", y: "  + yLoc + 
+                           ", z: "  + zLoc + ")";
 
             } throw new Exception("Invalid dimensionality value on " + 
                                   "coordinateNode at time of print.");

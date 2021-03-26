@@ -4,28 +4,39 @@ namespace Fractional_Cascading {
     // C# program for using Binary Search to find location of a
     // fractional cascading node in a list by a given attribute
     public class BinarySearchNodes {
-        public int binarySearchNode(Node[] nodeArray, int searchValue, int attrCode) {
-            return binarySearchNode(nodeArray, 0, nodeArray.Length-1, searchValue, attrCode);
+        public int binarySearch(Node[] nodeArray, int searchValue, int attrCode) {
+            /** Parameters:
+                    nodeArray:      array of nodes ordered by the attribute associated
+                                    with attrCode
+                                    
+                    searchValue:    the thing value for which we are searching
+
+                    attrCode:       node[i].getAttr(attrCode) returns the attrubute by
+                                    which nodeArray is ordered
+            */
+            if(nodeArray.Length == 0) 
+                throw new Exception("Attempting binarySearch on empty array");
+            return binarySearch(nodeArray, 0, nodeArray.Length-1, searchValue, attrCode);
         }
 
-        private int binarySearchNode(Node[] nodeArray, int l, int r, int data, int attrCode) {
-            // Base case
+        private int binarySearch(Node[] nodeArray, int l, int r, int x, int attrCode) {
             String xNotInArrException =
-                "data: " + data + " cannot be found in FC Node array during binary search";                                                  
+                "value: " + x + " cannot be found in node array during binary search";                                                  
             
-            if(r < 1) throw new Exception(xNotInArrException); // Base case
+            if(r < 1 || l > r) throw new Exception(xNotInArrException); // Base case
             
             int m = l + (r - l) / 2;
-            int dataAtMid = nodeArray[m].getAttr(attrCode);
+            
+            int valueAtMid = nodeArray[m].getAttr(attrCode);
 
-            // Data located at midpoint
-            if(data == dataAtMid) return m;
+            // Value located at midpoint of nodeArray
+            if(x == valueAtMid) return m;
 
-            // Data less than element at mid, search left side
-            else if(data < dataAtMid) return binarySearchNode(nodeArray, l, m-1, data, attrCode);
+            // Value is less than element at mid, search left side
+            else if(x < valueAtMid) return binarySearch(nodeArray, l, m-1, x, attrCode);
 
-            // Data greater than element at mid, search right side
-            else return binarySearchNode(nodeArray, m+1, r, data, attrCode);
+            // Value is greater than element at mid, search right side
+            else return binarySearch(nodeArray, m+1, r, x, attrCode);
         }
     }
 }

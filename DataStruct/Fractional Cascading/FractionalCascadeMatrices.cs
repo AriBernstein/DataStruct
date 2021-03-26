@@ -137,7 +137,7 @@ namespace Fractional_Cascading {
             int d = 0;  // index counter for FCNodeList1
             int j = 0;  // index counter for primeList
             
-            while(c < nodesToPromote.Length && d < FCNodeList2.Length) {
+            while(c < nodesToPromote.Length && d < FCNodeList1.Length) {
                 if (FCNodeList1[d].getData() < nodesToPromote[c].getData()) {
                     primeList[j] = FCNodeList1[d++].makeCopy();
                 } else primeList[j] = nodesToPromote[c++];
@@ -185,7 +185,7 @@ namespace Fractional_Cascading {
             // Set as inputCoordMatrix
             CoordinateNodeListGenerator cnlg = new CoordinateNodeListGenerator();
             CoordNode[][] coordNodeMatrix = new CoordNode[k][];
-            for (int i = 0; i < k; i++) coordNodeMatrix[i] = cnlg.getCoordinateNodeList(n);
+            for (int i = 0; i < k; i++) coordNodeMatrix[i] = cnlg.getCoordNodeList(n);
             inputCoordMatrix = coordNodeMatrix;
         }
 
@@ -214,7 +214,9 @@ namespace Fractional_Cascading {
                 Console.WriteLine("N: " + n);
                 Console.WriteLine("K: " + k);
             }
-            if(unitFracDen <= 1) throw new Exception("Invalid unitFracDen, must be greater than 1");
+
+            if(unitFracDen <= 1)
+                throw new Exception("Invalid unitFracDen, must be greater than 1");
             
             // Convert coordNodeMatrix to one of FractionalCascadingNodes, assign as nodeMatrix
             // -> start with matrix of coordNodes sorted by their location (xLoc)
@@ -227,8 +229,11 @@ namespace Fractional_Cascading {
             // Sort each array in coordinate matrix on its data value and set it
             sortCordMatrixOnData(inputCoordMatrix);
             setNodeMatrixFromCoordMatrix(inputCoordMatrix);
-            // Console.WriteLine("NodeMatrix");
-            // if(print) u.printNodeMatrix(nodeMatrix);
+
+            if(print) {
+                Console.WriteLine("NodeMatrix");
+                u.printNodeMatrix(nodeMatrix);
+            }
 
             // Build and assign nodeMatrixPrime from just-assigned nodeMatrix
             setNodeMatrixPrime(unitFracDen);

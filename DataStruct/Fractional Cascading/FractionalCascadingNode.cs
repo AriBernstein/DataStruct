@@ -14,12 +14,13 @@ namespace Fractional_Cascading {
                                         // used for pointer assignment
 
         private int previousAugmentedListIndx;
-        private static HashSet<int> coordNodeAttributesCodes = new HashSet<int>{0, 1, 2, 3};
+
+        // For accessing things attributes from baseCoordNode 
+        private static HashSet<int> coordNodeAttrCodes = new HashSet<int>{0, 1, 2, 3};
         
         public int getAttr(int attrCode) {
-            if (coordNodeAttributesCodes.Contains(attrCode)) {
+            if (coordNodeAttrCodes.Contains(attrCode))
                 return baseCoordNode.getAttr(attrCode);
-            }
             else if(attrCode == 4) return index;
             else if(attrCode == 5) return dimension;
             else throw new Exception("bad attribute code on FCNode");
@@ -70,7 +71,7 @@ namespace Fractional_Cascading {
 
         public int coordNodeLoc(int dim=1) {
             if(dim < 1 || dim > 3) {
-                string excStr = "Invalid dimension parameter when calling coordNodeLocation";
+                string excStr = "Invalid dimension parameter when calling coordNodeLoc";
                 throw new Exception(excStr);
                 }
             return baseCoordNode.getAttr(dim);
@@ -101,22 +102,22 @@ namespace Fractional_Cascading {
         public override string ToString() {
             if(prime == false) {    // If node is not in an augmented list
                 return "[FC Node - dim: " + dimension + ", index: " + index +
-                ", " + baseCoordNode + ']';
+                       ", " + baseCoordNode + ']';
             } else if(previousNode == null && nextNode == null) {
                 return "[FC Node - dim: " + dimension + ", index: " + index +
-                    ", " + baseCoordNode + ", next: empty, prev: empty]";
+                       ", " + baseCoordNode + ", next: empty, prev: empty]";
             } else if(previousNode == null && nextNode != null) {
                 return "[FC Node - dim: " + dimension + ", index: " + index +
-                    ", " + baseCoordNode + ", next: " + nextNode.getData() + 
-                    ", prev: empty]";
+                       ", " + baseCoordNode + ", next: " + nextNode.getData() + 
+                       ", prev: empty]";
             } else if (previousNode != null && nextNode == null) {
                 return "[FC Node - dim: " + dimension + ", index: " + index +
-                    ", " + baseCoordNode + ", next: empty, prev: " + 
-                    previousNode.getData() + ']';
+                       ", " + baseCoordNode + ", next: empty, prev: " + 
+                       previousNode.getData() + ']';
 
             } else return "[FC Node - dim: " + dimension + ", index: " + index + 
-                ", " + baseCoordNode + ", next: " + nextNode.getData() + 
-                ", prev: " + previousNode.getData()+ ']';
+                          ", " + baseCoordNode + ", next: " + nextNode.getData() + 
+                          ", prev: " + previousNode.getData()+ ']';
         }
     }
 }

@@ -35,7 +35,7 @@ namespace Fractional_Cascading {
             BinarySearchNodes bsn = new BinarySearchNodes();
             for(int i = 0; i < k; i++) {
                 CoordNode[] arr = inputCoordMatrix[i];
-                int indx = bsn.binarySearchNode(arr, data, 0);
+                int indx = bsn.binarySearch(arr, data, 0);
                 int locAtIndex = arr[indx].getAttr(1);
                 locationsOfData.Add(i + 1, locAtIndex);
             }
@@ -72,7 +72,7 @@ namespace Fractional_Cascading {
             Dictionary<int, int> locationsOfData = new Dictionary<int, int>();
             
             // Find data in first dimension
-            int dataIndx = bsn.binarySearchNode(nodeMatrixPrime[0], data, 0);
+            int dataIndx = bsn.binarySearch(nodeMatrixPrime[0], data, 0);
             FCNode dataNode = nodeNeighborCheck(nodeMatrixPrime[0][dataIndx], data, 1);
             locationsOfData[1] = dataNode.getAttr(1);
             return locationsOfData;
@@ -89,7 +89,8 @@ namespace Fractional_Cascading {
             nodeMatrix = fcm.getFractionalCascadingNodeMatix();
             nodeMatrixPrime = fcm.getFractionalCascadingNodeMatixPrime();
 
-            u.printDataLocationDict(trivialSolution(9507), 9507.ToString());
+            int x = 1503;
+            u.printDataLocationDict(trivialSolution(x), x.ToString());
         }
     }
 }
