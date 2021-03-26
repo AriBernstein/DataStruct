@@ -39,27 +39,29 @@ namespace Fractional_Cascading {
                 int locAtIndex = arr[indx].getAttr(1);
                 locationsOfData.Add(i + 1, locAtIndex);
             }
+
             return locationsOfData;
         }
 
-        private FCNode nodeNeighborCheck(FCNode dataNode, int data, int targetDimension) {
-            /**
-            Check if dataNode's matches target dimension. If not, check left and right nodes
-            */
-            if(dataNode.getDim() != targetDimension) {
-                FCNode prevNode = dataNode.getPrevPointer();
-                FCNode nextNode = dataNode.getNextPointer();
-                if(prevNode != null) {
-                    if(prevNode.getData() == data && prevNode.getDim() == targetDimension) {
-                        return prevNode;
-                    } else if (nextNode != null) {
-                        if (nextNode.getData() == data && nextNode.getDim() == targetDimension) {
-                            return nextNode;
-                        }
+        private FCNode nodeNeighborCheck(FCNode dataNode, int data, int targetDim) {
+            // If dataNode's matches target dimension; else, check left and right nodes.
+            
+            if(dataNode.getDim() == targetDim) return dataNode; // Check dataNode
+
+            // Check neighbors
+            FCNode prevNode = dataNode.getPrevPointer();
+            FCNode nextNode = dataNode.getNextPointer();
+
+            if(prevNode != null) {  // Check left neighbor
+                if(prevNode.getData() == data && prevNode.getDim() == targetDim) {
+                    return prevNode;
+                } else if (nextNode != null) {  // Check right neighbor
+                    if (nextNode.getData() == data && nextNode.getDim() == targetDim) {
+                        return nextNode;
                     }
-                } throw new Exception("Cannot find node in dimension");
-            } else return dataNode;
-        }
+                }
+            } throw new Exception("Cannot find node in dimension");
+    }
 
         private Dictionary<int, int> fractionalCascadeSearch(int data) {
             /**

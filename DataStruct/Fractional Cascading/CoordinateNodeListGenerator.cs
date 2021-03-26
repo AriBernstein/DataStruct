@@ -7,17 +7,20 @@ namespace Fractional_Cascading {
     public class CoordinateNodeListGenerator {
         public int[] randUniqueIntsRange(int n, int min=1, int max=10000) {
             /**
-                Note, max is exclusive
+            Generate list of random non-repeating integers
 
+            Parameters:
+                n:      size of list of random unique integers to generate
+                min:    lower bound (inclusive) of the random integers to generate
+                max:    upper bound (exclusive) of the random integers to generate
+
+            Algorithm:
                 initialize set S to empty
                 for J := N-M + 1 to N do
                     T := RandInt(1, J)
-                    if T is not in S then
-                        insert T in S
-                    else
-                        insert J in S
-
-            */
+                    if T is not in S then insert T in S
+                    else insert J in S   */
+                        
             Random random = new Random();
 
             if (max <= min || n < 0 || (n > max - min && max - min > 0)) {
@@ -27,18 +30,15 @@ namespace Fractional_Cascading {
                 throw new ArgumentOutOfRangeException(errorMsg);
             }
 
-            // generate count random values.
+            // hash sets don't support duplicate values
             HashSet<int> candidates = new HashSet<int>();
 
             // start count values before max, and end at max
-            for (int top = max - n; top < max; top++)
-            {
-                // May strike a duplicate.
-                // Need to add +1 to make inclusive generator
-                // +1 is safe even for MaxVal max value because top < max
+            for (int top = max - n; top < max; top++) {
+                // May strike a duplicate. Need to add +1 to make inclusive generator
+                // ->  +1 is safe even for MaxVal max value because top < max
                 if (!candidates.Add(random.Next(min, top + 1))) {
-                    // collision, add inclusive max.
-                    // which could not possibly have been added before.
+                    // Collision! Add inclusive max - could not have been added before.
                     candidates.Add(top);
                 }
             }
@@ -64,9 +64,8 @@ namespace Fractional_Cascading {
                                             bool randomizeRadomSeed=false,
                                             int randomSeed=10) {
             /**
-            NOTE: randomizeRadomSeed must be false when this is used
-                  to build matrices for FractionalCascadingMatrices
-            */
+            NOTE: randomizeRadomSeed must be false when this is used to build matrices
+                  for FractionalCascadingMatrices */
 
             CoordNode[] nodeList = new CoordNode[n];
             int[] x_list = randUniqueIntsRange(n);

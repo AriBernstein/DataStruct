@@ -5,14 +5,6 @@ namespace Fractional_Cascading {
     public class Utils {
         private string sep = "\n-----\n";
 
-        public void printStringArray(string[] arr) {
-            int n = arr.Length;
-            string s = "";
-            for (int i = 0; i < (n-1); ++i) s = s + (arr[i] + ", ");
-            s = s + arr[n-1] + sep;
-            Console.WriteLine(s);
-        }
-
         public void printIntArray(int[] arr) {
             int n = arr.Length;
             string s = "";

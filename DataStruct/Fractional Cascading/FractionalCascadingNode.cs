@@ -10,8 +10,8 @@ namespace Fractional_Cascading {
         private FCNode previousNode;
         private FCNode nextNode;
         private bool prime;        
-        private bool promoted = false;  // flag for nodes promoted into the current augmented list
-                                        // used for pointer assignment
+        private bool promoted = false;  // flag indicating node is being promoted into an
+                                        // augmented list, used for pointer assignment
 
         private int previousAugmentedListIndx;
 
@@ -54,7 +54,6 @@ namespace Fractional_Cascading {
         public int getDim() {
             return dimension;
         }
-
         public bool isPrime() {
             return prime;
         }

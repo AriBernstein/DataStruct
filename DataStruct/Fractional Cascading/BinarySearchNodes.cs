@@ -8,7 +8,7 @@ namespace Fractional_Cascading {
             /** Parameters:
                     nodeArray:      array of nodes ordered by the attribute associated
                                     with attrCode
-                                    
+                                                                    
                     searchValue:    the thing value for which we are searching
 
                     attrCode:       node[i].getAttr(attrCode) returns the attrubute by
