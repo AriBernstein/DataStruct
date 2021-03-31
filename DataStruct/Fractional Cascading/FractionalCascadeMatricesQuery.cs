@@ -23,6 +23,7 @@ namespace Fractional_Cascading {
         private int n; // number of elements in each list in nodeMatrix
         private int k; // number of lists
 
+
         public Dictionary<int, int> trivialSolution(int data) {
             /**
             Iterate through each list of coordinate nodes, perform binary
@@ -42,38 +43,27 @@ namespace Fractional_Cascading {
             return locationsOfData;
         }
 
-        private FCNode nodeNeighborCheck(FCNode node, int data, int targetDim) {
-            // If dataNode's matches target dimension; else, check left and right nodes.
-            if(node.getDim() == targetDim) return node; // Check dataNode
 
-            // Check neighbors
-            FCNode prevNode = node.getPrevPointer();
-            FCNode nextNode = node.getNextPointer();
-
-            if(prevNode != null) {  // Check left neighbor
-                if(prevNode.getData() == data && prevNode.getDim() == targetDim) {
-                    return prevNode;
-                } else if (nextNode != null) {  // Check right neighbor
-                    if (nextNode.getData() == data && nextNode.getDim() == targetDim) {
-                        return nextNode;
-                    }
-                }
-            } throw new Exception("Cannot find node in dimension " + targetDim);
+        private bool targetNodeCheck(FCNode node, int targetData, int targetDimension) {
+            return node != null &&
+                   node.getData() == targetData &&
+                   node.getDim() == targetDimension;
         }
 
-        private FCNode findNodeFromPointerRange(FCNode node, int currDim, int targetData) {
+
+        private FCNode findNodeFromPointerRange(FCNode node, int dim, int targetData) {
             /**
             Find the range of indices of either nodeMatrix or nodeMatrixPrime that contain
             the node we are looking for at the target dimension.
             Walk through promoted node pointers, starting with the list 2' and ending
-            // with list (k-1)', then do a final check on list k (not prime)    */
+            with list (k-1)', then do a final check on list k (not prime)    */
             
             FCNode prevNode = node.getPrevPointer();
             FCNode nextNode = node.getNextPointer();
             
             // Find range
             int lowRange, highRange;
-            int currIndex = currDim - 1;
+            int currIndex = dim - 1;
 
             if(prevNode == null) lowRange = 0;
             else lowRange = prevNode.getPreviouslyAugmentedIndex();
@@ -86,16 +76,18 @@ namespace Fractional_Cascading {
             // Search range
             bool found = false;
             foreach (int j in range) {
-                if(currDim == k) node = nodeMatrix[currIndex][j];
+                if(dim == k) // list(k-1)' is built using lists k and k-1 (not prime)
+                    node = nodeMatrix[currIndex][j];
                 else node = nodeMatrixPrime[currIndex][j];
                 
-                if(node.getData() == targetData && node.getDim() == currDim) {
+                if(targetNodeCheck(node, targetData, dim)) {
                     found = true;
                     break;
                 }
             }
-                
-            if(!(found)) throw new Exception("Can't find node in dimension: " + currDim);
+            
+            if(!(found)) throw new Exception("Can't find node with data " + targetData +
+                                             " in dimension: " + dim);
             return node;
         }
 
@@ -119,8 +111,16 @@ namespace Fractional_Cascading {
             dataIndex = bsn.binarySearch(nodeMatrixPrime[0], data, 0);
             dataNode = nodeMatrixPrime[0][dataIndex];
             
-            // Insure that dataNode is in the correct dimension
-            dataNode = nodeNeighborCheck(dataNode, data, 1);
+            // Ensure that dataNode is in the correct dimension - if not check neghbors
+            if(dataNode.getDim() != currentDim) {
+                Console.WriteLine("Sup ho");
+                FCNode next = dataNode.getNextPointer();
+                FCNode prev = dataNode.getPrevPointer();
+                if(targetNodeCheck(next, data, currentDim)) dataNode = next;
+                else if (targetNodeCheck(prev, data, currentDim)) dataNode = prev;
+                else throw new Exception("Cannot locate data in list 1' ");
+            }
+
             locationsOfData[currentDim] = dataNode.getAttr(1);
 
             for(int i = 1; i < nodeMatrix.Length; i++) {
