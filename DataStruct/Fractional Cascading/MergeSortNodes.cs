@@ -32,8 +32,7 @@ namespace Fractional_Cascading {
             while (i < n1) initialArray[k++] = leftArr[i++];
             while (j < n2) initialArray[k++] = rightArr[j++];
         }
-    
-        // Main function that sorts arr[l..r] using merge()
+
         private void mergeSort(CoordNode[] unsortedArr, int lIndex,
                                int rIndex, int sortAttrCode) {
             if (lIndex < rIndex) {  // base case

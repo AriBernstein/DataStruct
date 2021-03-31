@@ -29,7 +29,6 @@ namespace Fractional_Cascading {
         public FCNode(CoordNode cordNode, int coordDimension, int coordIndex,
                 bool isPrime=false,
                       bool isPromoted=false, int prevAugListIndx = -1) {
-            // Only relevant for fractional cascading example with lists
             baseCoordNode = cordNode;
             index = coordIndex;
             dimension = coordDimension;
