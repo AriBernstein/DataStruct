@@ -5,9 +5,11 @@ using System.Linq;
 
 namespace Fractional_Cascading {
     public class CoordinateNodeListGenerator {
-        public int[] randUniqueIntsRange(int n, int min=1, int max=10000) {
+
+        private (int[], HashSet<int>) randUniqueIntsRange(int n, int min, int max) {
             /**
-            Generate list of random non-repeating integers
+            Generate list of random non-repeating integers, return both randomly-ordered
+            list and set (for checking whether or not value to insert exists quickly)
 
             Parameters:
                 n:      size of list of random unique integers to generate
@@ -56,36 +58,60 @@ namespace Fractional_Cascading {
                 result[i] = tmp;  
             }
              
-            return result.ToArray();
+            return (result.ToArray(), candidates);
         }
 
         public CoordNode[] getCoordNodeList(int n, bool sort=true, int sortAttrCode=0,
-                                            int dimensions=1,
-                                            bool randomizeRadomSeed=false,
-                                            int randomSeed=10) {
+                                            int dimensions=1, int locRangeMin=1,
+                                            int locRangeMax=10000, int dataRangeMin=0,
+                                            int dataRangeMax=2000, int randomSeed=10,
+                                            int insertDataVal=-1) {
             /**
-            NOTE: randomizeRadomSeed must be false when this is used to build matrices
-                  for FractionalCascadingMatrices */
+            Return a list of coordNodes with random x, y, and z values ranging locRangeMin
+            to locRangeMax and data values ranging from dataRangeMin to dataRangeMax
+            (inclusive min, exlusive max). 
+
+            Parameters:
+                n: the length of the list of nodes to return
+                sort: if true, sort return list ordered by coordNode.getAttr(sortAttrCode)
+                dimensions: between one and three
+                locRangeMin: locRangeMax: randomized range of xyz values
+                dataRangeMin: dataRangeMax: randomized range of node data values
+                randomSeed: random seed by which to select nodeData
+                insertDataVal: if not -1, replace the data attribute of the node at a
+                               random index in the return list  */
 
             CoordNode[] nodeList = new CoordNode[n];
-            int[] x_list = randUniqueIntsRange(n);
-            int[] y_list = randUniqueIntsRange(n);
-            int[] z_list = randUniqueIntsRange(n);
-
-            if(randomizeRadomSeed) randomSeed = new Random().Next();
+            (int[] xList, HashSet<int> xSet) =
+                randUniqueIntsRange(n, locRangeMin, locRangeMax);
+            (int[] yList, HashSet<int> ySet) =
+                randUniqueIntsRange(n, locRangeMin, locRangeMax);
+            (int[] zList, HashSet<int> zSet) =
+                randUniqueIntsRange(n, locRangeMin, locRangeMax);
+            (int[] dataList, HashSet<int> dataSet) = 
+                randUniqueIntsRange(n, dataRangeMin, dataRangeMax);
              
             Random random = new Random(randomSeed);
             for(int i = 0; i < n; i++) {
-                int nodeData = random.Next(0, 2000);
                 if(dimensions == 1) {
-                    nodeList[i] = new CoordNode(nodeData, x_list[i]);
+                    nodeList[i] = new CoordNode(dataList[i], xList[i]);
                 } else if(dimensions == 2) {
-                    nodeList[i] = new CoordNode(nodeData, x_list[i], y_list[i]);
+                    nodeList[i] = new CoordNode(dataList[i], xList[i], yList[i]);
                 } else if(dimensions == 3) {
-                    nodeList[i] = new CoordNode(nodeData, x_list[i], y_list[i], z_list[i]);
+                    nodeList[i] = new CoordNode(dataList[i], xList[i], yList[i],
+                                                zList[i]);
                 }
-                nodeData++;
             } 
+
+            if(insertDataVal > -1) {
+                if(insertDataVal < -1)
+                    throw new Exception("insertDataVal parameter must be positive");
+                
+                if(!(dataSet.Contains(insertDataVal))) {
+                    int randomIndex = random.Next(0, n);
+                    nodeList[randomIndex].setData(insertDataVal);
+                }
+            }
 
             if(sort) {
                 MergeSortNodes msn = new MergeSortNodes();

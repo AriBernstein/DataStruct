@@ -27,6 +27,10 @@ namespace Fractional_Cascading {
             data = dataVal;
         }
 
+        public void setData(int newData) {
+            data = newData;
+        }
+
         public int getAttr(int attrCode) {
             if (attrCode == 0)      return data;
             else if (attrCode == 1) return xLoc;

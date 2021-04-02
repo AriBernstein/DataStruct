@@ -55,6 +55,7 @@ namespace Fractional_Cascading {
             /**
             Find the range of indices of either nodeMatrix or nodeMatrixPrime that contain
             the node we are looking for at the target dimension.
+            
             Walk through promoted node pointers, starting with the list 2' and ending
             with list (k-1)', then do a final check on list k (not prime)    */
             
@@ -68,6 +69,15 @@ namespace Fractional_Cascading {
             if(prevNode == null) lowRange = 0;
             else lowRange = prevNode.getPreviouslyAugmentedIndex();
 
+///////
+            // Console.WriteLine("suSU");
+            // if(nextNode != null) Console.WriteLine("nextNode: " + nextNode); 
+            // else {
+            //     Console.WriteLine("NEXXTNODE BE NULL\nDim: " + dim);
+            //     u.printNodeMatrix(nodeMatrixPrime);
+            //     Console.WriteLine("INDEX " + currIndex);
+            // }
+///////
             if(nextNode == null) highRange = nodeMatrixPrime[currIndex].Length - 1;
             else highRange = nextNode.getPreviouslyAugmentedIndex();
 
@@ -94,9 +104,9 @@ namespace Fractional_Cascading {
 
         public Dictionary<int, int> fractionalCascadeSearch(int data) {
             /**
-            Perform binary search to find data in first dimension
-            Then recursively use the previous and/or next pointers to search
-            the tiny range of the next dimension    */
+            Perform binary search to find data in first dimension.
+            Then iteratively use the previous and/or next pointers to search the tiny
+            range of the next dimension given by the prev and next node pointers    */
             BinarySearchNodes bsn = new BinarySearchNodes();
 
             // Return dictionary w/ key=dimension, pair=location in dimension
@@ -113,7 +123,6 @@ namespace Fractional_Cascading {
             
             // Ensure that dataNode is in the correct dimension - if not check neghbors
             if(dataNode.getDim() != currentDim) {
-                Console.WriteLine("Sup ho");
                 FCNode next = dataNode.getNextPointer();
                 FCNode prev = dataNode.getPrevPointer();
                 if(targetNodeCheck(next, data, currentDim)) dataNode = next;
@@ -137,11 +146,15 @@ namespace Fractional_Cascading {
 
 
         public FractionalCascadeMatricesQuery(int numValsPerList, int numLists,
-                                              int unitFracDen=2, bool print=true) {
-            FractionalCascadingMatrices fcm = 
-                new FractionalCascadingMatrices(numValsPerList, numLists);
+                                              int unitFracDen=2, bool print=true,
+                                              int insertDataVal=-1) {
+            FractionalCascadingMatrices fcm;
             n = numValsPerList;
             k = numLists;
+             
+            if(insertDataVal == -1) fcm = new FractionalCascadingMatrices(n, k);
+            else fcm = new FractionalCascadingMatrices(n, k, insertData: insertDataVal);
+            
             inputCoordMatrix = fcm.getInputCoordMatrix();
             nodeMatrix = fcm.getFractionalCascadingNodeMatix();
             nodeMatrixPrime = fcm.getFractionalCascadingNodeMatixPrime();
