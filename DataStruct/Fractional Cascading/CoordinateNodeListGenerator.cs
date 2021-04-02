@@ -62,9 +62,8 @@ namespace Fractional_Cascading {
         }
 
         public CoordNode[] getCoordNodeList(int n, bool sort=true, int sortAttrCode=0,
-                                            int dimensions=1, int locRangeMin=1,
-                                            int locRangeMax=10000, int dataRangeMin=0,
-                                            int dataRangeMax=2000, int randomSeed=10,
+                                            int dimensions=1, int rangeMin=0,
+                                            int rangeMax=9999999, int randomSeed=10,
                                             int insertDataVal=-1) {
             /**
             Return a list of coordNodes with random x, y, and z values ranging locRangeMin
@@ -83,13 +82,13 @@ namespace Fractional_Cascading {
 
             CoordNode[] nodeList = new CoordNode[n];
             (int[] xList, HashSet<int> xSet) =
-                randUniqueIntsRange(n, locRangeMin, locRangeMax);
+                randUniqueIntsRange(n, rangeMin, rangeMax);
             (int[] yList, HashSet<int> ySet) =
-                randUniqueIntsRange(n, locRangeMin, locRangeMax);
+                randUniqueIntsRange(n, rangeMin, rangeMax);
             (int[] zList, HashSet<int> zSet) =
-                randUniqueIntsRange(n, locRangeMin, locRangeMax);
+                randUniqueIntsRange(n, rangeMin, rangeMax);
             (int[] dataList, HashSet<int> dataSet) = 
-                randUniqueIntsRange(n, dataRangeMin, dataRangeMax);
+                randUniqueIntsRange(n, rangeMin, rangeMax);
              
             Random random = new Random(randomSeed);
             for(int i = 0; i < n; i++) {

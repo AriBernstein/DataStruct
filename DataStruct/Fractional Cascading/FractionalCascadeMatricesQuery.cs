@@ -8,8 +8,7 @@ namespace Fractional_Cascading {
     Search for an element x located in inputCoordMatrix in k lists using 2
     methods: fractional cascading and the trivial method (k binary searches)
     -> return k locations of x   */
-    public class FractionalCascadeMatricesQuery {
-        Utils u = new Utils();
+    public class FCMatricesQuery {
         
         private CoordNode[][] inputCoordMatrix;
         
@@ -136,15 +135,15 @@ namespace Fractional_Cascading {
         }
 
 
-        public FractionalCascadeMatricesQuery(int numValsPerList, int numLists,
-                                              int unitFracDen=2, bool print=true,
-                                              int insertDataVal=-1) {
+        public FCMatricesQuery(int numValsPerList, int numLists, int unitFracDen=2,
+                               bool print=true, int insertDataVal=-1) {
             FractionalCascadingMatrices fcm;
             n = numValsPerList;
             k = numLists;
              
             if(insertDataVal == -1) fcm = new FractionalCascadingMatrices(n, k);
-            else fcm = new FractionalCascadingMatrices(n, k, insertData: insertDataVal);
+            else fcm = new FractionalCascadingMatrices(n, k, insertData: insertDataVal,
+                                                       print:print);
             
             inputCoordMatrix = fcm.getInputCoordMatrix();
             nodeMatrix = fcm.getFractionalCascadingNodeMatix();
