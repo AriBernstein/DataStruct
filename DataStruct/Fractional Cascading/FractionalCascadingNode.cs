@@ -9,7 +9,7 @@ namespace Fractional_Cascading {
                                // attr code 5
         private FCNode previousNode;
         private FCNode nextNode;
-        private bool prime;        
+        private bool prime; // Really just for printing      
         private bool promoted = false;  // flag indicating node is being promoted into an
                                         // augmented list, used for pointer assignment
 
@@ -27,12 +27,10 @@ namespace Fractional_Cascading {
         }
 
         public FCNode(CoordNode cordNode, int coordDimension, int coordIndex,
-                bool isPrime=false,
                       bool isPromoted=false, int prevAugListIndx = -1) {
             baseCoordNode = cordNode;
             index = coordIndex;
             dimension = coordDimension;
-            prime = isPrime;
             promoted = isPromoted;
             previousAugmentedListIndx = prevAugListIndx;
         }
@@ -53,9 +51,7 @@ namespace Fractional_Cascading {
         public int getDim() {
             return dimension;
         }
-        public bool isPrime() {
-            return prime;
-        }
+        
         public void setPrime() {
             prime = true;
         }
@@ -90,7 +86,7 @@ namespace Fractional_Cascading {
         }
 
         public FCNode makeCopy(bool setPromoted=false, int prevAugmentedIndex = -1) {
-            FCNode ret = new FCNode(baseCoordNode, dimension, index, prime,
+            FCNode ret = new FCNode(baseCoordNode, dimension, index,
                                     setPromoted, prevAugmentedIndex);
             ret.nextNode = nextNode;
             ret.previousNode = previousNode;

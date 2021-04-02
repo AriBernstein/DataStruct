@@ -69,15 +69,6 @@ namespace Fractional_Cascading {
             if(prevNode == null) lowRange = 0;
             else lowRange = prevNode.getPreviouslyAugmentedIndex();
 
-///////
-            // Console.WriteLine("suSU");
-            // if(nextNode != null) Console.WriteLine("nextNode: " + nextNode); 
-            // else {
-            //     Console.WriteLine("NEXXTNODE BE NULL\nDim: " + dim);
-            //     u.printNodeMatrix(nodeMatrixPrime);
-            //     Console.WriteLine("INDEX " + currIndex);
-            // }
-///////
             if(nextNode == null) highRange = nodeMatrixPrime[currIndex].Length - 1;
             else highRange = nextNode.getPreviouslyAugmentedIndex();
 
