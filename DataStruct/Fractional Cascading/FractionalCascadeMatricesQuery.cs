@@ -136,13 +136,14 @@ namespace Fractional_Cascading {
 
 
         public FCMatricesQuery(int numValsPerList, int numLists, int unitFracDen=2,
-                               bool print=true, int insertDataVal=-1) {
+                               bool print=true, int insertData=-1) {
             FractionalCascadingMatrices fcm;
             n = numValsPerList;
             k = numLists;
              
-            if(insertDataVal == -1) fcm = new FractionalCascadingMatrices(n, k);
-            else fcm = new FractionalCascadingMatrices(n, k, insertData: insertDataVal,
+            if(insertData == -1) fcm = new FractionalCascadingMatrices(n, k);
+            else fcm = new FractionalCascadingMatrices(n, k,
+                                                       insertData: insertData,
                                                        print:print);
             
             inputCoordMatrix = fcm.getInputCoordMatrix();
