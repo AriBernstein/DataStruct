@@ -14,14 +14,13 @@ namespace Fractional_Cascading {
             return s;
         }
 
-        public string printDataLocationDict(Dictionary<int, int> dict, String val) {
+        public string printDataLocationDict(Dictionary<int, int> dict, String searchVal) {
             int n = dict.Count;
-            val = val + ' ';
+            searchVal = searchVal + " located in dimension ";
             string s = "";
             for (int i = 0; i < (n-1); ++i)
-                s = s + val + "located in dimension " + 
-                    (i + 1) + " at: \t" + dict[i + 1] + '\n';
-            s = s + val + "located in dimension " + n + " at: \t" + dict[n] + sep;
+                s = s + searchVal + (i + 1) + " at: \t" + dict[i + 1] + '\n';
+            s = s + searchVal + n + " at: \t" + dict[n] + sep;
 
             Console.WriteLine(s);
             return s;

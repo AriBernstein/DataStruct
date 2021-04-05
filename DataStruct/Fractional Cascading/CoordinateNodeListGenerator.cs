@@ -61,10 +61,10 @@ namespace Fractional_Cascading {
             return (result.ToArray(), candidates);
         }
 
-        public CoordNode[] getCoordNodeList(int n, bool sort=true, int sortAttrCode=0,
-                                            int dimensions=1, int rangeMin=0,
-                                            int rangeMax=10000000, int randomSeed=10,
-                                            int insertDataVal=-1) {
+        public CoordNode[] getCoordNodeList(int n, int insertDataVal, bool sort=true,
+                                            int sortAttrCode=0, int dimensions=1,
+                                            int rangeMin=0, int rangeMax=10000000,
+                                            int randomSeed=10) {
             /**
             Return a list of coordNodes with random x, y, and z values ranging locRangeMin
             to locRangeMax and data values ranging from dataRangeMin to dataRangeMax
@@ -102,15 +102,12 @@ namespace Fractional_Cascading {
                 }
             } 
 
-            if(insertDataVal > -1) {
-                if(insertDataVal < -1)
-                    throw new Exception("insertDataVal parameter must be positive");
-                
+            if(insertDataVal >= 0) {
                 if(!(dataSet.Contains(insertDataVal))) {
                     int randomIndex = random.Next(0, n);
                     nodeList[randomIndex].setData(insertDataVal);
                 }
-            }
+            } else throw new Exception("insertDataVal parameter must be positive");
             
             if(sort) {
                 MergeSortNodes msn = new MergeSortNodes();

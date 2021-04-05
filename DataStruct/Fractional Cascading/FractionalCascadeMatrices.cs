@@ -164,7 +164,7 @@ namespace Fractional_Cascading {
             }
         }
 
-        private void setCoordMatrix(int insertData=-1) {
+        private void setCoordMatrix(int insertData) {
             /**
             Build k lists of n CoordinateNodes each, sorted by their location (xLox). If 
             insertData equals -1, each list will have nodes which share data values but
@@ -175,12 +175,8 @@ namespace Fractional_Cascading {
             CoordinateNodeListGenerator cnlg = new CoordinateNodeListGenerator();
             CoordNode[][] coordNodeMatrix = new CoordNode[k][];
             for (int i = 0; i < k; i++) {
-                if(insertData == -1) {
-                    coordNodeMatrix[i] = cnlg.getCoordNodeList(n);
-                } else {
-                    coordNodeMatrix[i] = cnlg.getCoordNodeList(n, randomSeed: 10 + i,
-                                                               insertDataVal: insertData);
-                }
+                coordNodeMatrix[i] = cnlg.getCoordNodeList(n, insertData,
+                                                           randomSeed: 10 + i);
             }
             inputCoordMatrix = coordNodeMatrix;
         }
