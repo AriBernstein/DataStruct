@@ -63,7 +63,7 @@ namespace Fractional_Cascading {
 
         public CoordNode[] getCoordNodeList(int n, bool sort=true, int sortAttrCode=0,
                                             int dimensions=1, int rangeMin=0,
-                                            int rangeMax=9999999, int randomSeed=10,
+                                            int rangeMax=10000000, int randomSeed=10,
                                             int insertDataVal=-1) {
             /**
             Return a list of coordNodes with random x, y, and z values ranging locRangeMin
@@ -111,12 +111,11 @@ namespace Fractional_Cascading {
                     nodeList[randomIndex].setData(insertDataVal);
                 }
             }
-
+            
             if(sort) {
                 MergeSortNodes msn = new MergeSortNodes();
                 msn.sort(nodeList, sortAttrCode);
             }
-            
             return nodeList;
         }
     }

@@ -216,15 +216,16 @@ namespace Fractional_Cascading {
             
             // Convert coordNodeMatrix to one of FCNodes, assign as nodeMatrix
             // -> start with matrix of coordNodes sorted by their location (xLoc)
-            Console.WriteLine("Generating random coordinate nodes.");
             setCoordMatrix(insertData);
             if(print) {
+                Console.WriteLine("Generating random coordinate nodes.");
                 Console.WriteLine("CoordinateMatrix - input");
                 u.printNodeMatrix(inputCoordMatrix);
             }
 
             // Sort each array in coordinate matrix on its data value and set it
-            Console.WriteLine("Sorting coordinate matrix, building FCNode matrix from coord matrix.");
+            if(print) Console.WriteLine("Sorting coordinate matrix, building FCNode matrix from coord matrix.");
+
             sortCordMatrixOnData(inputCoordMatrix);
             setNodeMatrixFromCoordMatrix(inputCoordMatrix);
 
@@ -234,7 +235,7 @@ namespace Fractional_Cascading {
             }
 
             // Build and assign nodeMatrixPrime from just-assigned nodeMatrix
-            Console.WriteLine("Building augmented matrix using FCNode matrix.");
+            if(print) Console.WriteLine("Building augmented matrix using FCNode matrix.");
             setNodeMatrixPrime(unitFracDen);
 
             if(print) {

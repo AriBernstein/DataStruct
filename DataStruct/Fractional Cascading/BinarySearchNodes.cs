@@ -21,14 +21,16 @@ namespace Fractional_Cascading {
         }
 
         private int binarySearch(Node[] nodeArray, int l, int r, int x, int attrCode) {
-            String xNotInArrException =
-                "value: " + x + " cannot be found in node array during binary search" + 
-                "\n\tl-index: " + l +  "\tr-index: " + r + "\tx: " + x + "\n";                                                  
-            
-            if(r < 1 || l > r) throw new Exception(xNotInArrException); // Base case
+            if(r < 1 || l > r) {
+                // Check if value is at 0th index
+                if(nodeArray[r].getAttr(attrCode) == x) return r;
+                String xNotInArrException =
+                    "value: " + x + " cannot be found in node array during binary " + 
+                    "search\n\tl-index: " + l +  "\tr-index: " + r + "\tx: " + x + "\n";      
+                throw new Exception(xNotInArrException); // Base case
+            }
             
             int m = l + (r - l) / 2;
-            
             int valueAtMid = nodeArray[m].getAttr(attrCode);
 
             // Value located at midpoint of nodeArray
