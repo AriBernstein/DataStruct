@@ -177,14 +177,7 @@ namespace Fractional_Cascading {
             for (int i = 0; i < k; i++) {
                 coordNodeMatrix[i] = cnlg.getCoordNodeList(n, insertData,
                                                            randomSeed: 10 + i);
-            }
-            inputCoordMatrix = coordNodeMatrix;
-        }
-
-        private void sortCordMatrixOnData(CoordNode[][] matrx) {
-            // Sort each array in matrx by the data values of the coordinate nodes
-            MergeSortNodes msn = new MergeSortNodes();
-            foreach(CoordNode[] arr in matrx) msn.sort(arr, 0);
+            } inputCoordMatrix = coordNodeMatrix;
         }
 
         public FractionalCascadingMatrices(int numValsPerList, int numLists,
@@ -197,7 +190,7 @@ namespace Fractional_Cascading {
                 insertData:     data value for which to search inserted into each list in
                                 coordMatrix and nodeMatrix
                 unitFracDen:    denominator of the unit fraction indicating the size of
-                                the subset promoted list (d-1)' into list d'    */
+                                the subset of list (d-1)' to be promoted into list d'   */
                 
             n = numValsPerList;
             k = numLists;
@@ -211,12 +204,8 @@ namespace Fractional_Cascading {
             // -> start with matrix of coordNodes sorted by their location (xLoc)
             if(print) Console.WriteLine("Generating matrix of random sorted coordNodes.");
             setCoordMatrix(insertData);
-
-            // Sort each array in coordinate matrix on its data value and set it
-            // Are you necessary?
-            // if(print) Console.WriteLine("Sorting coordinate matrix");
-            // sortCordMatrixOnData(inputCoordMatrix);
             
+            // TODO: combine setCoordMatrix & setNodeMatrixFromCoordMatrix functionality
             if(print) Console.WriteLine("Building FCNode matrix from coord matrix.");
             setNodeMatrixFromCoordMatrix(inputCoordMatrix);
 

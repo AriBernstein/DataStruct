@@ -69,12 +69,12 @@ namespace Fractional_Cascading {
             else lowRange = prevNode.getPreviouslyAugmentedIndex();
 
             if(nextNode == null) {
-                if(dim == k) highRange = nodeMatrix[dimIndex].Length - 1;
+                if(dim == k) // list(k-1)' is built using lists k and k-1 (not prime)
+                    highRange = nodeMatrix[dimIndex].Length - 1;
                 else highRange = nodeMatrixPrime[dimIndex].Length - 1;
-            }
-            else highRange = nextNode.getPreviouslyAugmentedIndex();
+            } else highRange = nextNode.getPreviouslyAugmentedIndex();
 
-            IEnumerable<int> range = Enumerable.Range(lowRange, highRange - lowRange + 1);
+            IEnumerable<int> range = Enumerable.Range(lowRange, highRange - lowRange);
             
             // Search range
             bool found = false;
