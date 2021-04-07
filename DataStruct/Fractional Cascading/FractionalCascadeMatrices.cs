@@ -41,12 +41,12 @@ namespace Fractional_Cascading {
 
             For each node in primeList(i), assign a previous and next pointer to the
             previous and next nodes in the list that were not promoted from
-            primeList(i - 1).
-            */
+            primeList(i - 1).   */
             
             // Handle previous node pointers
             for(int i = 1; i < primeList.Length; i++) {
                 FCNode currNode = primeList[i];
+                currNode.setPrime();
                 for(int j = i-1; j >= 0; j--) {
                     FCNode prevNode = primeList[j];
                     if(prevNode.isPromoted() != currNode.isPromoted()) {
@@ -59,6 +59,7 @@ namespace Fractional_Cascading {
             // Handle next node pointers
             for(int i = 0; i < primeList.Length - 1; i++) {
                 FCNode currNode = primeList[i];
+                currNode.setPrime();
                 for(int j = i + 1; j < primeList.Length; j++) {
                     FCNode nextNode = primeList[j];
                     if(nextNode.isPromoted() != currNode.isPromoted()) {
@@ -131,8 +132,7 @@ namespace Fractional_Cascading {
             while(d < n) primeList[j++] = FCNodeList1[d++].makeCopy();
 
             // Set elements new elements to prime, assign pointers
-            // TODO- Make this more efficient, combine function
-            foreach(FCNode f in primeList) f.setPrime();
+            // TODO- Make this process much more efficient
             setPointers(primeList);
             
             return primeList;
@@ -166,7 +166,7 @@ namespace Fractional_Cascading {
 
         private void setCoordMatrix(int insertData) {
             /**
-            Build k lists of n CoordinateNodes each, sorted by their location (xLox). If 
+            Build k lists of n CoordinateNodes each, sorted by their data value. If 
             insertData equals -1, each list will have nodes which share data values but
             have various xLoc values. Otherwise, each list will have nodes with random
             xLoc and data values, except for insertData, which will be present in each
@@ -202,42 +202,27 @@ namespace Fractional_Cascading {
             n = numValsPerList;
             k = numLists;
             
-            if(print) {
-                Console.WriteLine("N: " + n);
-                Console.WriteLine("K: " + k);
-            }
+            if(print) Console.WriteLine("N: " + n + "\nK: " + k);
 
             if(unitFracDen <= 1)
                 throw new Exception("Invalid unitFracDen, must be greater than 1");
             
             // Convert coordNodeMatrix to one of FCNodes, assign as nodeMatrix
             // -> start with matrix of coordNodes sorted by their location (xLoc)
+            if(print) Console.WriteLine("Generating matrix of random sorted coordNodes.");
             setCoordMatrix(insertData);
-            if(print) {
-                Console.WriteLine("Generating random coordinate nodes.");
-                Console.WriteLine("CoordinateMatrix - input");
-                u.printNodeMatrix(inputCoordMatrix);
-            }
 
             // Sort each array in coordinate matrix on its data value and set it
-            if(print) Console.WriteLine("Sorting coordinate matrix, building FCNode matrix from coord matrix.");
-
-            sortCordMatrixOnData(inputCoordMatrix);
+            // Are you necessary?
+            // if(print) Console.WriteLine("Sorting coordinate matrix");
+            // sortCordMatrixOnData(inputCoordMatrix);
+            
+            if(print) Console.WriteLine("Building FCNode matrix from coord matrix.");
             setNodeMatrixFromCoordMatrix(inputCoordMatrix);
-
-            if(print) {
-                Console.WriteLine("NodeMatrix");
-                u.printNodeMatrix(nodeMatrix);
-            }
 
             // Build and assign nodeMatrixPrime from just-assigned nodeMatrix
             if(print) Console.WriteLine("Building augmented matrix using FCNode matrix.");
             setNodeMatrixPrime(unitFracDen);
-
-            if(print) {
-                Console.WriteLine("NodeMatrixPrime");
-                u.printNodeMatrix(nodeMatrixPrime);
-            }
         }
     }
 }

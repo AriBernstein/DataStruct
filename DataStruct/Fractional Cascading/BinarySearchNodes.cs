@@ -4,7 +4,6 @@ namespace Fractional_Cascading {
     // C# program for using Binary Search to find location of a
     // fractional cascading node in a list by a given attribute
     public class BinarySearchNodes {
-        private Utils u = new Utils();
         public int binarySearch(Node[] nodeArray, int searchValue, int attrCode) {
             /** Parameters:
                     nodeArray:      array of nodes ordered by the attribute associated
@@ -21,13 +20,13 @@ namespace Fractional_Cascading {
         }
 
         private int binarySearch(Node[] nodeArray, int l, int r, int x, int attrCode) {
-            if(r < 1 || l > r) {
-                // Check if value is at 0th index
+
+            if(l >= r) {
                 if(nodeArray[r].getAttr(attrCode) == x) return r;
                 String xNotInArrException =
                     "value: " + x + " cannot be found in node array during binary " + 
                     "search\n\tl-index: " + l +  "\tr-index: " + r + "\tx: " + x + "\n";      
-                throw new Exception(xNotInArrException); // Base case
+                throw new Exception(xNotInArrException); // Base case            
             }
             
             int m = l + (r - l) / 2;
@@ -37,7 +36,7 @@ namespace Fractional_Cascading {
             if(x == valueAtMid) return m;
 
             // Value is less than element at mid, search left side
-            else if(x < valueAtMid) return binarySearch(nodeArray, l, m-1, x, attrCode);
+            else if(x < valueAtMid) return binarySearch(nodeArray, l, m, x, attrCode);
 
             // Value is greater than element at mid, search right side
             else return binarySearch(nodeArray, m+1, r, x, attrCode);

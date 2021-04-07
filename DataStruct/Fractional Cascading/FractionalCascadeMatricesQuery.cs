@@ -63,22 +63,25 @@ namespace Fractional_Cascading {
             
             // Find range
             int lowRange, highRange;
-            int currIndex = dim - 1;
+            int dimIndex = dim - 1;
 
             if(prevNode == null) lowRange = 0;
             else lowRange = prevNode.getPreviouslyAugmentedIndex();
 
-            if(nextNode == null) highRange = nodeMatrixPrime[currIndex].Length - 1;
+            if(nextNode == null) {
+                if(dim == k) highRange = nodeMatrix[dimIndex].Length - 1;
+                else highRange = nodeMatrixPrime[dimIndex].Length - 1;
+            }
             else highRange = nextNode.getPreviouslyAugmentedIndex();
 
-            IEnumerable<int> range = Enumerable.Range(lowRange, highRange - lowRange);
+            IEnumerable<int> range = Enumerable.Range(lowRange, highRange - lowRange + 1);
             
             // Search range
             bool found = false;
             foreach (int j in range) {
                 if(dim == k) // list(k-1)' is built using lists k and k-1 (not prime)
-                    node = nodeMatrix[currIndex][j];
-                else node = nodeMatrixPrime[currIndex][j];
+                    node = nodeMatrix[dimIndex][j];
+                else node = nodeMatrixPrime[dimIndex][j];
                 
                 if(targetNodeCheck(node, targetData, dim)) {
                     found = true;
@@ -87,7 +90,8 @@ namespace Fractional_Cascading {
             }
             
             if(!(found)) throw new Exception("Can't find node with data " + targetData +
-                                             " in dimension: " + dim);
+                                             " in dimension: " + dim +
+                                             " during fractional cascading search");
             return node;
         }
 
@@ -120,6 +124,7 @@ namespace Fractional_Cascading {
                 else throw new Exception("Cannot locate data in list 1' ");
             }
 
+            // Assign first dimension location in return dictionary
             locationsOfData[currentDim] = dataNode.getAttr(1);
 
             for(int i = 1; i < nodeMatrix.Length; i++) {
