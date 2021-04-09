@@ -88,8 +88,7 @@ namespace Fractional_Cascading {
                     break;
                 }
             }
-            if(!(found)) Console.WriteLine(range.ToList()[range.ToArray().Length - 1]);
-            if(!(found)) Console.WriteLine(nodeMatrixPrime[dimIndex][nodeMatrixPrime[dimIndex].Length - 1]);
+            
             if(!(found)) throw new Exception("Can't find node with data " + targetData +
                                              " in dimension: " + dim +
                                              " during fractional cascading search");

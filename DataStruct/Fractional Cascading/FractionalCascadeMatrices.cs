@@ -114,10 +114,6 @@ namespace Fractional_Cascading {
                 j++;
             }
 
-            // Set elements new elements to prime, assign pointers
-            // TODO- Make this process much more efficient
-            // setPointers(primeList);
-
             return primeList;
         }
 
