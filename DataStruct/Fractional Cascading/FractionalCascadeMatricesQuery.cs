@@ -70,8 +70,8 @@ namespace Fractional_Cascading {
 
             if(nextNode == null) {
                 if(dim == k) // list(k-1)' is built using lists k and k-1 (not prime)
-                    highRange = nodeMatrix[dimIndex].Length - 1;
-                else highRange = nodeMatrixPrime[dimIndex].Length - 1;
+                    highRange = nodeMatrix[dimIndex].Length;
+                else highRange = nodeMatrixPrime[dimIndex].Length;
             } else highRange = nextNode.getPreviouslyAugmentedIndex();
 
             IEnumerable<int> range = Enumerable.Range(lowRange, highRange - lowRange);
@@ -88,7 +88,8 @@ namespace Fractional_Cascading {
                     break;
                 }
             }
-            
+            if(!(found)) Console.WriteLine(range.ToList()[range.ToArray().Length - 1]);
+            if(!(found)) Console.WriteLine(nodeMatrixPrime[dimIndex][nodeMatrixPrime[dimIndex].Length - 1]);
             if(!(found)) throw new Exception("Can't find node with data " + targetData +
                                              " in dimension: " + dim +
                                              " during fractional cascading search");

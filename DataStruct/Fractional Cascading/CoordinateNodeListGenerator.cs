@@ -61,7 +61,7 @@ namespace Fractional_Cascading {
             return (result.ToArray(), candidates);
         }
 
-        public CoordNode[] getCoordNodeList(int n, int insertDataVal, bool sort=true,
+        public CoordNode[] getCoordNodeList(int n, int insertData, bool sort=true,
                                             int sortAttrCode=0, int dimensions=1,
                                             int rangeMin=0, int rangeMax=10000000,
                                             int randomSeed=10) {
@@ -77,42 +77,56 @@ namespace Fractional_Cascading {
                 locRangeMin: locRangeMax: randomized range of xyz values
                 dataRangeMin: dataRangeMax: randomized range of node data values
                 randomSeed: random seed by which to select nodeData
-                insertDataVal: if not -1, replace the data attribute of the node at a
-                               random index in the return list  */
+                insertData: if not -1, replace the data attribute of the node at a
+                            random index in the return list  */
 
             CoordNode[] nodeList = new CoordNode[n];
-            (int[] xList, HashSet<int> xSet) =
+            
+            // Populate location and data values
+            int[] xList;                HashSet<int> xSet;
+            int[] yList = new int[0];   HashSet<int> ySet = new HashSet<int>{0};
+            int[] zList = new int[0];   HashSet<int> zSet = new HashSet<int>{0};
+
+            (int[] dataList, HashSet<int> dataSet) = // We will always need data
                 randUniqueIntsRange(n, rangeMin, rangeMax);
-            (int[] yList, HashSet<int> ySet) =
-                randUniqueIntsRange(n, rangeMin, rangeMax);
-            (int[] zList, HashSet<int> zSet) =
-                randUniqueIntsRange(n, rangeMin, rangeMax);
-            (int[] dataList, HashSet<int> dataSet) = 
-                randUniqueIntsRange(n, rangeMin, rangeMax);
-             
-            Random random = new Random(randomSeed);
-            for(int i = 0; i < n; i++) {
+
+            // We will always have at least one dimension
+            (int[] xL, HashSet<int> xS) = randUniqueIntsRange(n, rangeMin, rangeMax);
+            xList = xL; xSet = xS;
+            
+            // Check for further dimensionality before constructing random lists
+            if (dimensions >= 2) {
+                (int[] yL, HashSet<int> yS) = randUniqueIntsRange(n, rangeMin, rangeMax);
+                yList = yL; ySet = yS;
+            }
+            if (dimensions == 3) {
+                (int[] zL, HashSet<int> zS) = randUniqueIntsRange(n, rangeMin, rangeMax);
+                zList = zL; zSet = zS;
+            }
+            if(dimensions > 3 || dimensions < 1) {
+                string errMsg =
+                    "Invalid dimensions parameter value when calling getCoordNodeList";
+                throw new Exception(errMsg);
+            }
+
+            for(int i = 0; i < n; i++) {  // Build nodes using newly generated lists/sets
                 if(dimensions == 1) {
                     nodeList[i] = new CoordNode(dataList[i], xList[i]);
                 } else if(dimensions == 2) {
                     nodeList[i] = new CoordNode(dataList[i], xList[i], yList[i]);
                 } else if(dimensions == 3) {
-                    nodeList[i] = new CoordNode(dataList[i], xList[i], yList[i],
-                                                zList[i]);
+                    nodeList[i] = new CoordNode(dataList[i], xList[i], yList[i], zList[i]);
                 }
-            } 
-
-            if(insertDataVal >= 0) {
-                if(!(dataSet.Contains(insertDataVal))) {
-                    int randomIndex = random.Next(0, n);
-                    nodeList[randomIndex].setData(insertDataVal);
-                }
-            } else throw new Exception("insertDataVal parameter must be positive");
-            
-            if(sort) {
-                MergeSortNodes msn = new MergeSortNodes();
-                msn.sort(nodeList, sortAttrCode);
             }
+
+            // Insert expected search value
+            if(insertData >= 0) {   // note: n/2 index in nodeList is arbitrary
+                if(!(dataSet.Contains(insertData))) nodeList[n/2].setData(insertData);
+            } else throw new Exception("insertData parameter must be positive");
+            
+            // Sort randomly generated attributes on sortAttrCode
+            if(sort) new MergeSortNodes().sort(nodeList, sortAttrCode);
+            
             return nodeList;
         }
     }
