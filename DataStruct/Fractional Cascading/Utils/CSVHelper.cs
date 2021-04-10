@@ -26,7 +26,10 @@ namespace Fractional_Cascading {
         /**
         Functionality to output search stats to a CSV file  */
 
-        private string filePath = "fractional_cascading_search_stats.csv";
+        private string filePath;
+        public CSVHelper(string filePathStr) {
+            filePath  = filePathStr;
+        }
         
         public void writeCsv(List<Record> recs) {
             using (StreamWriter writer = new StreamWriter(filePath))

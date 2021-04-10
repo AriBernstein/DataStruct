@@ -72,9 +72,11 @@ namespace Fractional_Cascading {
             // -> Merge elements from nodesToPromote and FCNodeList1 into primeList
             // -> For each node, point to the previous and next foreign nodes
             // --> ie. prev and next nodes not present in initial list of given node
-            FCNode lastPromotedNode = null;    FCNode lastNotPromotedNode = null;
-
-            void setPointersNEW(FCNode currentNode) {  // Handle pointer assignment
+            
+            // Handles pointer assignment
+            FCNode lastPromotedNode = null;
+            FCNode lastNotPromotedNode = null;
+            void setPointers(FCNode currentNode) {
                 // Assign prev and next non-promoted node pointers
                 if(currentNode.isPromoted()) {
                     lastPromotedNode = currentNode;
@@ -92,25 +94,26 @@ namespace Fractional_Cascading {
                 currentNode.setPrime();
             }
 
+            // Merge and call setPointers()
             c = 0;
             while(c < nodesToPromote.Length && d < FCNodeList1.Length) {
                 if (FCNodeList1[d].getData() < nodesToPromote[c].getData()) {
                     primeList[j] = FCNodeList1[d++].makeCopy();
                 } else primeList[j] = nodesToPromote[c++];
                 
-                setPointersNEW(primeList[j]);
+                setPointers(primeList[j]);
                 j++;
             }
 
-            // Add leftover values:
+            // Add remaining values:
             while(c < nodesToPromote.Length) {
                 primeList[j] = nodesToPromote[c++];
-                setPointersNEW(primeList[j]);
+                setPointers(primeList[j]);
                 j++;
             }
             while(d < n) {
                 primeList[j] = FCNodeList1[d++].makeCopy();
-                setPointersNEW(primeList[j]);
+                setPointers(primeList[j]);
                 j++;
             }
 
