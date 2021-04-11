@@ -122,10 +122,11 @@ namespace Fractional_Cascading {
                 if(targetNodeCheck(next, data, currentDim)) dataNode = next;
                 else if (targetNodeCheck(prev, data, currentDim)) dataNode = prev;
                 else {
-                    Console.WriteLine("Index neighbors left:\t" + nodeMatrixPrime[0][dataIndex-1] + '\t' + nodeMatrixPrime[0][dataIndex-2]);
-                    Console.WriteLine("Index neighbors right:\t" + nodeMatrixPrime[0][dataIndex+1] + '\t' + nodeMatrixPrime[0][dataIndex+2]);
-
-                    string errorMsg = "Cannot locate data in augmented list 1' " + 
+                    string errorMsg = "Cannot locate data in augmented list 1' " +
+                                      "Index neighbor left:\t" +
+                                      nodeMatrixPrime[0][dataIndex-1] +
+                                      "Index neighbor right:\t" +
+                                      nodeMatrixPrime[0][dataIndex+1] +
                                       $"\nDataNode: {dataNode}\nNextNode: {next}" +
                                       $"\nPrevNode: {prev}";
                     throw new Exception(errorMsg);
@@ -149,8 +150,7 @@ namespace Fractional_Cascading {
 
 
         public FCMatricesQuery(int numValsPerList, int numLists, int unitFracDen=2,
-                               bool print=true, int insertData=-1,
-                               bool consistentSeed=true) {
+                               bool print=true, int insertData=-1) {
             FractionalCascadingMatrices fcm;
             n = numValsPerList;
             k = numLists;
@@ -158,8 +158,8 @@ namespace Fractional_Cascading {
             if(insertData == -1) fcm = new FractionalCascadingMatrices(n, k);
             else fcm = new FractionalCascadingMatrices(n, k,
                                                        insertData: insertData,
-                                                       print:print,
-                                                       consistentSeed:consistentSeed);
+                                                       print:print);
+            
             inputCoordMatrix = fcm.getInputCoordMatrix();
             nodeMatrix = fcm.getFractionalCascadingNodeMatix();
             nodeMatrixPrime = fcm.getFractionalCascadingNodeMatixPrime();

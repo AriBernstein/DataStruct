@@ -85,11 +85,16 @@ namespace Fractional_Cascading {
             return nextNode;
         }
 
-        public FCNode makeCopy(bool setPromoted=false, int prevAugmentedIndex = -1) {
+        public FCNode makeCopy(bool setPromoted=false, bool keepPointers=false,
+                               int prevAugmentedIndex = -1) {
+            
             FCNode ret = new FCNode(baseCoordNode, dimension, index,
                                     setPromoted, prevAugmentedIndex);
-            ret.nextNode = nextNode;
-            ret.previousNode = previousNode;
+            if(keepPointers) {
+                ret.nextNode = nextNode;
+                ret.previousNode = previousNode;
+            }
+
             return ret;
         }
 
