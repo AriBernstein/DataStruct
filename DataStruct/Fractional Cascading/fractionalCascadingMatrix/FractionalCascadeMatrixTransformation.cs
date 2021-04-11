@@ -171,8 +171,7 @@ namespace Fractional_Cascading {
             CoordinateNodeListGenerator cnlg = new CoordinateNodeListGenerator();
             inputCoordMatrix = new CoordNode[k][];
             for (int i = 0; i < k; i++) {
-                inputCoordMatrix[i] = cnlg.getCoordNodeList(n, insertData,
-                                                            randomSeed: 10 + i);
+                inputCoordMatrix[i] = cnlg.getCoordNodeList(n, insertData);
             }
         }
 

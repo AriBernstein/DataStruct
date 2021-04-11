@@ -4,7 +4,6 @@ using System.Collections.Generic;
 namespace Fractional_Cascading {
     class FCMatrixDemo {
         Utils u = new Utils();
-        Random random = new Random();
 
         public void demo(int x, int n, int k, bool print=true) {
             Console.WriteLine("Starting Fractional Cascading Matrix Search Demo\n");
@@ -38,6 +37,7 @@ namespace Fractional_Cascading {
 
             List<Record> fractionalCascadingStats = new List<Record>();
             System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
+            Random random = new Random();
 
             for(int k = kMin; k < kMax; k+= kIncr) {
                 Console.WriteLine("K: " + k);

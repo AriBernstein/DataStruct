@@ -6,7 +6,8 @@ using System.Linq;
 namespace Fractional_Cascading {
     public class CoordinateNodeListGenerator {
 
-        private (int[], HashSet<int>) randUniqueIntsRange(int n, int min, int max) {
+        private (int[], HashSet<int>) randUniqueIntsRange(int n, int min, int max,
+                                                          int randomSeed=-1) {
             /**
             Generate list of random non-repeating integers, return both randomly-ordered
             list and set (for checking whether or not value to insert exists quickly)
@@ -15,6 +16,7 @@ namespace Fractional_Cascading {
                 n:      size of list of random unique integers to generate
                 min:    lower bound (inclusive) of the random integers to generate
                 max:    upper bound (exclusive) of the random integers to generate
+                randomSeed: if -1, use system default, else use this
 
             Algorithm:
                 initialize set S to empty
@@ -23,7 +25,9 @@ namespace Fractional_Cascading {
                     if T is not in S then insert T in S
                     else insert J in S   */
                         
-            Random random = new Random();
+            Random random;
+            if(randomSeed == -1) random = new Random();
+            else random = new Random(randomSeed);
 
             if (max <= min || n < 0 || (n > max - min && max - min > 0)) {
                 // need to use 64-bit to support big ranges (negative min, positive max)
@@ -64,7 +68,7 @@ namespace Fractional_Cascading {
         public CoordNode[] getCoordNodeList(int n, int insertData, bool sort=true,
                                             int sortAttrCode=0, int dimensions=1,
                                             int rangeMin=0, int rangeMax=10000000,
-                                            int randomSeed=10) {
+                                            int randomSeed=-1) {
             /**
             Return a list of coordNodes with random x, y, and z values ranging locRangeMin
             to locRangeMax and data values ranging from dataRangeMin to dataRangeMax
@@ -76,7 +80,7 @@ namespace Fractional_Cascading {
                 dimensions: between one and three
                 locRangeMin: locRangeMax: randomized range of xyz values
                 dataRangeMin: dataRangeMax: randomized range of node data values
-                randomSeed: random seed by which to select nodeData
+                randomSeed: random seed used dataList generation, system default if -1
                 insertData: if not -1, replace the data attribute of the node at a
                             random index in the return list  */
 
@@ -88,7 +92,7 @@ namespace Fractional_Cascading {
             int[] zList = new int[0];   HashSet<int> zSet = new HashSet<int>{0};
 
             (int[] dataList, HashSet<int> dataSet) = // We will always need data
-                randUniqueIntsRange(n, rangeMin, rangeMax);
+                randUniqueIntsRange(n, rangeMin, rangeMax, randomSeed);
 
             // We will always have at least one dimension
             (int[] xL, HashSet<int> xS) = randUniqueIntsRange(n, rangeMin, rangeMax);
@@ -115,7 +119,8 @@ namespace Fractional_Cascading {
                 } else if(dimensions == 2) {
                     nodeList[i] = new CoordNode(dataList[i], xList[i], yList[i]);
                 } else if(dimensions == 3) {
-                    nodeList[i] = new CoordNode(dataList[i], xList[i], yList[i], zList[i]);
+                    nodeList[i] =
+                        new CoordNode(dataList[i], xList[i], yList[i], zList[i]);
                 }
             }
 
