@@ -27,16 +27,15 @@ namespace Fractional_Cascading {
         Functionality to output search stats to a CSV file  */
 
         private string filePath;
+        public CSVHelper(string filePathStr) {
+            filePath  = filePathStr;
+        }
         
-        public void writeCSV(List<Record> recs) {
+        public void writeCsv(List<Record> recs) {
             using (StreamWriter writer = new StreamWriter(filePath))
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture)) {
                 csv.WriteRecords(recs);
             }
-        }
-
-        public CSVHelper(string filePathString) {
-            filePath = filePathString;
         }
     }
 }

@@ -4,9 +4,10 @@ using System.Linq;
 
 
 namespace Fractional_Cascading {
-    public class CoordinateNodeListGenerator {
+    public class CoordinateNodeGenerator {
 
-        private (int[], HashSet<int>) randUniqueIntsRange(int n, int min, int max) {
+        private (int[], HashSet<int>) randUniqueIntsRange(int n, int min, int max,
+                                                          int randomSeed=-1) {
             /**
             Generate list of random non-repeating integers, return both randomly-ordered
             list and set (for checking whether or not value to insert exists quickly)
@@ -22,8 +23,9 @@ namespace Fractional_Cascading {
                     T := RandInt(1, J)
                     if T is not in S then insert T in S
                     else insert J in S   */
-                        
+            
             Random random = new Random();
+            if (randomSeed != -1) random = new Random(randomSeed);
 
             if (max <= min || n < 0 || (n > max - min && max - min > 0)) {
                 // need to use 64-bit to support big ranges (negative min, positive max)
@@ -33,38 +35,38 @@ namespace Fractional_Cascading {
             }
 
             // hash sets don't support duplicate values
-            HashSet<int> candidates = new HashSet<int>();
+            HashSet<int> randomValueSet = new HashSet<int>();
 
             // start count values before max, and end at max
             for (int top = max - n; top < max; top++) {
                 // May strike a duplicate. Need to add +1 to make inclusive generator
                 // ->  +1 is safe even for MaxVal max value because top < max
-                if (!candidates.Add(random.Next(min, top + 1))) {
+                if (!randomValueSet.Add(random.Next(min, top + 1))) {
                     // Collision! Add inclusive max - could not have been added before.
-                    candidates.Add(top);
+                    randomValueSet.Add(top);
                 }
             }
 
             // load them in to a list, to sort
-            List<int> result = candidates.ToList();
+            List<int> randomUniqueList = randomValueSet.ToList();
 
             // shuffle the results because HashSet has messed
             // with the order, and the algorithm does not produce
             // random-ordered results (e.g. max-1 will never be the first value)
-            for (int i = result.Count - 1; i > 0; i--) {  
+            for (int i = randomUniqueList.Count - 1; i > 0; i--) {  
                 int k = random.Next(i + 1);  
-                int tmp = result[k];  
-                result[k] = result[i];  
-                result[i] = tmp;  
+                int tmp = randomUniqueList[k];  
+                randomUniqueList[k] = randomUniqueList[i];  
+                randomUniqueList[i] = tmp;  
             }
              
-            return (result.ToArray(), candidates);
+            return (randomUniqueList.ToArray(), randomValueSet);
         }
 
         public CoordNode[] getCoordNodeList(int n, int insertData, bool sort=true,
                                             int sortAttrCode=0, int dimensions=1,
                                             int rangeMin=0, int rangeMax=10000000,
-                                            int randomSeed=10) {
+                                            int randomSeed=-1) {
             /**
             Return a list of coordNodes with random x, y, and z values ranging locRangeMin
             to locRangeMax and data values ranging from dataRangeMin to dataRangeMax
@@ -76,7 +78,8 @@ namespace Fractional_Cascading {
                 dimensions: between one and three
                 locRangeMin: locRangeMax: randomized range of xyz values
                 dataRangeMin: dataRangeMax: randomized range of node data values
-                randomSeed: random seed by which to select nodeData
+                randomSeed: if not -1, random seed by which to select nodeData. Else
+                            seed is system default
                 insertData: if not -1, replace the data attribute of the node at a
                             random index in the return list  */
 
@@ -88,7 +91,7 @@ namespace Fractional_Cascading {
             int[] zList = new int[0];   HashSet<int> zSet = new HashSet<int>{0};
 
             (int[] dataList, HashSet<int> dataSet) = // We will always need data
-                randUniqueIntsRange(n, rangeMin, rangeMax);
+                randUniqueIntsRange(n, rangeMin, rangeMax, randomSeed);
 
             // We will always have at least one dimension
             (int[] xL, HashSet<int> xS) = randUniqueIntsRange(n, rangeMin, rangeMax);
@@ -115,7 +118,8 @@ namespace Fractional_Cascading {
                 } else if(dimensions == 2) {
                     nodeList[i] = new CoordNode(dataList[i], xList[i], yList[i]);
                 } else if(dimensions == 3) {
-                    nodeList[i] = new CoordNode(dataList[i], xList[i], yList[i], zList[i]);
+                    nodeList[i] =
+                        new CoordNode(dataList[i], xList[i], yList[i], zList[i]);
                 }
             }
 

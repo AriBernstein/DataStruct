@@ -6,11 +6,12 @@ namespace Fractional_Cascading {
         Utils u = new Utils();
         Random random = new Random();
 
-        public void demo(int x, int n, int k, bool print=true) {
+        public void demo(int x, int n, int k, bool print=true, bool consistentSeed=true) {
             Console.WriteLine("Starting Fractional Cascading Matrix Search Demo\n");
             System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
             
-            FCMatricesQuery fcmq = new FCMatricesQuery(n, k, insertData:x, print:print);
+            FCMatricesQuery fcmq = new FCMatricesQuery(n, k, insertData:x, print:print,
+                                                       consistentSeed:consistentSeed);
             
             Console.WriteLine("\nBinary search:");
             watch.Start();
@@ -66,7 +67,7 @@ namespace Fractional_Cascading {
                 }
             }
             
-            new CSVHelper(CSVFileName).writeCSV(fractionalCascadingStats);
+            new CSVHelper(CSVFileName).writeCsv(fractionalCascadingStats);
             Console.WriteLine("\n\nAll done :)\n\n");
         }
     }

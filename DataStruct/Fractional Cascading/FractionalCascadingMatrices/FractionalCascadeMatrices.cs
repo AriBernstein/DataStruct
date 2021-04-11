@@ -33,6 +33,41 @@ namespace Fractional_Cascading {
         public FCNode[][] getFractionalCascadingNodeMatixPrime() {
             return nodeMatrixPrime;
         }
+
+        private void setPointers(FCNode[] primeList) {
+            /**
+            primeList represents the augmented list primeList(i). It contains FCNodes
+            FCNodes from both the intial list(i) and promoted from primeList(i - 1).
+            For each node in primeList(i), assign a previous and next pointer to the
+            previous and next nodes in the list that were not promoted from
+            primeList(i - 1).   */
+
+            // Handle previous node pointers
+            for(int i = 1; i < primeList.Length; i++) {
+                FCNode currNode = primeList[i];
+                currNode.setPrime();
+                for(int j = i-1; j >= 0; j--) {
+                    FCNode prevNode = primeList[j];
+                    if(prevNode.isPromoted() != currNode.isPromoted()) {
+                        currNode.setPrevPointer(prevNode);
+                        break;
+                    }
+                }
+            }
+
+            // Handle next node pointers
+            for(int i = 0; i < primeList.Length - 1; i++) {
+                FCNode currNode = primeList[i];
+                currNode.setPrime();
+                for(int j = i + 1; j < primeList.Length; j++) {
+                    FCNode nextNode = primeList[j];
+                    if(nextNode.isPromoted() != currNode.isPromoted()) {
+                        currNode.setNextPointer(nextNode);
+                        break;
+                    }
+                }
+            }
+        }
         
         private FCNode[] buildListPrime(FCNode[] FCNodeList1, FCNode[] FCNodeList2,
                                         int unitFracDen) {
@@ -67,52 +102,27 @@ namespace Fractional_Cascading {
                 // list and flag them as promoted.
                 nodesToPromote[c++] = FCNodeList2[i].makeCopy(true, i);
             }
-            
-            // Perform Fractional Cascading transformation 
-            // -> Merge elements from nodesToPromote and FCNodeList1 into primeList
-            // -> For each node, point to the previous and next foreign nodes
-            // --> ie. prev and next nodes not present in initial list of given node
-            FCNode lastPromotedNode = null;    FCNode lastNotPromotedNode = null;
 
-            void setPointersNEW(FCNode currentNode) {  // Handle pointer assignment
-                // Assign prev and next non-promoted node pointers
-                if(currentNode.isPromoted()) {
-                    lastPromotedNode = currentNode;
-                    currentNode.setPrevPointer(lastNotPromotedNode);
-                    if(lastNotPromotedNode != null)
-                        lastNotPromotedNode.setNextPointer(currentNode);
-
-                // Assign prev and next promoted node pointers
-                } else {
-                    lastNotPromotedNode = currentNode;
-                    currentNode.setPrevPointer(lastPromotedNode);
-                    if (lastPromotedNode != null)
-                        lastPromotedNode.setNextPointer(currentNode);
-                }
-                currentNode.setPrime();
-            }
-
+            // Merge
             c = 0;
             while(c < nodesToPromote.Length && d < FCNodeList1.Length) {
                 if (FCNodeList1[d].getData() < nodesToPromote[c].getData()) {
                     primeList[j] = FCNodeList1[d++].makeCopy();
                 } else primeList[j] = nodesToPromote[c++];
-                
-                setPointersNEW(primeList[j]);
                 j++;
             }
 
-            // Add leftover values:
+            // Add remaining values:
             while(c < nodesToPromote.Length) {
                 primeList[j] = nodesToPromote[c++];
-                setPointersNEW(primeList[j]);
                 j++;
             }
             while(d < n) {
                 primeList[j] = FCNodeList1[d++].makeCopy();
-                setPointersNEW(primeList[j]);
                 j++;
             }
+
+            setPointers(primeList);
 
             return primeList;
         }
@@ -156,7 +166,7 @@ namespace Fractional_Cascading {
             }
         }
 
-        private void setCoordMatrix(int insertData) {
+        private void setCoordMatrix(int insertData, bool consistentSeed=true) {
             /**
             Build k lists of n CoordinateNodes each, sorted by their data value. If 
             insertData equals -1, each list will have nodes which share data values but
@@ -164,17 +174,22 @@ namespace Fractional_Cascading {
             xLoc and data values, except for insertData, which will be present in each
             list. Set as inputCoordMatrix */
 
-            CoordinateNodeListGenerator cnlg = new CoordinateNodeListGenerator();
+            CoordinateNodeGenerator cnlg = new CoordinateNodeGenerator();
             inputCoordMatrix = new CoordNode[k][];
-            for (int i = 0; i < k; i++) {
-                inputCoordMatrix[i] = cnlg.getCoordNodeList(n, insertData,
-                                                            randomSeed: 10 + i);
+            if(consistentSeed) {
+                for (int i = 0; i < k; i++) {
+                    inputCoordMatrix[i] = cnlg.getCoordNodeList(n, insertData,
+                                                                randomSeed: 10 + i);
+                }
+            } else {
+                for (int i = 0; i < k; i++)
+                    inputCoordMatrix[i] = cnlg.getCoordNodeList(n, insertData);
             }
         }
 
         public FractionalCascadingMatrices(int numValsPerList, int numLists,
                                            int unitFracDen=2, int insertData=-1,
-                                           bool print=true) {
+                                           bool print=true, bool consistentSeed=true) {
             /**
             Parameters:
                 numValsPerList: k
@@ -195,7 +210,7 @@ namespace Fractional_Cascading {
             // Convert coordNodeMatrix to one of FCNodes, assign as nodeMatrix
             // -> start with matrix of coordNodes sorted by their location (xLoc)
             if(print) Console.WriteLine("Generating matrix of random sorted coordNodes.");
-            setCoordMatrix(insertData);
+            setCoordMatrix(insertData, consistentSeed);
             
             // TODO: combine setCoordMatrix & setNodeMatrixFromCoordMatrix functionality
             if(print) Console.WriteLine("Building FCNode matrix from coord matrix.");
