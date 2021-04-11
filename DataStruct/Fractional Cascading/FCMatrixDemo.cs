@@ -8,7 +8,7 @@ namespace Fractional_Cascading {
 
         public void demo(int x, int n, int k, bool print=true) {
             Console.WriteLine("Starting Fractional Cascading Matrix Search Demo\n");
-            var watch = new System.Diagnostics.Stopwatch();
+            System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
             
             FCMatricesQuery fcmq = new FCMatricesQuery(n, k, insertData:x, print:print);
             
@@ -29,16 +29,19 @@ namespace Fractional_Cascading {
             Console.WriteLine("n: " + n + ", " + "\tk: " + k + "\tx: " + x);
             Console.WriteLine($"Execution Time of trivial solution: {trivialMS} ms");
             Console.WriteLine($"Execution Time of fractional cascading solution: {fcMS} ms");
-            Console.WriteLine($"Ratio of duration of FC solution vs trivial: {(float)fcMS / trivialMS}");
+            Console.WriteLine($"Ratio of duration of FC solution vs trivial: {(float)fcMS / trivialMS}\n\n");
         }
 
-        public void CSV_Loop(int x, int kMin, int kMax, int nMin, int nMax, String CSVFileName) {
+        public void CSV_Loop(int x, String CSVFileName,
+                             int kMin, int kMax, int kIncr,
+                             int nMin, int nMax, int nIncr) {
+
             List<Record> fractionalCascadingStats = new List<Record>();
             System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
 
-            for(int k = 250; k < 300; k+= 10) {
+            for(int k = kMin; k < kMax; k+= kIncr) {
                 Console.WriteLine("K: " + k);
-                    for(int n = 200000; n < 500000; n += 50000){
+                    for(int n = nMin; n < nMax; n += nIncr){
                         x = random.Next(0, n);
                         FCMatricesQuery fcmq =
                             new FCMatricesQuery(n, k, insertData:x, print:false);
@@ -63,7 +66,7 @@ namespace Fractional_Cascading {
                 }
             }
             
-            new CSVHelper(CSVFileName).writeCsv(fractionalCascadingStats);
+            new CSVHelper(CSVFileName).writeCSV(fractionalCascadingStats);
             Console.WriteLine("\n\nAll done :)\n\n");
         }
     }
