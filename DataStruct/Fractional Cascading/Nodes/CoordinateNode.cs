@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Fractional_Cascading {
     public class CoordNode : Node {
-        private int data; // attr code 0
+        private DataNode data; // attr code 0
 
         // attr codes 1, 2, 3
         private int xLoc = -1, yLoc = -1, zLoc = -1;
@@ -11,28 +11,28 @@ namespace Fractional_Cascading {
             xLoc = xVal;
             yLoc = yVal;
             zLoc = zVal;
-            data = dataVal;
+            data = new DataNode(dataVal);
         }
 
         public CoordNode(int dataVal, int xVal, int yVal) {
             // 2-dimensional constructor
             xLoc = xVal;
             yLoc = yVal;
-            data = dataVal;
+            data = new DataNode(dataVal);
         }
 
         public CoordNode(int dataVal, int xVal) {
             // 1-dimenstional constructor
             xLoc = xVal;
-            data = dataVal;
+            data = new DataNode(dataVal);
         }
 
         public void setData(int newData) {
-            data = newData;
+            data = new DataNode(newData);
         }
 
         public int getAttr(int attrCode) {
-            if (attrCode == 0)      return data;
+            if (attrCode == 0)      return data.getAttr(attrCode);
             else if (attrCode == 1) return xLoc;
             else if (attrCode == 2) return yLoc;
             else if (attrCode == 3) return zLoc;
