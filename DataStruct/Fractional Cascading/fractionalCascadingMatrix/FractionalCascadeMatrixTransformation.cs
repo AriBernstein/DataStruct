@@ -126,27 +126,26 @@ namespace Fractional_Cascading {
             nodeMatrixPrime = new FCNode[k][];
             
             // Convert coordNodes -> FCNodes
-            FCNode[][] nodeMatrixTemp = new FCNode[k][];
+            // FCNode[][] nodeMatrixTemp = new FCNode[k][];
             if(print) Console.WriteLine("Copying coordNodes into (non-promoted) FCNodes");
             for (int i = 0; i < k; i++) {
-                nodeMatrixTemp[i] = new FCNode[n];
+                nodeMatrixPrime[i] = new FCNode[n];
                 for(int j = 0; j < n; j++) {
                     CoordNode thisCoordNode = inputCoordMatrix[i][j];
                     FCNode thisFCNode = new FCNode(thisCoordNode, (i + 1), j);                    
-                    nodeMatrixTemp[i][j] = thisFCNode;
+                    nodeMatrixPrime[i][j] = thisFCNode;
                 }
             }
             
             // Begin Fractional Cascading Transformation
             if(print) Console.WriteLine("Performing Fractional Cascading transformation" +
                                         " on FCNode matrix.");
-            // nodes are always promoted from lower dimensions
-            // -> for (highest dim k, list(k') = list(k)
-            nodeMatrixPrime[k-1] = nodeMatrixTemp[k-1];
 
+            // re. (k-2), nodes are always promoted from lower dimensions
+            // -> for (highest dim) k, list(k') = list(k) -> list(k) is at index (k-1)
             // build the remaining promoted lists by nodes from list(i - 1') into list(i)
             for(int i = k-2; i >= 0; i--) {
-                FCNode[] nonAugmentedNodeListI = nodeMatrixTemp[i];
+                FCNode[] nonAugmentedNodeListI = nodeMatrixPrime[i];
                 FCNode[] augmentedNodeListIPlusOne = nodeMatrixPrime[i + 1];
                 nodeMatrixPrime[i] = buildListPrime(nonAugmentedNodeListI,
                                                     augmentedNodeListIPlusOne,
