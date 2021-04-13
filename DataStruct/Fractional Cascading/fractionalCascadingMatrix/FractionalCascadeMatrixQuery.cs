@@ -11,17 +11,9 @@ namespace Fractional_Cascading {
     public class FCMatricesQuery {
         
         private CoordNode[][] inputCoordMatrix;
-        
-        // Matrix of k lists of FractionalCascadingNodes, each of size n
-        private FCNode[][] nodeMatrix;
-       
-        // Matrix of k-1 lists of FractionalCascadingNodes, each except for
-        // the lastpromoted from the previous list
         private FCNode[][] nodeMatrixPrime;
-        
         private int n; // number of elements in each list in nodeMatrix
         private int k; // number of lists
-
 
         public Dictionary<int, int> trivialSolution(int data) {
             /**
@@ -69,9 +61,7 @@ namespace Fractional_Cascading {
             else lowRange = prevNode.getPreviouslyAugmentedIndex();
 
             if(nextNode == null) {
-                if(dim == k) // list(k-1)' is built using lists k and k-1 (not prime)
-                    highRange = nodeMatrix[dimIndex].Length;
-                else highRange = nodeMatrixPrime[dimIndex].Length;
+                highRange = nodeMatrixPrime[dimIndex].Length;
             } else highRange = nextNode.getPreviouslyAugmentedIndex();
 
             IEnumerable<int> range = Enumerable.Range(lowRange, highRange - lowRange);
@@ -79,9 +69,7 @@ namespace Fractional_Cascading {
             // Search range
             bool found = false;
             foreach (int j in range) {
-                if(dim == k) // list(k-1)' is built using lists k and k-1 (not prime)
-                    node = nodeMatrix[dimIndex][j];
-                else node = nodeMatrixPrime[dimIndex][j];
+                node = nodeMatrixPrime[dimIndex][j];
                 
                 if(targetNodeCheck(node, targetData, dim)) {
                     found = true;
@@ -136,7 +124,7 @@ namespace Fractional_Cascading {
             // Assign first dimension location in return dictionary
             locationsOfData[currentDim] = dataNode.getAttr(1);
 
-            for(int i = 1; i < nodeMatrix.Length; i++) {
+            for(int i = 1; i < nodeMatrixPrime.Length; i++) {
                 // Walk through promoted node pointers, starting with the list 2' until
                 // list (k-1)', then do a final check on list k (not prime)
                 // -> This logic is handled in findNodeFromPointerRange
@@ -161,8 +149,7 @@ namespace Fractional_Cascading {
                                                        print:print);
             
             inputCoordMatrix = fcm.getInputCoordMatrix();
-            nodeMatrix = fcm.getFractionalCascadingNodeMatix();
-            nodeMatrixPrime = fcm.getFractionalCascadingNodeMatixPrime();
+            nodeMatrixPrime = fcm.getFCNodeMatixPrime();
         }
     }
 }

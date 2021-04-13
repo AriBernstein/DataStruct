@@ -15,11 +15,9 @@ namespace Fractional_Cascading {
     public class FractionalCascadingMatrices {
         Utils u = new Utils();
         private CoordNode[][] inputCoordMatrix;
-        // Matrix of k lists of FCNodes, each of size n
-        private FCNode[][] nodeMatrix;
        
-        // Matrix of k-1 lists of FCNodes, each except for
-        // the lastPromoted from the previous list
+        // Matrix of k lists of FCNodes, post FC transformation
+        // -> each list except for l(k) has nodes promoted from previous dimensions
         private FCNode[][] nodeMatrixPrime;
         private int n; // number of elements in each list in nodeMatrix
         private int k; // number of lists
@@ -27,10 +25,7 @@ namespace Fractional_Cascading {
         public CoordNode[][] getInputCoordMatrix() {
             return inputCoordMatrix;
         }
-        public FCNode[][] getFractionalCascadingNodeMatix() {
-            return nodeMatrix;
-        }
-        public FCNode[][] getFractionalCascadingNodeMatixPrime() {
+        public FCNode[][] getFCNodeMatixPrime() {
             return nodeMatrixPrime;
         }
         
@@ -42,11 +37,9 @@ namespace Fractional_Cascading {
 
             fcNodeListOne and fcNodeListTwo must be ordered according to their data 
 
-            Note: the first time this is run (for the kth list),  FCNodeList1 = list(k-1)
-                                                                  FCNodeList2 = list(k)
-                  all other times this is run, FCNodeList1 = list(i-1)'
-                                               FCNodeList2 = list(i)
-            */
+            Note: FCNodeList1 = list(i-1)'
+                  FCNodeList2 = list(i)    */
+
             int numPromotedNodes =
                     (int)(Math.Ceiling(FCNodeList2.Length / (double)unitFracDen));
 
@@ -106,7 +99,7 @@ namespace Fractional_Cascading {
                 j++;
             }
 
-            // Add leftover values:
+            // Add leftover values to augmented list:
             while(c < nodesToPromote.Length) {
                 primeList[j] = nodesToPromote[c++];
                 setPointers(primeList[j]);
@@ -121,42 +114,43 @@ namespace Fractional_Cascading {
             return primeList;
         }
 
-        private void setNodeMatrixPrime(int unitFracDen) {
+        private void setFCTransformationMatrix(int unitFracDen, bool print=false) {
             /**
+            Copy coordNode matrix into FCNode matrix, perform fractional cascading
+            transformation
+
             Parameter:
                 unitFracDen: denominator of the unit fraction indicating the size of the
-                             subset promoted list (d-1)' into list d'
+                             subset promoted list (d-1)' into list d'   */
 
-            re. k-1 size of nodeMatrixPrime d1, promoted lists are in terms of d and d-1
-            st primes of every list total at k-1 lists  */
-
-            nodeMatrixPrime = new FCNode[k-1][];
+            nodeMatrixPrime = new FCNode[k][];
             
-            // build list(k-1)' - only promoted list build using 2 non-promoted lists
-            nodeMatrixPrime[k-2] =
-                buildListPrime(nodeMatrix[k-2], nodeMatrix[k-1], unitFracDen);
+            // Convert coordNodes -> FCNodes
+            FCNode[][] nodeMatrixTemp = new FCNode[k][];
+            if(print) Console.WriteLine("Copying coordNodes into (non-promoted) FCNodes");
+            for (int i = 0; i < k; i++) {
+                nodeMatrixTemp[i] = new FCNode[n];
+                for(int j = 0; j < n; j++) {
+                    CoordNode thisCoordNode = inputCoordMatrix[i][j];
+                    FCNode thisFCNode = new FCNode(thisCoordNode, (i + 1), j);                    
+                    nodeMatrixTemp[i][j] = thisFCNode;
+                }
+            }
+            
+            // Begin Fractional Cascading Transformation
+            if(print) Console.WriteLine("Performing Fractional Cascading transformation" +
+                                        " on FCNode matrix.");
+            // nodes are always promoted from lower dimensions
+            // -> for (highest dim k, list(k') = list(k)
+            nodeMatrixPrime[k-1] = nodeMatrixTemp[k-1];
 
             // build the remaining promoted lists by nodes from list(i - 1') into list(i)
-            for(int i = k-3; i >= 0; i--) {
-                FCNode[] nonAugmentedNodeListI = nodeMatrix[i];
+            for(int i = k-2; i >= 0; i--) {
+                FCNode[] nonAugmentedNodeListI = nodeMatrixTemp[i];
                 FCNode[] augmentedNodeListIPlusOne = nodeMatrixPrime[i + 1];
                 nodeMatrixPrime[i] = buildListPrime(nonAugmentedNodeListI,
                                                     augmentedNodeListIPlusOne,
                                                     unitFracDen);
-            }
-        }
-
-        private void setNodeMatrixFromCoordMatrix(CoordNode[][] coordNodeMatrix) {
-            // Convert 2D array of CoordNodes into 2D array of FCNodes, set as nodeMatrix
-            nodeMatrix = new FCNode[k][];
-            for (int i = 0; i < k; i++) {
-                nodeMatrix[i] = new FCNode[n];
-                for(int j = 0; j < n; j++) {
-                    CoordNode thisCoordNode = coordNodeMatrix[i][j];
-                    FCNode thisFCNode =
-                        new FCNode(thisCoordNode, (i + 1), j);                    
-                    nodeMatrix[i][j] = thisFCNode;
-                }
             }
         }
 
@@ -199,15 +193,9 @@ namespace Fractional_Cascading {
             // -> start with matrix of coordNodes sorted by their location (xLoc)
             if(print) Console.WriteLine("Generating matrix of random sorted coordNodes.");
             setCoordMatrix(insertData);
-            
-            // TODO: combine setCoordMatrix & setNodeMatrixFromCoordMatrix functionality
-            if(print) Console.WriteLine("Building FCNode matrix from coord matrix.");
-            setNodeMatrixFromCoordMatrix(inputCoordMatrix);
 
             // Build and assign nodeMatrixPrime from just-assigned nodeMatrix
-            if(print) Console.WriteLine("Performing Fractional Cascading transformation" +
-                                        " on FCNode matrix.");
-            setNodeMatrixPrime(unitFracDen);
+            setFCTransformationMatrix(unitFracDen, print:print);
         }
     }
 }
