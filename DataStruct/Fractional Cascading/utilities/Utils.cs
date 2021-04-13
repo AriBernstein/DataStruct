@@ -5,16 +5,17 @@ namespace Fractional_Cascading {
     public class Utils {
         private string sep = "\n-----\n";
 
-        public String printIntArray(int[] arr) {
+        public String PrintIntArray(int[] arr) {
             int n = arr.Length;
             string s = "";
-            for (int i = 0; i < (n-1); ++i) s = s + (arr[i] + ", ");
+            for (int i = 0; i < (n-1); ++i)
+                s = s + (arr[i] + ", ");
             s = s + arr[n-1] + sep;
             Console.WriteLine(s);
             return s;
         }
 
-        public string printDataLocationDict(Dictionary<int, int> dict, String searchVal) {
+        public string PrintDataLocationDict(Dictionary<int, int> dict, String searchVal) {
             int n = dict.Count;
             searchVal = searchVal + " located in dimension ";
             string s = "";
@@ -26,16 +27,18 @@ namespace Fractional_Cascading {
             return s;
         }
 
-        public string printNodeArray(Node[] arr) {
+        public string PrintNodeArray(Node[] arr) {
             string s = "";
             int n = arr.Length;
-            for (int i = 0; i < (n-1); i++) s = s + (arr[i] + "\n");
+            for (int i = 0; i < (n-1); i++)
+                s = s + (arr[i] + "\n");
             s = s + (arr[n-1] + sep);
             Console.WriteLine(s);
             return s;
         }
-        public void printNodeMatrix(Node[][] matrx) {
-            for(int i = 0; i < matrx.Length; i++) printNodeArray(matrx[i]);
+        public void PrintNodeMatrix(Node[][] matrix) {
+            for(int i = 0; i < matrix.Length; i++)
+                PrintNodeArray(matrix[i]);
         }
     }
 }

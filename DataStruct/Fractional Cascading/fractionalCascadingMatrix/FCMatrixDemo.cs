@@ -5,7 +5,7 @@ namespace Fractional_Cascading {
     class FCMatrixDemo {
         Utils u = new Utils();
 
-        public void demo(int x, int n, int k, bool print=true) {
+        public void Demo(int x, int n, int k, bool print=true) {
             Console.WriteLine("Starting Fractional Cascading Matrix Search Demo\n");
             System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
             
@@ -13,14 +13,14 @@ namespace Fractional_Cascading {
             
             Console.WriteLine("\nBinary search:");
             watch.Start();
-            u.printDataLocationDict(fcmq.trivialSolution(x), x.ToString());
+            u.PrintDataLocationDict(fcmq.TrivialSolution(x), x.ToString());
             watch.Stop();
             int trivialMS = (int)watch.ElapsedMilliseconds;
             
             Console.WriteLine("\nFractional Cascading search:");
             watch.Reset();
             watch.Start();
-            u.printDataLocationDict(fcmq.fractionalCascadeSearch(x), x.ToString());
+            u.PrintDataLocationDict(fcmq.FractionalCascadeSearch(x), x.ToString());
             watch.Stop();
             int fcMS = (int)watch.ElapsedMilliseconds;
 
@@ -31,7 +31,7 @@ namespace Fractional_Cascading {
             Console.WriteLine($"Ratio of duration of FC solution vs trivial: {(float)fcMS / trivialMS}\n\n");
         }
 
-        public void CSV_Loop(int x, String CSVFileName,
+        public void CSV_Loop(String CSVFileName,
                              int kMin, int kMax, int kIncr,
                              int nMin, int nMax, int nIncr) {
 
@@ -42,20 +42,20 @@ namespace Fractional_Cascading {
             for(int k = kMin; k < kMax; k+= kIncr) {
                 Console.WriteLine("K: " + k);
                     for(int n = nMin; n < nMax; n += nIncr){
-                        x = random.Next(0, n);
+                        int x = random.Next(0, n);
                         FCMatricesQuery fcmq =
                             new FCMatricesQuery(n, k, insertData:x, print:false);
                         
                         // Trivial solution
                         watch.Start();
-                        fcmq.trivialSolution(x);
+                        fcmq.TrivialSolution(x);
                         watch.Stop();
                         float trivialTime = watch.ElapsedMilliseconds;
                         
                         // Fractional Cascading solution
                         watch.Reset();
                         watch.Start();
-                        fcmq.fractionalCascadeSearch(x);
+                        fcmq.FractionalCascadeSearch(x);
                         watch.Stop();
                         float FCTime = watch.ElapsedMilliseconds;
 

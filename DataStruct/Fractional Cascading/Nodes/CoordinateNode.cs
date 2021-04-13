@@ -27,19 +27,22 @@ namespace Fractional_Cascading {
             data = new DataNode(dataVal);
         }
 
-        public void setData(int newData) {
+        public void SetData(int newData) {
             data = new DataNode(newData);
         }
+        public DataNode GetDataNode() {
+            return data;
+        }
 
-        public int getAttr(int attrCode) {
-            if (attrCode == 0)      return data.getAttr(attrCode);
+        public int GetAttr(int attrCode) {
+            if (attrCode == 0)      return data.GetAttr(attrCode);
             else if (attrCode == 1) return xLoc;
             else if (attrCode == 2) return yLoc;
             else if (attrCode == 3) return zLoc;
             else throw new Exception("bad attribute code on coordNode");
         }
 
-        public void setLoc(int dimension, int location) {
+        public void SetLoc(int dimension, int location) {
             if (dimension == 1)         xLoc = location;
             else if (dimension == 2)    yLoc = location;
             else if (dimension == 3)    zLoc = location;
@@ -47,7 +50,7 @@ namespace Fractional_Cascading {
                                      "calling setLoc on coordNode");
         }
 
-        public int dimensionality() {
+        public int GetDimensionality() {
             if (zLoc != -1)         return 3;
             else if (yLoc != -1)    return 2;
             else if (xLoc != -1)    return 1;
@@ -55,7 +58,7 @@ namespace Fractional_Cascading {
         }
 
         public override string ToString() {
-            int d = dimensionality();
+            int d = GetDimensionality();
             switch (d) {
                 case 1:
                     return "Data: " + data + 

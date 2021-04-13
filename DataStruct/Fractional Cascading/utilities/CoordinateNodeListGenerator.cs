@@ -6,7 +6,7 @@ using System.Linq;
 namespace Fractional_Cascading {
     public class CoordinateNodeListGenerator {
 
-        private (int[], HashSet<int>) randUniqueIntsRange(int n, int min, int max,
+        private (int[], HashSet<int>) RandUniqueIntsRange(int n, int min, int max,
                                                           int randomSeed=-1) {
             /**
             Generate list of random non-repeating integers, return both randomly-ordered
@@ -65,7 +65,7 @@ namespace Fractional_Cascading {
             return (result.ToArray(), candidates);
         }
 
-        public CoordNode[] getCoordNodeList(int n, int insertData, bool sort=true,
+        public CoordNode[] GetCoordNodeList(int n, int insertData, bool sort=true,
                                             int sortAttrCode=0, int dimensions=1,
                                             int rangeMin=0, int rangeMax=10000000,
                                             int randomSeed=-1) {
@@ -92,19 +92,19 @@ namespace Fractional_Cascading {
             int[] zList = new int[0];   HashSet<int> zSet = new HashSet<int>{0};
 
             (int[] dataList, HashSet<int> dataSet) = // We will always need data
-                randUniqueIntsRange(n, rangeMin, rangeMax, randomSeed);
+                RandUniqueIntsRange(n, rangeMin, rangeMax, randomSeed);
 
             // We will always have at least one dimension
-            (int[] xL, HashSet<int> xS) = randUniqueIntsRange(n, rangeMin, rangeMax);
+            (int[] xL, HashSet<int> xS) = RandUniqueIntsRange(n, rangeMin, rangeMax);
             xList = xL; xSet = xS;
             
             // Check for further dimensionality before constructing random lists
             if (dimensions >= 2) {
-                (int[] yL, HashSet<int> yS) = randUniqueIntsRange(n, rangeMin, rangeMax);
+                (int[] yL, HashSet<int> yS) = RandUniqueIntsRange(n, rangeMin, rangeMax);
                 yList = yL; ySet = yS;
             }
             if (dimensions == 3) {
-                (int[] zL, HashSet<int> zS) = randUniqueIntsRange(n, rangeMin, rangeMax);
+                (int[] zL, HashSet<int> zS) = RandUniqueIntsRange(n, rangeMin, rangeMax);
                 zList = zL; zSet = zS;
             }
             if(dimensions > 3 || dimensions < 1) {
@@ -126,11 +126,11 @@ namespace Fractional_Cascading {
 
             // Insert expected search value
             if(insertData >= 0) {   // note: n/2 index in nodeList is arbitrary
-                if(!(dataSet.Contains(insertData))) nodeList[n/2].setData(insertData);
+                if(!(dataSet.Contains(insertData))) nodeList[n/2].SetData(insertData);
             } else throw new Exception("insertData parameter must be positive");
             
             // Sort randomly generated attributes on sortAttrCode
-            if(sort) new MergeSortNodes().sort(nodeList, sortAttrCode);
+            if(sort) new MergeSortNodes().Sort(nodeList, sortAttrCode);
             
             return nodeList;
         }

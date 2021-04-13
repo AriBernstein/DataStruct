@@ -10,7 +10,7 @@ namespace DataStruct_Examples {
             int k = 1000;
 
             FCMatrixDemo fcmd = new FCMatrixDemo();
-            fcmd.demo(x, n, k);
+            fcmd.Demo(x, n, k);
         }
     }
 }

@@ -10,12 +10,12 @@ namespace Fractional_Cascading {
     -> return k locations of x   */
     public class FCMatricesQuery {
         
-        private CoordNode[][] inputCoordMatrix;
-        private FCNode[][] nodeMatrixPrime;
+        private CoordNode[][] InputCoordMatrix;
+        private FCNode[][] NodeMatrixPrime;
         private int n; // number of elements in each list in nodeMatrix
         private int k; // number of lists
 
-        public Dictionary<int, int> trivialSolution(int data) {
+        public Dictionary<int, int> TrivialSolution(int data) {
             /**
             Iterate through each list of coordinate nodes, perform binary
             search to find index holding node with data, extract location
@@ -25,9 +25,9 @@ namespace Fractional_Cascading {
             Dictionary<int, int> locationsOfData = new Dictionary<int, int>();
 
             for(int i = 0; i < k; i++) {
-                CoordNode[] arr = inputCoordMatrix[i];
-                int nodeIndex = new BinarySearchNodes().binarySearch(arr, data, 0);
-                int nodeData = arr[nodeIndex].getAttr(1);
+                CoordNode[] arr = InputCoordMatrix[i];
+                int nodeIndex = new BinarySearchNodes().BinarySearch(arr, data, 0);
+                int nodeData = arr[nodeIndex].GetAttr(1);
                 locationsOfData.Add(i + 1, nodeData);
             }
 
@@ -35,56 +35,59 @@ namespace Fractional_Cascading {
         }
 
 
-        private bool targetNodeCheck(FCNode node, int targetData, int targetDimension) {
+        private bool TargetNodeCheck(FCNode node, int targetData, int targetDimension) {
             return node != null &&
-                   node.getData() == targetData &&
-                   node.getDim() == targetDimension;
+                   node.GetData() == targetData &&
+                   node.GetDim() == targetDimension;
         }
 
 
-        private FCNode findNodeFromPointerRange(FCNode node, int dim, int targetData) {
+        private FCNode FindNodeFromPointerRange(FCNode DataNode, int TargetDimension) {
             /**
-            Find the range of indices of either nodeMatrix or nodeMatrixPrime that contain
-            the node we are looking for at the target dimension.
+            Find and search a range of indices for the FCNode with the target data value
+            at the target dimension.
             
-            Walk through promoted node pointers, starting with the list 2' and ending
-            with list (k-1)', then do a final check on list k (not prime)    */
-            
-            FCNode prevNode = node.getPrevPointer();
-            FCNode nextNode = node.getNextPointer();
+            Finding range:
+                DataNode comes from targetDimension - 1 . DataNode contains pointers to 
+                FCNodes from the augmented list of the next dimension (TargetDimension).
+                The search range is between the locations of DataNode.prev and
+                DataNode.next in the augmented list in the TargetDimension. */
+
+            int targetData = DataNode.GetData();
+            FCNode prevNode = DataNode.getPrevPointer();
+            FCNode nextNode = DataNode.getNextPointer();
             
             // Find range
             int lowRange, highRange;
-            int dimIndex = dim - 1;
+            int targetDimIndex = TargetDimension - 1;
 
             if(prevNode == null) lowRange = 0;
             else lowRange = prevNode.getPreviouslyAugmentedIndex();
 
-            if(nextNode == null) {
-                highRange = nodeMatrixPrime[dimIndex].Length;
-            } else highRange = nextNode.getPreviouslyAugmentedIndex();
+            if(nextNode == null) highRange = NodeMatrixPrime[targetDimIndex].Length;
+            else highRange = nextNode.getPreviouslyAugmentedIndex();
 
             IEnumerable<int> range = Enumerable.Range(lowRange, highRange - lowRange);
             
             // Search range
             bool found = false;
             foreach (int j in range) {
-                node = nodeMatrixPrime[dimIndex][j];
+                DataNode = NodeMatrixPrime[targetDimIndex][j];
                 
-                if(targetNodeCheck(node, targetData, dim)) {
+                if(TargetNodeCheck(DataNode, targetData, TargetDimension)) {
                     found = true;
                     break;
                 }
             }
             
             if(!(found)) throw new Exception("Can't find node with data " + targetData +
-                                             " in dimension: " + dim +
+                                             " in dimension: " + TargetDimension +
                                              " during fractional cascading search");
-            return node;
+            return DataNode;
         }
 
 
-        public Dictionary<int, int> fractionalCascadeSearch(int data) {
+        public Dictionary<int, int> FractionalCascadeSearch(int data) {
             /**
             Perform binary search to find data in first dimension.
             Then iteratively use the previous and/or next pointers to search the tiny
@@ -100,21 +103,21 @@ namespace Fractional_Cascading {
             int currentDim = 1;
 
             // Find data in first dimension
-            dataIndex = bsn.binarySearch(nodeMatrixPrime[0], data, 0);
-            dataNode = nodeMatrixPrime[0][dataIndex];
+            dataIndex = bsn.BinarySearch(NodeMatrixPrime[0], data, 0);
+            dataNode = NodeMatrixPrime[0][dataIndex];
             
             // Ensure that dataNode is in the correct dimension - if not check neghbors
-            if(dataNode.getDim() != currentDim) {
+            if(dataNode.GetDim() != currentDim) {
                 FCNode next = dataNode.getNextPointer();
                 FCNode prev = dataNode.getPrevPointer();
-                if(targetNodeCheck(next, data, currentDim)) dataNode = next;
-                else if (targetNodeCheck(prev, data, currentDim)) dataNode = prev;
+                if(TargetNodeCheck(next, data, currentDim)) dataNode = next;
+                else if (TargetNodeCheck(prev, data, currentDim)) dataNode = prev;
                 else {
                     string errorMsg = "Cannot locate data in augmented list 1' " +
                                       "Index neighbor left:\t" +
-                                      nodeMatrixPrime[0][dataIndex-1] +
+                                      NodeMatrixPrime[0][dataIndex-1] +
                                       "Index neighbor right:\t" +
-                                      nodeMatrixPrime[0][dataIndex+1] +
+                                      NodeMatrixPrime[0][dataIndex+1] +
                                       $"\nDataNode: {dataNode}\nNextNode: {next}" +
                                       $"\nPrevNode: {prev}";
                     throw new Exception(errorMsg);
@@ -122,15 +125,15 @@ namespace Fractional_Cascading {
             }
 
             // Assign first dimension location in return dictionary
-            locationsOfData[currentDim] = dataNode.getAttr(1);
+            locationsOfData[currentDim] = dataNode.GetAttr(1);
 
-            for(int i = 1; i < nodeMatrixPrime.Length; i++) {
+            for(int i = 1; i < NodeMatrixPrime.Length; i++) {
                 // Walk through promoted node pointers, starting with the list 2' until
                 // list (k-1)', then do a final check on list k (not prime)
                 // -> This logic is handled in findNodeFromPointerRange
                 currentDim++ ;
-                dataNode = findNodeFromPointerRange(dataNode, currentDim, data);
-                locationsOfData[currentDim] = dataNode.getAttr(1);
+                dataNode = FindNodeFromPointerRange(dataNode, currentDim);
+                locationsOfData[currentDim] = dataNode.GetAttr(1);
             }
 
             return locationsOfData;
@@ -148,8 +151,8 @@ namespace Fractional_Cascading {
                                                        insertData: insertData,
                                                        print:print);
             
-            inputCoordMatrix = fcm.getInputCoordMatrix();
-            nodeMatrixPrime = fcm.getFCNodeMatixPrime();
+            InputCoordMatrix = fcm.GetInputCoordMatrix();
+            NodeMatrixPrime = fcm.GetFCNodeMatixPrime();
         }
     }
 }

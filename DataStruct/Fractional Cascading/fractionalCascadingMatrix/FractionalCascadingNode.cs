@@ -3,64 +3,61 @@ using System.Collections.Generic;
 
 namespace Fractional_Cascading {
     public class FCNode : Node {        
-        private CoordNode baseCoordNode; // attr codes [0, 3]
-        private int index; // attr code 4
-        private int dimension; // k value of list where nodes are stored
-                               // attr code 5
-        private FCNode previousNode;
-        private FCNode nextNode;
-        private bool prime; // Really just for printing      
-        private bool promoted = false;  // flag indicating node is being promoted into an
-                                        // augmented list, used for pointer assignment
+        private CoordNode BaseCoordNode; // attr codes [0, 3]
+        private int Index; // attr code 4
+        private int Dimension; // between 1 and k inclusive, attr code 5
+        private FCNode PreviousNode;
+        private FCNode NextNode;
+        private bool Prime; // Really just for printing      
+        private bool Promoted = false;  // flag indicating node is has been promoted into
+                                        // an augmented list from a previous dimensions,
+                                        // used for pointer assignment
 
-        private int previousAugmentedListIndx;
-
-        // For accessing things attributes from baseCoordNode 
-        private static HashSet<int> coordNodeAttrCodes = new HashSet<int>{0, 1, 2, 3};
-        
-        public int getAttr(int attrCode) {
-            if (coordNodeAttrCodes.Contains(attrCode))
-                return baseCoordNode.getAttr(attrCode);
-            else if(attrCode == 4) return index;
-            else if(attrCode == 5) return dimension;
+        private int PreviousAugmentedListIndex;
+     
+        public int GetAttr(int attrCode) {  // For accessing attributes from baseCoordNode
+            if (0 <= attrCode && attrCode <= 4 ) 
+                return BaseCoordNode.GetAttr(attrCode);
+            else if(attrCode == 4) return Index;
+            else if(attrCode == 5) return Dimension;
             else throw new Exception("bad attribute code on FCNode");
         }
 
-        public FCNode(CoordNode cordNode, int coordDimension, int coordIndex,
-                      bool isPromoted=false, int prevAugListIndx = -1) {
-            baseCoordNode = cordNode;
-            index = coordIndex;
-            dimension = coordDimension;
-            promoted = isPromoted;
-            previousAugmentedListIndx = prevAugListIndx;
+        public FCNode(CoordNode baseCordNode, int dimension, int index,
+                      bool promoted=false, int previousAugmentedListIndex = -1) {
+            BaseCoordNode = baseCordNode;
+            Index = index;
+            Dimension = dimension;
+            Promoted = promoted;
+            PreviousAugmentedListIndex = previousAugmentedListIndex;
         }
         
-        public FCNode(CoordNode cordNode, bool isPrime = false) {
-            baseCoordNode = cordNode;
-            prime = isPrime;
+        public FCNode(CoordNode baseCoordNode, bool prime = false) {
+            BaseCoordNode = baseCoordNode;
+            Prime = prime;
         }
 
-        public CoordNode getCoordNode() {
-            return baseCoordNode;
+        public CoordNode GetCoordNode() {
+            return BaseCoordNode;
         }
 
-        public int getData(){
-            return baseCoordNode.getAttr(0);
+        public int GetData(){
+            return BaseCoordNode.GetAttr(0);
         }
 
-        public int getDim() {
-            return dimension;
+        public int GetDim() {
+            return Dimension;
         }
         
         public void setPrime() {
-            prime = true;
+            Prime = true;
         }
 
         public bool isPromoted() {
-            return promoted;
+            return Promoted;
         }
         public int getPreviouslyAugmentedIndex() {
-            return previousAugmentedListIndx;
+            return PreviousAugmentedListIndex;
         }
 
         public int coordNodeLoc(int dim=1) {
@@ -68,55 +65,55 @@ namespace Fractional_Cascading {
                 string excStr = "Invalid dimension parameter when calling coordNodeLoc";
                 throw new Exception(excStr);
                 }
-            return baseCoordNode.getAttr(dim);
+            return BaseCoordNode.GetAttr(dim);
         }
 
         public void setPrevPointer(FCNode prev) {
-            previousNode = prev;
+            PreviousNode = prev;
         }
         public FCNode getPrevPointer() {
-            return previousNode;
+            return PreviousNode;
         }
 
         public void setNextPointer(FCNode next) {
-            nextNode = next;
+            NextNode = next;
         }
         public FCNode getNextPointer() {
-            return nextNode;
+            return NextNode;
         }
 
         public FCNode makeCopy(bool setPromoted=false, bool keepPointers=false,
                                int prevAugmentedIndex = -1) {
             
-            FCNode ret = new FCNode(baseCoordNode, dimension, index,
+            FCNode ret = new FCNode(BaseCoordNode, Dimension, Index,
                                     setPromoted, prevAugmentedIndex);
             if(keepPointers) {
-                ret.nextNode = nextNode;
-                ret.previousNode = previousNode;
+                ret.NextNode = NextNode;
+                ret.PreviousNode = PreviousNode;
             }
 
             return ret;
         }
 
         public override string ToString() {
-            if(prime == false) {    // If node is not in an augmented list
-                return "[FC Node - dim: " + dimension + ", index: " + index +
-                       ", " + baseCoordNode + ']';
-            } else if(previousNode == null && nextNode == null) {
-                return "[FC Node - dim: " + dimension + ", index: " + index +
-                       ", " + baseCoordNode + ", next: empty, prev: empty]";
-            } else if(previousNode == null && nextNode != null) {
-                return "[FC Node - dim: " + dimension + ", index: " + index +
-                       ", " + baseCoordNode + ", next: " + nextNode.getData() + 
+            if(Prime == false) {    // If node is not in an augmented list
+                return "[FC Node - dim: " + Dimension + ", index: " + Index +
+                       ", " + BaseCoordNode + ']';
+            } else if(PreviousNode == null && NextNode == null) {
+                return "[FC Node - dim: " + Dimension + ", index: " + Index +
+                       ", " + BaseCoordNode + ", next: empty, prev: empty]";
+            } else if(PreviousNode == null && NextNode != null) {
+                return "[FC Node - dim: " + Dimension + ", index: " + Index +
+                       ", " + BaseCoordNode + ", next: " + NextNode.GetData() + 
                        ", prev: empty]";
-            } else if (previousNode != null && nextNode == null) {
-                return "[FC Node - dim: " + dimension + ", index: " + index +
-                       ", " + baseCoordNode + ", next: empty, prev: " + 
-                       previousNode.getData() + ']';
+            } else if (PreviousNode != null && NextNode == null) {
+                return "[FC Node - dim: " + Dimension + ", index: " + Index +
+                       ", " + BaseCoordNode + ", next: empty, prev: " + 
+                       PreviousNode.GetData() + ']';
 
-            } else return "[FC Node - dim: " + dimension + ", index: " + index + 
-                          ", " + baseCoordNode + ", next: " + nextNode.getData() + 
-                          ", prev: " + previousNode.getData()+ ']';
+            } else return "[FC Node - dim: " + Dimension + ", index: " + Index + 
+                          ", " + BaseCoordNode + ", next: " + NextNode.GetData() + 
+                          ", prev: " + PreviousNode.GetData()+ ']';
         }
     }
 }

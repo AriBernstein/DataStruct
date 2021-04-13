@@ -1,19 +1,19 @@
 ﻿using System;
 namespace Fractional_Cascading {
     public class DataNode : Node {
-        private int data; // attr code 0
+        private int Data; // attr code 0
 
-        public int getAttr(int attrCode) {
-            if (attrCode == 0) return data;
+        public int GetAttr(int attrCode) {
+            if (attrCode == 0) return Data;
             else throw new Exception("getAttr != 0 when called on DataNode");
         }
         
         public DataNode(int dataVal) {
-            data = dataVal;
+            Data = dataVal;
         }
 
         public override string ToString() {
-            return data.ToString();
+            return Data.ToString();
         }
     }
 }
