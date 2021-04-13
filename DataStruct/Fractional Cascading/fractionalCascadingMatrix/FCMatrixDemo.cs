@@ -58,10 +58,11 @@ namespace Fractional_Cascading {
                         fcmq.FractionalCascadeSearch(x);
                         watch.Stop();
                         float FCTime = watch.ElapsedMilliseconds;
+                        float ratio = FCTime / trivialTime;
 
-                        Record rec = new Record(n, k, x, trivialTime, FCTime);
-                        Console.WriteLine("\n\nn: " + n + "\tk: " + k + "\tx: " + x +
-                            "\nTrivial: " + trivialTime + "\tFC: " + FCTime);
+                        Record rec = new Record(n, k, x, trivialTime, FCTime, ratio);
+                        Console.WriteLine($"\n\nn: {n}\tk: {k}\tx: {x}\nTrivial: " +
+                            $"{trivialTime} ms\tFC: {FCTime} ms\tRatio: {ratio}");
                         fractionalCascadingStats.Add(rec);
                 }
             }

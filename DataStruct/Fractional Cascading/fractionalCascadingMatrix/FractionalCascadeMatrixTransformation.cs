@@ -39,10 +39,32 @@ namespace Fractional_Cascading {
             Note: FCNodeList1 = list(i-1)'
                   FCNodeList2 = list(i)    */
 
+            // Nested function to handle pointer assignment
+            FCNode lastPromotedNode = null;    FCNode lastNotPromotedNode = null;
+            void setPointers(FCNode currentNode) {
+                // Assign prev and next pointers to closest non-promoted nodes
+                if(currentNode.isPromoted()) {
+                    lastPromotedNode = currentNode;
+                    currentNode.setPrevPointer(lastNotPromotedNode);
+                    if(lastNotPromotedNode != null)
+                        if(lastNotPromotedNode.getNextPointer() == null)
+                            lastNotPromotedNode.setNextPointer(currentNode);
+
+                } else {    // Assign prev and next pointers to closest promoted nodes
+                    lastNotPromotedNode = currentNode;
+                    currentNode.setPrevPointer(lastPromotedNode);
+                    if (lastPromotedNode != null)
+                        if(lastPromotedNode.getNextPointer() == null)
+                            lastPromotedNode.setNextPointer(currentNode);
+                }
+
+                currentNode.setPrime();
+            }
+
+            // Instantiate promoted list
             int numPromotedNodes =
                     (int)(Math.Ceiling(FCNodeList2.Length / (double)unitFracDen));
 
-            // Instantiate promoted list
             int FCNodeListPrimeSize = n + numPromotedNodes;       
             FCNode[] FCNodeListPrime = new FCNode[FCNodeListPrimeSize];
 
@@ -64,30 +86,7 @@ namespace Fractional_Cascading {
             // Perform Fractional Cascading transformation 
             // -> Merge elements from nodesToPromote and FCNodeList1 into FCNodeListPrime
             // -> For each node, point to the previous and next foreign nodes
-            // --> ie. prev and next nodes not present in initial list of given node
-            FCNode lastPromotedNode = null;    FCNode lastNotPromotedNode = null;
-
-            void setPointers(FCNode currentNode) {  // Handle pointer assignment
-                // Assign prev and next pointers to closest non-promoted nodes
-                if(currentNode.isPromoted()) {
-                    lastPromotedNode = currentNode;
-                    currentNode.setPrevPointer(lastNotPromotedNode);
-                    if(lastNotPromotedNode != null)
-                        if(lastNotPromotedNode.getNextPointer() == null)
-                            lastNotPromotedNode.setNextPointer(currentNode);
-
-                // Assign prev and next pointers to closest promoted nodes
-                } else {
-                    lastNotPromotedNode = currentNode;
-                    currentNode.setPrevPointer(lastPromotedNode);
-                    if (lastPromotedNode != null)
-                        if(lastPromotedNode.getNextPointer() == null)
-                            lastPromotedNode.setNextPointer(currentNode);
-                }
-
-                currentNode.setPrime();
-            }
-
+            // --> ie. prev and next nodes not present in initial list of given nod
             c = 0;
             while(c < nodesToPromote.Length && d < FCNodeList1.Length) {
                 if (FCNodeList1[d].GetData() < nodesToPromote[c].GetData()) {
@@ -139,10 +138,10 @@ namespace Fractional_Cascading {
             if(print) Console.WriteLine("Performing Fractional Cascading transformation" +
                                         " on FCNode matrix.");
 
-            // re. (k-2), nodes are always promoted from lower dimensions
-            // -> for (highest dim) k, list(k') = list(k)
-            // -> ( list(k) is at index (k-1) )
-            // build the remaining promoted lists by nodes from list(i - 1') into list(i)
+            // Perform transformation on all lists in reverse order
+            // Re. i = (k-2), as nodes are always promoted from higher dimensions into
+            // lower ones, for (highest dim) k, list(k) = list(k')
+            // -> So no transformation needed, list(k) is at index (k-1), start at (k-2)
             for(int i = k-2; i >= 0; i--) {
                 FCNode[] augmentedNodeListI = NodeMatrixPrime[i];
                 FCNode[] augmentedNodeListIPlusOne = NodeMatrixPrime[i + 1];
@@ -157,7 +156,6 @@ namespace Fractional_Cascading {
             Build k lists of n CoordinateNodes each, sorted by their data value. Each list 
             will have nodes with random xLoc and data values, except for insertData, which
             will be present in each list. Set as inputCoordMatrix */
-
             CoordinateNodeListGenerator cnlg = new CoordinateNodeListGenerator();
             InputCoordMatrix = new CoordNode[k][];
             

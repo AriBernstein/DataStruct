@@ -42,7 +42,7 @@ namespace Fractional_Cascading {
         }
 
 
-        private FCNode FindNodeFromPointerRange(FCNode DataNode, int TargetDimension) {
+        private FCNode FindNodeFromPointerRange(FCNode dataNode, int targetDimension) {
             /**
             Find and search a range of indices for the FCNode with the target data value
             at the target dimension.
@@ -53,13 +53,13 @@ namespace Fractional_Cascading {
                 The search range is between the locations of DataNode.prev and
                 DataNode.next in the augmented list in the TargetDimension. */
 
-            int targetData = DataNode.GetData();
-            FCNode prevNode = DataNode.getPrevPointer();
-            FCNode nextNode = DataNode.getNextPointer();
+            int targetData = dataNode.GetData();
+            FCNode prevNode = dataNode.getPrevPointer();
+            FCNode nextNode = dataNode.getNextPointer();
             
             // Find range
             int lowRange, highRange;
-            int targetDimIndex = TargetDimension - 1;
+            int targetDimIndex = targetDimension - 1;
 
             if(prevNode == null) lowRange = 0;
             else lowRange = prevNode.getPreviouslyAugmentedIndex();
@@ -72,26 +72,26 @@ namespace Fractional_Cascading {
             // Search range
             bool found = false;
             foreach (int j in range) {
-                DataNode = NodeMatrixPrime[targetDimIndex][j];
+                dataNode = NodeMatrixPrime[targetDimIndex][j];
                 
-                if(TargetNodeCheck(DataNode, targetData, TargetDimension)) {
+                if(TargetNodeCheck(dataNode, targetData, targetDimension)) {
                     found = true;
                     break;
                 }
             }
             
             if(!(found)) throw new Exception("Can't find node with data " + targetData +
-                                             " in dimension: " + TargetDimension +
+                                             " in dimension: " + targetDimension +
                                              " during fractional cascading search");
-            return DataNode;
+            return dataNode;
         }
 
 
         public Dictionary<int, int> FractionalCascadeSearch(int data) {
             /**
-            Perform binary search to find data in first dimension.
-            Then iteratively use the previous and/or next pointers to search the tiny
-            range of the next dimension given by the prev and next node pointers    */
+            Perform binary search to find data in first dimension. Then iteratively use
+            the previous and/or next pointers to search the (tiny) range of the next
+            dimension given by the prev and next node pointers    */
             BinarySearchNodes bsn = new BinarySearchNodes();
 
             // Return dictionary w/ key=dimension, pair=location in dimension
