@@ -6,21 +6,28 @@ namespace Fractional_Cascading {
         Utils u = new Utils();
 
         public void Demo(int x, int n, int k, bool print=true) {
+            /**
+            Print search output iff k <= 100 */
+
             Console.WriteLine("Starting Fractional Cascading Matrix Search Demo\n");
             System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
             
-            FCMatricesQuery fcmq = new FCMatricesQuery(n, k, insertData:x, print:print);
+            FCMatrixQuery fcmq = new FCMatrixQuery(n, k, insertData:x, print:print);
             
-            Console.WriteLine("\nBinary search:");
+            Console.WriteLine("\nPerfroming binary search...");
             watch.Start();
-            u.PrintDataLocationDict(fcmq.TrivialSolution(x), x.ToString());
+            if (k <= 100 && print)
+                u.PrintDataLocationDict(fcmq.TrivialSolution(x), x.ToString());
+            else fcmq.TrivialSolution(x);
             watch.Stop();
             int trivialMS = (int)watch.ElapsedMilliseconds;
             
-            Console.WriteLine("\nFractional Cascading search:");
+            Console.WriteLine("\nPerforming Fractional Cascading search...");
             watch.Reset();
             watch.Start();
-            u.PrintDataLocationDict(fcmq.FractionalCascadeSearch(x), x.ToString());
+            if (k <= 100)
+                u.PrintDataLocationDict(fcmq.FractionalCascadeSearch(x), x.ToString());
+            else fcmq.FractionalCascadeSearch(x);
             watch.Stop();
             int fcMS = (int)watch.ElapsedMilliseconds;
 
@@ -43,8 +50,8 @@ namespace Fractional_Cascading {
                 Console.WriteLine("K: " + k);
                     for(int n = nMin; n < nMax; n += nIncr){
                         int x = random.Next(0, n);
-                        FCMatricesQuery fcmq =
-                            new FCMatricesQuery(n, k, insertData:x, print:false);
+                        FCMatrixQuery fcmq =
+                            new FCMatrixQuery(n, k, insertData:x, print:false);
                         
                         // Trivial solution
                         watch.Start();

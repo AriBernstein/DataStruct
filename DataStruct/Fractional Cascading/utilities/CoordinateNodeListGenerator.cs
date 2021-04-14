@@ -7,7 +7,8 @@ namespace Fractional_Cascading {
     public class CoordinateNodeListGenerator {
 
         private (int[], HashSet<int>) RandUniqueIntsRange(int n, int min, int max,
-                                                          int randomSeed=-1) {
+                                                          int randomSeed=-1,
+                                                          bool randomizeOrder=true) {
             /**
             Generate list of random non-repeating integers, return both randomly-ordered
             list and set (for checking whether or not value to insert exists quickly)
@@ -29,7 +30,8 @@ namespace Fractional_Cascading {
             if(randomSeed == -1) random = new Random();
             else random = new Random(randomSeed);
 
-            if (max <= min || n < 0 || (n > max - min && max - min > 0)) {
+            if (max <= min || n < 0 ||  // max - min > 0 required to avoid overflow
+                                        (n > max - min && max - min > 0)) {
                 // need to use 64-bit to support big ranges (negative min, positive max)
                 string errorMsg = "Range " + min + " to " + max + " (" + ((Int64)max -
                                   (Int64)min) + " values), or count " + n + " is illegal";
@@ -43,23 +45,24 @@ namespace Fractional_Cascading {
             for (int top = max - n; top < max; top++) {
                 // May strike a duplicate. Need to add +1 to make inclusive generator
                 // ->  +1 is safe even for MaxVal max value because top < max
-                if (!candidates.Add(random.Next(min, top + 1))) {
+                if (!candidates.Add(random.Next(min, top + 1)))
                     // Collision! Add inclusive max - could not have been added before.
                     candidates.Add(top);
-                }
             }
 
             // load them in to a list, to sort
             List<int> result = candidates.ToList();
 
-            // shuffle the results because HashSet has messed
-            // with the order, and the algorithm does not produce
-            // random-ordered results (e.g. max-1 will never be the first value)
-            for (int i = result.Count - 1; i > 0; i--) {  
-                int k = random.Next(i + 1);  
-                int tmp = result[k];  
-                result[k] = result[i];  
-                result[i] = tmp;  
+            if(randomizeOrder) {
+            // shuffle the results because HashSet has messed with the order, and the
+            // algorithm does not produce random-ordered results
+            // -> (ex. max-1 will never be the first value)
+                for (int i = result.Count - 1; i > 0; i--) {  
+                    int k = random.Next(i + 1);  
+                    int tmp = result[k];  
+                    result[k] = result[i];  
+                    result[i] = tmp;  
+                }
             }
              
             return (result.ToArray(), candidates);

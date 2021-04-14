@@ -12,7 +12,7 @@ namespace Fractional_Cascading {
     -> elements from list i-1' are "promoted" into list i to build list i'
     -> list 0' is sized ~2n 
     */
-    public class FractionalCascadingMatrices {
+    public class FractionalCascadingMatrix {
         private CoordNode[][] InputCoordMatrix;
        
         // Matrix of k lists of FCNodes, post FC transformation
@@ -139,16 +139,13 @@ namespace Fractional_Cascading {
                                         " on FCNode matrix.");
 
             // Perform transformation on all lists in reverse order
-            // Re. i = (k-2), as nodes are always promoted from higher dimensions into
-            // lower ones, for (highest dim) k, list(k) = list(k')
-            // -> So no transformation needed, list(k) is at index (k-1), start at (k-2)
-            for(int i = k-2; i >= 0; i--) {
-                FCNode[] augmentedNodeListI = NodeMatrixPrime[i];
-                FCNode[] augmentedNodeListIPlusOne = NodeMatrixPrime[i + 1];
-                NodeMatrixPrime[i] = BuildListPrime(augmentedNodeListI,
-                                                    augmentedNodeListIPlusOne,
+            // Re. i = (k-2): as nodes are always promoted from higher dimensions into
+            //                lower ones, for (highest dim) k, list(k) = list(k')
+            for(int i = k-2; i >= 0; i--)
+                NodeMatrixPrime[i] = BuildListPrime(NodeMatrixPrime[i],
+                                                    NodeMatrixPrime[i + 1],
                                                     unitFracDen);
-            }
+
         }
 
         private void SetCoordMatrix(int insertData) {
@@ -163,7 +160,7 @@ namespace Fractional_Cascading {
                 InputCoordMatrix[i] = cnlg.GetCoordNodeList(n, insertData);
         }
 
-        public FractionalCascadingMatrices(int numValsPerList, int numLists,
+        public FractionalCascadingMatrix(int numValsPerList, int numLists,
                                            int unitFracDen=2, int insertData=-1,
                                            bool print=true) {
             /**
@@ -178,14 +175,15 @@ namespace Fractional_Cascading {
             n = numValsPerList;
             k = numLists;
             
-            if(print) Console.WriteLine("N: " + n + "\tK: " + k);
+            if(print) Console.WriteLine($"N: {n}\tK: {k}\tX: {insertData}");
 
             if(unitFracDen <= 1)
                 throw new Exception("Invalid unitFracDen, must be greater than 1");
             
             // Convert coordNodeMatrix to one of FCNodes, assign as nodeMatrix
             // -> start with matrix of coordNodes sorted by their location (xLoc)
-            if(print) Console.WriteLine("Generating matrix of random sorted coordNodes.");
+            if(print) Console.WriteLine($"Generating matrix of {k} sorted lists of {n} " +
+                                        "randomly generated coordNodes.");
             SetCoordMatrix(insertData);
 
             // Build and assign nodeMatrixPrime from just-assigned nodeMatrix

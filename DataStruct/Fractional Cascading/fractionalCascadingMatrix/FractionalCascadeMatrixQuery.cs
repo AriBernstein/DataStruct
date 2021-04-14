@@ -8,7 +8,7 @@ namespace Fractional_Cascading {
     Search for an element x located in inputCoordMatrix in k lists using 2
     methods: fractional cascading and the trivial method (k binary searches)
     -> return k locations of x   */
-    public class FCMatricesQuery {
+    public class FCMatrixQuery {
         
         private CoordNode[][] InputCoordMatrix;
         private FCNode[][] NodeMatrixPrime;
@@ -23,12 +23,15 @@ namespace Fractional_Cascading {
 
             // Return dictionary w/ key=dimension, pair=location in dimension
             Dictionary<int, int> locationsOfData = new Dictionary<int, int>();
-
+            BinarySearchNodes bsn = new BinarySearchNodes();
             for(int i = 0; i < k; i++) {
                 CoordNode[] arr = InputCoordMatrix[i];
-                int nodeIndex = new BinarySearchNodes().BinarySearch(arr, data, 0);
+                int nodeIndex = bsn.BinarySearch(arr, data, 0);
                 int nodeData = arr[nodeIndex].GetAttr(1);
-                locationsOfData.Add(i + 1, nodeData);
+                
+                // Memory issues, this is a stupid amount of space especially
+                // when we're only trying to record function timing
+                if(k < 10000) locationsOfData.Add(i + 1, nodeData);
             }
 
             return locationsOfData;
@@ -113,10 +116,10 @@ namespace Fractional_Cascading {
                 if(TargetNodeCheck(next, data, currentDim)) dataNode = next;
                 else if (TargetNodeCheck(prev, data, currentDim)) dataNode = prev;
                 else {
-                    string errorMsg = "Cannot locate data in augmented list 1' " +
-                                      "Index neighbor left:\t" +
+                    string errorMsg = "Cannot locate data in augmented list 1'" +
+                                      "\nIndex neighbor left:\t" +
                                       NodeMatrixPrime[0][dataIndex-1] +
-                                      "Index neighbor right:\t" +
+                                      "\nIndex neighbor right:\t" +
                                       NodeMatrixPrime[0][dataIndex+1] +
                                       $"\nDataNode: {dataNode}\nNextNode: {next}" +
                                       $"\nPrevNode: {prev}";
@@ -124,8 +127,9 @@ namespace Fractional_Cascading {
                 }
             }
 
-            // Assign first dimension location in return dictionary
-            locationsOfData[currentDim] = dataNode.GetAttr(1);
+            if(k < 10000) // This takes up too much memmory
+                // Assign first dimension location in return dictionary
+                locationsOfData[currentDim] = dataNode.GetAttr(1);
 
             for(int i = 1; i < NodeMatrixPrime.Length; i++) {
                 // Walk through promoted node pointers, starting with the list 2' until
@@ -140,14 +144,14 @@ namespace Fractional_Cascading {
         }
 
 
-        public FCMatricesQuery(int numValsPerList, int numLists, int unitFracDen=2,
+        public FCMatrixQuery(int numValsPerList, int numLists, int unitFracDen=2,
                                bool print=true, int insertData=-1) {
-            FractionalCascadingMatrices fcm;
+            FractionalCascadingMatrix fcm;
             n = numValsPerList;
             k = numLists;
              
-            if(insertData == -1) fcm = new FractionalCascadingMatrices(n, k);
-            else fcm = new FractionalCascadingMatrices(n, k,
+            if(insertData == -1) fcm = new FractionalCascadingMatrix(n, k);
+            else fcm = new FractionalCascadingMatrix(n, k,
                                                        insertData: insertData,
                                                        print:print);
             
