@@ -116,13 +116,12 @@ namespace Fractional_Cascading {
                 if(TargetNodeCheck(next, data, currentDim)) dataNode = next;
                 else if (TargetNodeCheck(prev, data, currentDim)) dataNode = prev;
                 else {
-                    string errorMsg = "Cannot locate data in augmented list 1'" +
-                                      "\nIndex neighbor left:\t" +
+                    string errorMsg = "Cannot locate data in augmented list 1'\n" +
+                                      $"DataNode: {dataNode}\nIndex neighbor left:\t" +
                                       NodeMatrixPrime[0][dataIndex-1] +
                                       "\nIndex neighbor right:\t" +
                                       NodeMatrixPrime[0][dataIndex+1] +
-                                      $"\nDataNode: {dataNode}\nNextNode: {next}" +
-                                      $"\nPrevNode: {prev}";
+                                      $"\nNextNode: {next}nPrevNode: {prev}";
                     throw new Exception(errorMsg);
                 }
             }
@@ -145,15 +144,22 @@ namespace Fractional_Cascading {
 
 
         public FCMatrixQuery(int numValsPerList, int numLists, int unitFracDen=2,
-                               bool print=true, int insertData=-1) {
+                               bool print=true, int insertData=-1,
+                               bool randNodeAttrOrders=true) {
             FractionalCascadingMatrix fcm;
             n = numValsPerList;
             k = numLists;
              
-            if(insertData == -1) fcm = new FractionalCascadingMatrix(n, k);
-            else fcm = new FractionalCascadingMatrix(n, k,
-                                                       insertData: insertData,
-                                                       print:print);
+            if(insertData == -1) {
+                fcm = new FractionalCascadingMatrix(n, k,
+                                                    print:print,
+                                                    randNodeAttrOrders:
+                                                        randNodeAttrOrders);
+            }
+            else fcm = new FractionalCascadingMatrix(n, k, insertData: insertData,
+                                                     print:print,
+                                                     randNodeAttrOrders:
+                                                        randNodeAttrOrders);
             
             InputCoordMatrix = fcm.GetInputCoordMatrix();
             NodeMatrixPrime = fcm.GetFCNodeMatixPrime();

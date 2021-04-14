@@ -18,7 +18,10 @@ namespace Fractional_Cascading {
                 min:    lower bound (inclusive) of the random integers to generate
                 max:    upper bound (exclusive) of the random integers to generate
                 randomSeed: if -1, use system default, else use this
-
+                randomizeOrder: this function uses a hash set to ensure non-repeating
+                                numbers. When converted to a list, its order is not
+                                random, so we shuffle it to make it so. Shuffling takes
+                                time is not necessary if a random order is not needed
             Algorithm:
                 initialize set S to empty
                 for J := N-M + 1 to N do
@@ -71,7 +74,7 @@ namespace Fractional_Cascading {
         public CoordNode[] GetCoordNodeList(int n, int insertData, bool sort=true,
                                             int sortAttrCode=0, int dimensions=1,
                                             int rangeMin=0, int rangeMax=10000000,
-                                            int randomSeed=-1) {
+                                            int randomSeed=-1, bool randomizeOrder=true) {
             /**
             Return a list of coordNodes with random x, y, and z values ranging locRangeMin
             to locRangeMax and data values ranging from dataRangeMin to dataRangeMax
@@ -95,19 +98,24 @@ namespace Fractional_Cascading {
             int[] zList = new int[0];   HashSet<int> zSet = new HashSet<int>{0};
 
             (int[] dataList, HashSet<int> dataSet) = // We will always need data
-                RandUniqueIntsRange(n, rangeMin, rangeMax, randomSeed);
+                RandUniqueIntsRange(n, rangeMin, rangeMax, randomSeed, randomizeOrder);
 
             // We will always have at least one dimension
-            (int[] xL, HashSet<int> xS) = RandUniqueIntsRange(n, rangeMin, rangeMax);
+            (int[] xL, HashSet<int> xS) = RandUniqueIntsRange(n, rangeMin, rangeMax,
+                                                              randomSeed, randomizeOrder);
             xList = xL; xSet = xS;
             
             // Check for further dimensionality before constructing random lists
             if (dimensions >= 2) {
-                (int[] yL, HashSet<int> yS) = RandUniqueIntsRange(n, rangeMin, rangeMax);
+                (int[] yL, HashSet<int> yS) = RandUniqueIntsRange(n, rangeMin, rangeMax,
+                                                                  randomSeed,
+                                                                  randomizeOrder);
                 yList = yL; ySet = yS;
             }
             if (dimensions == 3) {
-                (int[] zL, HashSet<int> zS) = RandUniqueIntsRange(n, rangeMin, rangeMax);
+                (int[] zL, HashSet<int> zS) = RandUniqueIntsRange(n, rangeMin, rangeMax,
+                                                                  randomSeed,
+                                                                  randomizeOrder);
                 zList = zL; zSet = zS;
             }
             if(dimensions > 3 || dimensions < 1) {

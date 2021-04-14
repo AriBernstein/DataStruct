@@ -124,7 +124,8 @@ namespace Fractional_Cascading {
             NodeMatrixPrime = new FCNode[k][];
             
             // Convert coordNodes -> FCNodes
-            if(print) Console.WriteLine("Copying coordNodes into (non-promoted) FCNodes");
+            if(print) Console.WriteLine("Instantiating (not-yet-promoted) FCNodes " +
+                                        "from coordNode data.");
             for (int i = 0; i < k; i++) {
                 NodeMatrixPrime[i] = new FCNode[n];
                 for(int j = 0; j < n; j++) {
@@ -148,7 +149,7 @@ namespace Fractional_Cascading {
 
         }
 
-        private void SetCoordMatrix(int insertData) {
+        private void SetCoordMatrix(int insertData, bool randomizeOrder=true) {
             /**
             Build k lists of n CoordinateNodes each, sorted by their data value. Each list 
             will have nodes with random xLoc and data values, except for insertData, which
@@ -157,12 +158,14 @@ namespace Fractional_Cascading {
             InputCoordMatrix = new CoordNode[k][];
             
             for (int i = 0; i < k; i++)
-                InputCoordMatrix[i] = cnlg.GetCoordNodeList(n, insertData);
+                InputCoordMatrix[i] =
+                    cnlg.GetCoordNodeList(n, insertData, randomizeOrder:randomizeOrder);
         }
 
         public FractionalCascadingMatrix(int numValsPerList, int numLists,
-                                           int unitFracDen=2, int insertData=-1,
-                                           bool print=true) {
+                                         int unitFracDen=2, int insertData=-1,
+                                         bool print=true,
+                                         bool randNodeAttrOrders=true) {
             /**
             Parameters:
                 numValsPerList: k
@@ -170,7 +173,14 @@ namespace Fractional_Cascading {
                 insertData:     data value for which to search inserted into each list in
                                 coordMatrix and nodeMatrix
                 unitFracDen:    denominator of the unit fraction indicating the size of
-                                the subset of list (d-1)' to be promoted into list d'   */
+                                the subset of list (d-1)' to be promoted into list d'
+                randNodeAttrOrders:
+                                (first read documentation in of method RandUniqueIntsRange
+                                in CoordinateNodeListGenerator.cs).
+                                Random order of nodes' data attribute is irrlelvant as
+                                they are later sorted on it. The order of their xLoc
+                                attribute is relevant if demonstrating the correctness of
+                                the search but irrelevant if testing the speed. */
                 
             n = numValsPerList;
             k = numLists;

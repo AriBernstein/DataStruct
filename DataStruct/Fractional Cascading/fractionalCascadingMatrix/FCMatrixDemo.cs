@@ -12,7 +12,8 @@ namespace Fractional_Cascading {
             Console.WriteLine("Starting Fractional Cascading Matrix Search Demo\n");
             System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
             
-            FCMatrixQuery fcmq = new FCMatrixQuery(n, k, insertData:x, print:print);
+            FCMatrixQuery fcmq = new FCMatrixQuery(n, k, insertData:x, print:print,
+                                                   randNodeAttrOrders:false);
             
             Console.WriteLine("\nPerfroming binary search...");
             watch.Start();
@@ -51,7 +52,8 @@ namespace Fractional_Cascading {
                     for(int n = nMin; n < nMax; n += nIncr){
                         int x = random.Next(0, n);
                         FCMatrixQuery fcmq =
-                            new FCMatrixQuery(n, k, insertData:x, print:false);
+                            new FCMatrixQuery(n, k, insertData:x, print:false,
+                                              randNodeAttrOrders:false);
                         
                         // Trivial solution
                         watch.Start();
