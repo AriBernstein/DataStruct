@@ -10,6 +10,9 @@ namespace Fractional_Cascading {
                                                           int randomSeed=-1,
                                                           bool randomizeOrder=true) {
             /**
+            Note: this function is a modified implementation the following solution:
+                  https://codereview.stackexchange.com/a/61372
+
             Generate list of random non-repeating integers, return both randomly-ordered
             list and set (for checking whether or not value to insert exists quickly)
 

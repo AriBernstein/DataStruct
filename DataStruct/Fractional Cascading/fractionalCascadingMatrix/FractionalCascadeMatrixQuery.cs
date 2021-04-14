@@ -149,17 +149,8 @@ namespace Fractional_Cascading {
             FractionalCascadingMatrix fcm;
             n = numValsPerList;
             k = numLists;
-             
-            if(insertData == -1) {
-                fcm = new FractionalCascadingMatrix(n, k,
-                                                    print:print,
-                                                    randNodeAttrOrders:
-                                                        randNodeAttrOrders);
-            }
-            else fcm = new FractionalCascadingMatrix(n, k, insertData: insertData,
-                                                     print:print,
-                                                     randNodeAttrOrders:
-                                                        randNodeAttrOrders);
+            fcm = new FractionalCascadingMatrix(n, k, insertData: insertData, print:print,
+                                                randNodeAttrOrders: randNodeAttrOrders);
             
             InputCoordMatrix = fcm.GetInputCoordMatrix();
             NodeMatrixPrime = fcm.GetFCNodeMatixPrime();
