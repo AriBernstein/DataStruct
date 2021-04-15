@@ -4,7 +4,7 @@ using System.Linq;
 
 
 namespace Fractional_Cascading {
-    public class CoordinateNodeListGenerator {
+    public class CoordNodeGenerator {
 
         private (int[], HashSet<int>) RandUniqueIntsRange(int n, int min, int max,
                                                           int randomSeed=-1,
