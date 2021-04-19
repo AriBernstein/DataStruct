@@ -159,8 +159,7 @@ namespace Fractional_Cascading {
             
             for (int i = 0; i < k; i++)
                 InputCoordMatrix[i] =
-                    cnlg.GetCoordNodeList(n, insertData, rangeMax: n*k,
-                                          randomizeOrder:randomizeOrder);
+                    cnlg.GetCoordNodeList(n, insertData, randomizeOrder:randomizeOrder);
         }
 
         public FractionalCascadingMatrix(int numValsPerList, int numLists,
@@ -182,7 +181,6 @@ namespace Fractional_Cascading {
                                 they are later sorted on it. The order of their xLoc
                                 attribute is relevant if demonstrating the correctness of
                                 the search but irrelevant if testing the speed. */
-                
             n = numValsPerList;
             k = numLists;
             
