@@ -128,23 +128,23 @@ namespace Fractional_Cascading {
             }
 
             for(int i = 0; i < n; i++) {  // Build nodes using newly generated lists/sets
-                if(dimensions == 1) {
+                if (dimensions == 1) {
                     nodeList[i] = new CoordNode(dataList[i], xList[i]);
-                } else if(dimensions == 2) {
+                } else if (dimensions == 2) {
                     nodeList[i] = new CoordNode(dataList[i], xList[i], yList[i]);
-                } else if(dimensions == 3) {
+                } else if (dimensions == 3) {
                     nodeList[i] =
                         new CoordNode(dataList[i], xList[i], yList[i], zList[i]);
                 }
             }
 
             // Insert expected search value
-            if(insertData >= 0) {   // note: n/2 index in nodeList is arbitrary
-                if(!(dataSet.Contains(insertData))) nodeList[n/2].SetData(insertData);
+            if (insertData >= 0) {   // note: n/2 index in nodeList is arbitrary
+                if (!(dataSet.Contains(insertData))) nodeList[n/2].SetData(insertData);
             } else throw new Exception("insertData parameter must be positive");
             
             // Sort randomly generated attributes on sortAttrCode
-            if(sort) new MergeSortNodes().Sort(nodeList, sortAttrCode);
+            if (sort) new MergeSortNodes().Sort(nodeList, sortAttrCode);
             
             return nodeList;
         }

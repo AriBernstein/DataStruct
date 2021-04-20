@@ -1,7 +1,7 @@
 using System;
 
 namespace Fractional_Cascading {
-    class BinarySearchRangeTree {
+    class RangeTreeBST {
 
         BSTNode Root = null;
 

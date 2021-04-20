@@ -16,10 +16,9 @@ namespace Fractional_Cascading {
         private int PreviousAugmentedListIndex;
      
         public int GetAttr(int attrCode) {  // For accessing attributes from baseCoordNode
-            if (0 <= attrCode && attrCode <= 4 ) 
-                return BaseCoordNode.GetAttr(attrCode);
-            else if(attrCode == 4) return Index;
-            else if(attrCode == 5) return Dimension;
+            if (0 <= attrCode && attrCode <= 4 ) return BaseCoordNode.GetAttr(attrCode);
+            else if (attrCode == 4) return Index;
+            else if (attrCode == 5) return Dimension;
             else throw new Exception("bad attribute code on FCNode");
         }
 
@@ -96,13 +95,13 @@ namespace Fractional_Cascading {
         }
 
         public override string ToString() {
-            if(Prime == false) {    // If node is not in an augmented list
+            if (Prime == false) {    // If node is not in an augmented list
                 return "[FC Node - dim: " + Dimension + ", index: " + Index +
                        ", " + BaseCoordNode + ']';
-            } else if(PreviousNode == null && NextNode == null) {
+            } else if (PreviousNode == null && NextNode == null) {
                 return "[FC Node - dim: " + Dimension + ", index: " + Index +
                        ", " + BaseCoordNode + ", next: empty, prev: empty]";
-            } else if(PreviousNode == null && NextNode != null) {
+            } else if (PreviousNode == null && NextNode != null) {
                 return "[FC Node - dim: " + Dimension + ", index: " + Index +
                        ", " + BaseCoordNode + ", next: " + NextNode.GetData() + 
                        ", prev: empty]";

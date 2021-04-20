@@ -20,7 +20,6 @@ namespace Fractional_Cascading {
         }
 
         private int BinarySearch(Node[] nodeArray, int l, int r, int x, int attrCode) {
-
             if(l >= r) {
                 if(nodeArray[r].GetAttr(attrCode) == x) return r;
                 String xNotInArrException =
@@ -33,10 +32,10 @@ namespace Fractional_Cascading {
             int valueAtMid = nodeArray[m].GetAttr(attrCode);
 
             // Value located at midpoint of nodeArray
-            if(x == valueAtMid) return m;
+            if (x == valueAtMid) return m;
 
             // Value is less than element at mid, search left side
-            else if(x < valueAtMid) return BinarySearch(nodeArray, l, m, x, attrCode);
+            else if (x < valueAtMid) return BinarySearch(nodeArray, l, m, x, attrCode);
 
             // Value is greater than element at mid, search right side
             else return BinarySearch(nodeArray, m+1, r, x, attrCode);

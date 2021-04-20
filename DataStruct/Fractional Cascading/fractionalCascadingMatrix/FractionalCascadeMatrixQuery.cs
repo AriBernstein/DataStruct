@@ -113,7 +113,7 @@ namespace Fractional_Cascading {
             if(dataNode.GetDim() != currentDim) {
                 FCNode next = dataNode.getNextPointer();
                 FCNode prev = dataNode.getPrevPointer();
-                if(TargetNodeCheck(next, data, currentDim)) dataNode = next;
+                if      (TargetNodeCheck(next, data, currentDim)) dataNode = next;
                 else if (TargetNodeCheck(prev, data, currentDim)) dataNode = prev;
                 else {
                     string errorMsg = "Cannot locate data in augmented list 1'\n" +

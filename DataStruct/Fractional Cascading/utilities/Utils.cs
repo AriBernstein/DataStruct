@@ -27,9 +27,12 @@ namespace Fractional_Cascading {
             if(numLeadingVals == 3) sizeClass -= 1;
 
             string sizeClassLabel;
-            if(sizeClass == 1) sizeClassLabel = "thousand";
+            if      (sizeClass == 1) sizeClassLabel = "thousand";
             else if (sizeClass == 2) sizeClassLabel = "million";
             else if (sizeClass == 3) sizeClassLabel = "billion";
+            else if (sizeClass == 4) sizeClassLabel = "trillion";
+            else if (sizeClass == 5) sizeClassLabel = "quadrillion";
+            else if (sizeClass == 6) sizeClassLabel = "quintrillion";
             else sizeClassLabel = "too many zeros man";
 
             return $"{leadingVal.ToString()} {sizeClassLabel}";

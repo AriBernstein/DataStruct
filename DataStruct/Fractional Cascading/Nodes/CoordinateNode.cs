@@ -35,7 +35,7 @@ namespace Fractional_Cascading {
         }
 
         public int GetAttr(int attrCode) {
-            if (attrCode == 0)      return data.GetAttr(attrCode);
+            if      (attrCode == 0) return data.GetAttr(attrCode);
             else if (attrCode == 1) return xLoc;
             else if (attrCode == 2) return yLoc;
             else if (attrCode == 3) return zLoc;
@@ -43,7 +43,7 @@ namespace Fractional_Cascading {
         }
 
         public void SetLoc(int dimension, int location) {
-            if (dimension == 1)         xLoc = location;
+            if      (dimension == 1)    xLoc = location;
             else if (dimension == 2)    yLoc = location;
             else if (dimension == 3)    zLoc = location;
             else throw new Exception("invalid dimension parameter when " +
@@ -51,7 +51,7 @@ namespace Fractional_Cascading {
         }
 
         public int GetDimensionality() {
-            if (zLoc != -1)         return 3;
+            if      (zLoc != -1)    return 3;
             else if (yLoc != -1)    return 2;
             else if (xLoc != -1)    return 1;
             else throw new Exception("coordNode has no dimension values.");
