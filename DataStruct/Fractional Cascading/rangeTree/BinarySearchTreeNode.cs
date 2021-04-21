@@ -12,7 +12,7 @@ namespace Fractional_Cascading {
         private BSTNode LeftChild;
         private BSTNode RightChild;
         
-        public int getKey() {
+        public int GetKey() {
             return Key;
         }
         
