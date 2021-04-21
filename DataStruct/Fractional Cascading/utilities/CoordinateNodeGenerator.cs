@@ -148,5 +148,14 @@ namespace Fractional_Cascading {
             
             return nodeList;
         }
+
+        
+        public BSTNode[] getBSTNodes(int n, int min=0, int max=-1) {
+            if(max == -1) max = n * n;
+            BSTNode[] nodeList = new BSTNode[n];
+            (int[] keyList, HashSet<int> keySet) = RandUniqueIntsRange(n, min, max);
+            for(int i = 0; i < n; i++) nodeList[i] = new BSTNode(keyList[i]);
+            return nodeList;
+        }
     }
 }

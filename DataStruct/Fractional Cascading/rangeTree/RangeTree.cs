@@ -19,7 +19,7 @@ namespace Fractional_Cascading {
                 buildTree(coordNodes, dimension + 1);
             
             RangeTreeLeaf[] sortedNodes;
-            if(dimension == 1) sortedNodes = xLeaves;
+            if      (dimension == 1) sortedNodes = xLeaves;
             else if (dimension == 2) sortedNodes = yLeaves;
             else if (dimension == 3) sortedNodes = zLeaves;
             else throw new Exception("WATT?");
@@ -38,12 +38,12 @@ namespace Fractional_Cascading {
                 int currDim = i + 1;
                 msn.Sort(coordNodes, currDim);
                 RangeTreeLeaf[] currList = new RangeTreeLeaf[coordNodes.Length];
-                for(int j = 0; j < currList.Length; j++)
+                for (int j = 0; j < currList.Length; j++)
                     currList[j] = new RangeTreeLeaf(coordNodes[j].GetDataNode(), currDim,
                                                     coordNodes[j].GetAttr(currDim));
-                if(currDim == 1) xLeaves = currList;
-                else if(currDim == 2) yLeaves = currList;
-                else if(currDim == 3) zLeaves = currList;
+                if      (currDim == 1) xLeaves = currList;
+                else if (currDim == 2) yLeaves = currList;
+                else if (currDim == 3) zLeaves = currList;
                 else throw new Exception("WAT?");
             }
         }

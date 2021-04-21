@@ -2,12 +2,12 @@ using System;
 
 namespace Fractional_Cascading {
 
-    class BSTNode {
+    public class BSTNode {
         // Key is the average of minIndex and maxIndex 
         private int Key;
         private bool Root;
-        private int Dimension;
         private bool Leaf;
+        private bool Red;
         private BSTNode Parent;
         private BSTNode LeftChild;
         private BSTNode RightChild;
@@ -23,9 +23,18 @@ namespace Fractional_Cascading {
         public bool isLeaf() {
             return Leaf;
         }
+        public void makeLeaf() {
+            Leaf = true;
+        }
 
-        public int getDim() {
-            return Dimension;
+        public void changeColor() {
+            Red = !(Red);
+        }
+        public bool isRed() {
+            return Red;
+        }
+        public bool isBlack() {
+            return !(Red);
         }
 
         public BSTNode getParent() {
@@ -49,10 +58,11 @@ namespace Fractional_Cascading {
             RightChild = rightChild;
         }
 
-        public BSTNode(int key, bool leaf=false, bool root=false) {
+        public BSTNode(int key, bool leaf=false, bool red = true, bool root=false) {
             Key = key;
             Leaf = leaf;
             Root = root;
+            Red = red;
         }
 
     }
