@@ -43,22 +43,22 @@ namespace Fractional_Cascading {
             FCNode lastPromotedNode = null;    FCNode lastNotPromotedNode = null;
             void setPointers(FCNode currentNode) {
                 // Assign prev and next pointers to closest non-promoted nodes
-                if(currentNode.isPromoted()) {
+                if(currentNode.IsPromoted()) {
                     lastPromotedNode = currentNode;
-                    currentNode.setPrevPointer(lastNotPromotedNode);
+                    currentNode.SetPrevPointer(lastNotPromotedNode);
                     if(lastNotPromotedNode != null)
-                        if(lastNotPromotedNode.getNextPointer() == null)
-                            lastNotPromotedNode.setNextPointer(currentNode);
+                        if(lastNotPromotedNode.GetNextPointer() == null)
+                            lastNotPromotedNode.SetNextPointer(currentNode);
 
                 } else {    // Assign prev and next pointers to closest promoted nodes
                     lastNotPromotedNode = currentNode;
-                    currentNode.setPrevPointer(lastPromotedNode);
+                    currentNode.SetPrevPointer(lastPromotedNode);
                     if (lastPromotedNode != null)
-                        if(lastPromotedNode.getNextPointer() == null)
-                            lastPromotedNode.setNextPointer(currentNode);
+                        if(lastPromotedNode.GetNextPointer() == null)
+                            lastPromotedNode.SetNextPointer(currentNode);
                 }
 
-                currentNode.setPrime();
+                currentNode.SetPrime();
             }
 
             // Instantiate promoted list
@@ -80,7 +80,7 @@ namespace Fractional_Cascading {
                 // state at which we can easily both store their locations in their
                 // previous lists and flag them as promoted.
                 nodesToPromote[c++] =
-                    FCNodeList2[i].makeCopy(setPromoted:true, prevAugmentedIndex:i);
+                    FCNodeList2[i].MakeCopy(setPromoted:true, prevAugmentedIndex:i);
             }
             
             // Perform Fractional Cascading transformation 
@@ -90,7 +90,7 @@ namespace Fractional_Cascading {
             c = 0;
             while(c < nodesToPromote.Length && d < FCNodeList1.Length) {
                 if (FCNodeList1[d].GetData() < nodesToPromote[c].GetData()) {
-                    FCNodeListPrime[j] = FCNodeList1[d++].makeCopy();
+                    FCNodeListPrime[j] = FCNodeList1[d++].MakeCopy();
                 } else FCNodeListPrime[j] = nodesToPromote[c++];
                 
                 setPointers(FCNodeListPrime[j]);
@@ -104,7 +104,7 @@ namespace Fractional_Cascading {
                 j++;
             }
             while(d < n) {
-                FCNodeListPrime[j] = FCNodeList1[d++].makeCopy();
+                FCNodeListPrime[j] = FCNodeList1[d++].MakeCopy();
                 setPointers(FCNodeListPrime[j]);
                 j++;
             }

@@ -48,18 +48,18 @@ namespace Fractional_Cascading {
             return Dimension;
         }
         
-        public void setPrime() {
+        public void SetPrime() {
             Prime = true;
         }
 
-        public bool isPromoted() {
+        public bool IsPromoted() {
             return Promoted;
         }
-        public int getPreviouslyAugmentedIndex() {
+        public int GetPreviouslyAugmentedIndex() {
             return PreviousAugmentedListIndex;
         }
 
-        public int coordNodeLoc(int dim=1) {
+        public int CoordNodeLoc(int dim=1) {
             if(dim < 1 || dim > 3) {
                 string excStr = "Invalid dimension parameter when calling coordNodeLoc";
                 throw new Exception(excStr);
@@ -67,21 +67,21 @@ namespace Fractional_Cascading {
             return BaseCoordNode.GetAttr(dim);
         }
 
-        public void setPrevPointer(FCNode prev) {
+        public void SetPrevPointer(FCNode prev) {
             PreviousNode = prev;
         }
-        public FCNode getPrevPointer() {
+        public FCNode GetPrevPointer() {
             return PreviousNode;
         }
 
-        public void setNextPointer(FCNode next) {
+        public void SetNextPointer(FCNode next) {
             NextNode = next;
         }
-        public FCNode getNextPointer() {
+        public FCNode GetNextPointer() {
             return NextNode;
         }
 
-        public FCNode makeCopy(bool setPromoted=false, bool keepPointers=false,
+        public FCNode MakeCopy(bool setPromoted=false, bool keepPointers=false,
                                int prevAugmentedIndex = -1) {
             
             FCNode ret = new FCNode(BaseCoordNode, Dimension, Index,

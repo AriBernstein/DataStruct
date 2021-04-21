@@ -17,9 +17,9 @@ namespace Fractional_Cascading {
             if (root == null)   // Base case
                 return new BSTNode(key, root:true);
             else if (key < root.GetKey())   // Recurse left
-                root.setLeftChild(Insert(root.getLeftChild(), key));
+                root.SetLeftChild(Insert(root.GetLeftChild(), key));
             else if (key >= root.GetKey())  // Recuse right
-                root.setRightChild(Insert(root.getRightChild(), key));
+                root.SetRightChild(Insert(root.GetRightChild(), key));
 
             n++;
             return root;
@@ -33,40 +33,32 @@ namespace Fractional_Cascading {
             if(order == 1) TraverseInOrder(Root);
             else if (order == 2) TraversePreOrder(Root);
             else if (order == 3) TraversePostOrder(Root);
-            else throw new Exception("Invalid order paramter when calling traverse.");
+            else throw new Exception($"Invalid order paramter {order} when "+
+                                      "calling traverse.");
         } 
 
         private void TraverseInOrder(BSTNode root) {
-            int i = 0;
-            int[] inOrderLst = new int[n];
             if (!(root == null)) {
-                TraverseInOrder(root.getLeftChild());
-                inOrderLst[i++] = root.GetKey();
-                TraverseInOrder(root.getRightChild());
+                TraverseInOrder(root.GetLeftChild());
+                Console.Write($"{root.GetKey()}, ");
+                TraverseInOrder(root.GetRightChild());
             }
-            u.PrintIntArray(inOrderLst);
         }
 
         private void TraversePreOrder(BSTNode root) {
-            int i = 0;
-            int[] preOrderLst = new int[n];
             if (!(root == null)) {
-                preOrderLst[i++] = root.GetKey();
-                TraversePreOrder(root.getLeftChild());
-                TraversePreOrder(root.getRightChild());
+                Console.Write($"{root.GetKey()}, ");
+                TraversePreOrder(root.GetLeftChild());
+                TraversePreOrder(root.GetRightChild());
             }
-            u.PrintIntArray(preOrderLst);
         }
 
         private void TraversePostOrder(BSTNode root) {
-            int i = 0;
-            int [] postOrderLst = new int[n];
             if (!(root == null)) {
-                TraversePostOrder(root.getLeftChild());
-                TraversePostOrder(root.getRightChild());
-                postOrderLst[i++] = root.GetKey();
+                TraversePostOrder(root.GetLeftChild());
+                TraversePostOrder(root.GetRightChild());
+                Console.Write($"{root.GetKey()}, ");
             }
-            u.PrintIntArray(postOrderLst);
         }
 
         public BSTNode GetRoot() {

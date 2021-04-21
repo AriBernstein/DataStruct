@@ -57,18 +57,18 @@ namespace Fractional_Cascading {
                 DataNode.next in the augmented list in the TargetDimension. */
 
             int targetData = dataNode.GetData();
-            FCNode prevNode = dataNode.getPrevPointer();
-            FCNode nextNode = dataNode.getNextPointer();
+            FCNode prevNode = dataNode.GetPrevPointer();
+            FCNode nextNode = dataNode.GetNextPointer();
             
             // Find range
             int lowRange, highRange;
             int targetDimIndex = targetDimension - 1;
 
             if(prevNode == null) lowRange = 0;
-            else lowRange = prevNode.getPreviouslyAugmentedIndex();
+            else lowRange = prevNode.GetPreviouslyAugmentedIndex();
 
             if(nextNode == null) highRange = NodeMatrixPrime[targetDimIndex].Length;
-            else highRange = nextNode.getPreviouslyAugmentedIndex();
+            else highRange = nextNode.GetPreviouslyAugmentedIndex();
 
             IEnumerable<int> range = Enumerable.Range(lowRange, highRange - lowRange);
             
@@ -111,8 +111,8 @@ namespace Fractional_Cascading {
             
             // Ensure that dataNode is in the correct dimension - if not check neghbors
             if(dataNode.GetDim() != currentDim) {
-                FCNode next = dataNode.getNextPointer();
-                FCNode prev = dataNode.getPrevPointer();
+                FCNode next = dataNode.GetNextPointer();
+                FCNode prev = dataNode.GetPrevPointer();
                 if      (TargetNodeCheck(next, data, currentDim)) dataNode = next;
                 else if (TargetNodeCheck(prev, data, currentDim)) dataNode = prev;
                 else {

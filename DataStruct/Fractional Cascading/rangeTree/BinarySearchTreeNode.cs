@@ -16,45 +16,45 @@ namespace Fractional_Cascading {
             return Key;
         }
         
-        public bool isRoot() {
+        public bool IsRoot() {
             return Root;
         }
 
-        public bool isLeaf() {
+        public bool IsLeaf() {
             return Leaf;
         }
-        public void makeLeaf() {
+        public void MakeLeaf() {
             Leaf = true;
         }
 
-        public void changeColor() {
+        public void ChangeColor() {
             Red = !(Red);
         }
-        public bool isRed() {
+        public bool IsRed() {
             return Red;
         }
-        public bool isBlack() {
+        public bool IsBlack() {
             return !(Red);
         }
 
-        public BSTNode getParent() {
+        public BSTNode GetParent() {
             return Parent;
         }
-        public void setParent(BSTNode parent) {
+        public void SetParent(BSTNode parent) {
             Parent = parent;
         }
 
-        public BSTNode getLeftChild() {
+        public BSTNode GetLeftChild() {
             return LeftChild;
         }
-        public void setLeftChild(BSTNode leftChild) {
+        public void SetLeftChild(BSTNode leftChild) {
             LeftChild = leftChild;
         }
 
-        public BSTNode getRightChild() {
+        public BSTNode GetRightChild() {
             return RightChild;
         }
-        public void setRightChild(BSTNode rightChild) {
+        public void SetRightChild(BSTNode rightChild) {
             RightChild = rightChild;
         }
 

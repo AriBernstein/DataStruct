@@ -2,9 +2,9 @@ using System;
 
 namespace Fractional_Cascading {
     interface RangeTreeNodeBase {
-        int getDim();
-        bool isLeaf();
-        RangeTreeNodeBase getNextDimNode();
+        int GetDim();
+        bool IsLeaf();
+        RangeTreeNodeBase GetNextDimNode();
     }
     
     class RangeTreeNode : RangeTreeNodeBase {
@@ -18,37 +18,37 @@ namespace Fractional_Cascading {
         private RangeTreeNodeBase leftChild;
         private RangeTreeNodeBase rightChild;
         
-        public void setNextDimNode(RangeTreeNode nextDimBranchNode) {
-            if(nextDimBranch.isLeaf())
+        public void SetNextDimNode(RangeTreeNode nextDimBranchNode) {
+            if(nextDimBranch.IsLeaf())
                 throw new Exception("nextDimBranchNode must be a BranchNode");
             else
                 nextDimBranch = nextDimBranchNode;
         }
-        public RangeTreeNodeBase getNextDimNode() {
+        public RangeTreeNodeBase GetNextDimNode() {
             return nextDimBranch;
         }
         
-        public void setLeftChild(RangeTreeNodeBase leftChildNode)  {
+        public void SetLeftChild(RangeTreeNodeBase leftChildNode)  {
             leftChild = leftChildNode;
         }
-        public RangeTreeNodeBase getLeftChild() {
+        public RangeTreeNodeBase GetLeftChild() {
             return leftChild;
         }
 
-        public void setRightChild(RangeTreeNodeBase rightChildNode)  {
+        public void SetRightChild(RangeTreeNodeBase rightChildNode)  {
             rightChild = rightChildNode;
         }
-        public RangeTreeNodeBase getRightChild() {
+        public RangeTreeNodeBase GetRightChild() {
             return rightChild;
         }
 
-        public int getDim() {
+        public int GetDim() {
             return dimension;
         }
-        public bool isRoot() {
+        public bool IsRoot() {
             return root;
         }
-        public bool isLeaf() {
+        public bool IsLeaf() {
             return false;
         }
         public RangeTreeNode(int dimensionVal, RangeTreeNode parentNode, int minIndexVal,
@@ -67,29 +67,29 @@ namespace Fractional_Cascading {
         private RangeTreeLeaf nextDimLeaf;
         private RangeTreeNode parent;
         private DataNode data;
-        public int getDim() {
+        public int GetDim() {
             return dimension;
         }
 
-        public bool isLeaf() {
+        public bool IsLeaf() {
             return true;
         }
 
-        public void setNextDimNode(RangeTreeLeaf nextDimLeafNode) {
-            if(!(nextDimLeafNode.isLeaf()))
+        public void SetNextDimNode(RangeTreeLeaf nextDimLeafNode) {
+            if(!(nextDimLeafNode.IsLeaf()))
                 throw new Exception("nextDimLeafNode must be a LeafNode");
             else
                 nextDimLeaf = nextDimLeafNode;
         }
 
-        public void setParent(RangeTreeNode parentNode) {
+        public void SetParent(RangeTreeNode parentNode) {
             parent = parentNode;
         }
-        public RangeTreeNode getParent() {
+        public RangeTreeNode GetParent() {
             return parent;
         }
 
-        public RangeTreeNodeBase getNextDimNode() {
+        public RangeTreeNodeBase GetNextDimNode() {
             return nextDimLeaf;
         }
 
