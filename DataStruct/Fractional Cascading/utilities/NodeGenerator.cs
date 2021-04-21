@@ -83,11 +83,11 @@ namespace Fractional_Cascading {
         }
 
         
-        public BSTNode[] GetRandomBSTNodes(int n, int min=0, int max=-1) {
+        public RBTreeNode[] GetRandomBSTNodes(int n, int min=0, int max=-1) {
             if(max == -1) max = n * 10;
-            BSTNode[] nodeList = new BSTNode[n];
+            RBTreeNode[] nodeList = new RBTreeNode[n];
             (int[] keyList, HashSet<int> keySet) = u.RandUniqueIntsRange(n, min, max);
-            for(int i = 0; i < n; i++) nodeList[i] = new BSTNode(keyList[i]);
+            for(int i = 0; i < n; i++) nodeList[i] = new RBTreeNode(keyList[i]);
             return nodeList;
         }
     }

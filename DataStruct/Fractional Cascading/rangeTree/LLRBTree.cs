@@ -1,7 +1,9 @@
 using System;
 
 namespace Fractional_Cascading {
-    class BinarySearchTree {
+    class LLRBTree {
+        /**
+        LLRBTree -> Left Leaning Red Black Tree */
 
         private RBTreeNode Root = null;
 
@@ -10,6 +12,7 @@ namespace Fractional_Cascading {
         public void Insert(int key) {
             Root = Insert(Root, key);
         }
+
         private RBTreeNode Insert(RBTreeNode curr, int key) {
             
             // lil sapling :)
@@ -19,7 +22,7 @@ namespace Fractional_Cascading {
             // under current node generation implementation
             if (key == curr.GetKey()) throw new Exception("Attempting insert of node " +
                                                           "with key already present in " +
-                                                          "Binary Search Tree.");
+                                                          "Red Black Tree.");
 
             // recurse left if key less than that of current node
             if (key < curr.GetKey()) curr.SetLeftChild(Insert(curr.GetLeftChild(), key));

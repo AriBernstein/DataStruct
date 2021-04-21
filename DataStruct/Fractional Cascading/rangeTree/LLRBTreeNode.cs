@@ -2,22 +2,13 @@ using System;
 
 namespace Fractional_Cascading {
 
-    public class BSTNode {
-        // Key is the average of minIndex and maxIndex 
+    public class RBTreeNode {
         private int Key;
-        private bool Root;
-        private bool Leaf;
-        private bool Red;
-        private BSTNode Parent;
-        private BSTNode LeftChild;
-        private BSTNode RightChild;
-        
+        private bool Leaf, Red;
+        private RBTreeNode Parent, LeftChild, RightChild;
+
         public int GetKey() {
             return Key;
-        }
-        
-        public bool IsRoot() {
-            return Root;
         }
 
         public bool IsLeaf() {
@@ -37,31 +28,30 @@ namespace Fractional_Cascading {
             return !(Red);
         }
 
-        public BSTNode GetParent() {
+        public RBTreeNode GetParent() {
             return Parent;
         }
-        public void SetParent(BSTNode parent) {
+        public void SetParent(RBTreeNode parent) {
             Parent = parent;
         }
 
-        public BSTNode GetLeftChild() {
+        public RBTreeNode GetLeftChild() {
             return LeftChild;
         }
-        public void SetLeftChild(BSTNode leftChild) {
+        public void SetLeftChild(RBTreeNode leftChild) {
             LeftChild = leftChild;
         }
 
-        public BSTNode GetRightChild() {
+        public RBTreeNode GetRightChild() {
             return RightChild;
         }
-        public void SetRightChild(BSTNode rightChild) {
+        public void SetRightChild(RBTreeNode rightChild) {
             RightChild = rightChild;
         }
 
-        public BSTNode(int key, bool leaf=false, bool red = true, bool root=false) {
+        public RBTreeNode(int key, bool leaf=false, bool red = true) {
             Key = key;
             Leaf = leaf;
-            Root = root;
             Red = red;
         }
 
