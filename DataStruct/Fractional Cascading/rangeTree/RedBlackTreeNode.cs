@@ -49,6 +49,10 @@ namespace Fractional_Cascading {
             RightChild = rightChild;
         }
 
+        // public override bool Equals(RBTreeNode n) {
+
+        // }
+
         public RBTreeNode(int key, bool leaf=false, bool red = true) {
             Key = key;
             Leaf = leaf;
