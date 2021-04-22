@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 namespace Fractional_Cascading {
     class RBTree {
@@ -80,11 +81,13 @@ namespace Fractional_Cascading {
             x.SetParent(y);
         }
 
-        public void PrintTree(int order) {
+        public string TraverseTree(int order) {
             /**
-            order = 1 -> Inorder
-                    2 -> Preorder
-                    3 -> Postorder  */
+            Output to console & return as string.
+
+            Patameter:  order = 1 -> Inorder
+                                2 -> Preorder
+                                3 -> Postorder  */
 
             // Helpers:
             void PrintInOrder(RBTreeNode root) {
@@ -108,7 +111,9 @@ namespace Fractional_Cascading {
                 Console.Write($"{root.GetKey()}, ");
             }
 
-            // Print:
+            // Write to string using console:
+            StringWriter sw = new StringWriter();
+            Console.SetOut(sw);
             if(order == 1) {
                 Console.Write("\nInorder traversal: ");
                 PrintInOrder(Root);
@@ -120,6 +125,15 @@ namespace Fractional_Cascading {
                 PrintPostOrder(Root);
             } else throw new Exception($"Invalid order paramter {order} when "+
                                        "calling traverse.");
+            String ret = sw.ToString();
+            ret = ret.Remove(ret.Length - 2, 2);   // remove trailing comma & space
+
+            // close StringWriter, reset standard out, return
+            sw.Close();
+            var standardOutput = new StreamWriter(Console.OpenStandardOutput());
+            standardOutput.AutoFlush = true;
+            Console.SetOut(standardOutput);
+            return ret;
         }
 
         public RBTreeNode GetRoot() {
