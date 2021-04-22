@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 
 namespace Fractional_Cascading {
     class RBTreeHelper {
@@ -17,23 +18,23 @@ namespace Fractional_Cascading {
             // Helpers:
             void PrintInOrder(RBTreeNode currRoot) {
                 if (currRoot == null) return;
-                PrintInOrder(currRoot.GetLeftChild());
-                Console.Write($"{currRoot.GetKey()}, ");
-                PrintInOrder(currRoot.GetRightChild());
+                PrintInOrder(currRoot.Left());
+                Console.Write($"{currRoot.GetData()}, ");
+                PrintInOrder(currRoot.Right());
             }
 
             void PrintPreOrder(RBTreeNode currRoot) {
                 if (currRoot == null) return;
-                Console.Write($"{currRoot.GetKey()}, ");
-                PrintPreOrder(currRoot.GetLeftChild());
-                PrintPreOrder(currRoot.GetRightChild());
+                Console.Write($"{currRoot.GetData()}, ");
+                PrintPreOrder(currRoot.Left());
+                PrintPreOrder(currRoot.Right());
             }
 
             void PrintPostOrder(RBTreeNode currRoot) {
                 if (currRoot == null) return;
-                PrintPostOrder(currRoot.GetLeftChild());
-                PrintPostOrder(currRoot.GetRightChild());
-                Console.Write($"{currRoot.GetKey()}, ");
+                PrintPostOrder(currRoot.Left());
+                PrintPostOrder(currRoot.Right());
+                Console.Write($"{currRoot.GetData()}, ");
             }
 
             // Write to string using console:
@@ -62,6 +63,55 @@ namespace Fractional_Cascading {
             Console.SetOut(standardOutput);
             Console.WriteLine(output);
             return output;
+        }
+
+        public String PrintSubTree(RBTreeNode node) {
+            /**
+            Note, functionality largely taken from this article:
+                    https://www.baeldung.com/java-print-binary-tree-diagram */
+
+            void Traverse(StringBuilder sb, String padding, String pointer,
+                          RBTreeNode node, bool hasRightSibling) {
+                if (node != null) {
+                    sb.Append("\n");
+                    sb.Append(padding);
+                    sb.Append(pointer);
+                    sb.Append(" " + node.GetData());
+                    if(node.IsRed()) sb.Append(" (R)");
+                    else sb.Append(" (B)");
+
+                    StringBuilder paddingBuilder = new StringBuilder(padding);
+                    
+                    if (hasRightSibling) paddingBuilder.Append("│   ");
+                    else paddingBuilder.Append("    ");
+
+                    String paddingForBoth = paddingBuilder.ToString();
+                    String pointerRight = "└────";
+                    String pointerLeft = (node.Right() != null) ? "├────" : "└────";
+
+                    Traverse(sb, paddingForBoth, pointerLeft, node.Left(), node.Right() != null);
+                    Traverse(sb, paddingForBoth, pointerRight, node.Right(), false);
+                }
+            }
+
+            String TraversePreOrder(RBTreeNode root) {
+                if (root == null) return "";
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append(root.GetData());
+
+                String pointerRight = "└──";
+                String pointerLeft = (root.Right() != null) ? "├──" : "└──";
+
+                Traverse(sb, "", pointerLeft, root.Left(), root.Right() != null);
+                Traverse(sb, "", pointerRight, root.Right(), false);
+                return sb.ToString();
+            }
+
+            String prettyBinaryTree = TraversePreOrder(node);
+            Console.WriteLine(TraversePreOrder(node));
+            return prettyBinaryTree;
+
         }
     }
 }

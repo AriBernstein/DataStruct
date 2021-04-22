@@ -1,89 +1,159 @@
 using System;
-using System.IO;
 
 namespace Fractional_Cascading {
     class RBTree {
-        /**
-        LLRBTree -> Left Leaning Red Black Tree */
 
         private RBTreeNode Root = null;
         private RBTreeHelper h = new RBTreeHelper();
 
         Utils u = new Utils();
 
-        public void Insert(int key) {
-            Root = Insert(Root, key);
-        }
-
-        private RBTreeNode Insert(RBTreeNode curr, int key) {
-            
-            // lil sapling :)
-            if (curr == null) return new RBTreeNode(key);
-            
-            // nodes with duplicate keys (in a single dimension) should be impossible
-            // under current node generation implementation
-            if (key == curr.GetKey()) throw new Exception("Attempting insert of node " +
-                                                          "with key already present in " +
-                                                          "Red Black Tree.");
-
-            // recurse left if key less than that of current node
-            if (key < curr.GetKey()) curr.SetLeftChild(Insert(curr.GetLeftChild(), key));
-            
-            // recurse right if key >= current node
-            else curr.SetRightChild(Insert(curr.GetRightChild(), key));
-
-            return curr;
-        }
-
         public void RotateRight(RBTreeNode y) {
             // setup x & y
-            RBTreeNode x = y.GetLeftChild();
-            y.SetLeftChild(x.GetRightChild());
+            RBTreeNode x = y.Left();
+            y.SetLeft(x.Right());
             
             // if x has a right child, make y the parent of the right child of x.
-            if (x.GetRightChild() != null) x.GetRightChild().SetParent(y);
-            x.SetParent(y.GetParent());
+            if (x.Right() != null) x.Right().SetParent(y);
+            x.SetParent(y.Parent());
             
             // if y has no parent, make x the root of the tree.
-            if (y.GetParent() == null) Root = x;
+            if (y.Parent() == null) Root = x;
             
             // else if y is the right child of its parent p, make x the right child of p.
-            else if (y == y.GetParent().GetRightChild()) y.GetParent().SetRightChild(x);
+            else if (y == y.Parent().Right()) y.Parent().SetRight(x);
             
             // else assign x as the left child of p.
-            else y.GetParent().SetLeftChild(x);
+            else y.Parent().SetLeft(x);
 
             // make x the parent of y.
-            x.SetRightChild(y);
+            x.SetRight(y);
             y.SetParent(x);
         }
 
 
         public void RotateLeft(RBTreeNode x) {
             // setup x & y
-            RBTreeNode y = x.GetRightChild();
-            x.SetRightChild(y.GetLeftChild());
+            RBTreeNode y = x.Right();
+            x.SetRight(y.Left());
 
             // if y has a left child, make x the parent of the left child of y.
-            if (y.GetLeftChild() != null) y.GetLeftChild().SetParent(x);
-            y.SetParent(x.GetParent());
+            if (y.Left() != null) y.Left().SetParent(x);
+            y.SetParent(x.Parent());
 
             // if x has no parent, make y the root of the tree.
-            if (x.GetParent() == null) Root = y;
+            if (x.Parent() == null) Root = y;
             
             // else if x is the left child of p, make y the left child of p.
-            else if (x == x.GetParent().GetLeftChild()) x.GetParent().SetLeftChild(y);
+            else if (x == x.Parent().Left()) x.Parent().SetLeft(y);
 
             // else make y the right child of p
-            else x.GetParent().SetRightChild(y);
+            else x.Parent().SetRight(y);
 
             // make y the parent of x
-            y.SetLeftChild(x);
+            y.SetLeft(x);
             x.SetParent(y);
+        }
+
+        private void ReadjustPostInsert(RBTreeNode newNode) {
+
+            RBTreeNode u;   // Will denote "pibling" of newNode; ie. if newNode's parent
+                            // is the left child of newNode's grandparent, u = newNode's
+                            // grandparent's right child and vice versa.
+            
+            // While the parent of newNode (p) is RED.
+            while (newNode.Parent().IsRed()) {
+
+                // If p is the right child of grandParent (gP) of left child (z):
+                if (newNode.Parent() == newNode.GrandParent().Right()) {
+
+                    u = newNode.GrandParent().Left();
+
+                    if (u.IsRed()) {
+                    // If the color of the left child of gP of z is RED, set the color of
+                    // both the children of gP as BLACK, set the color of gP as RED, and
+                    // assign gP to newNode.
+                        u.SetBlack();
+                        newNode.Parent().SetBlack();
+                        newNode.GrandParent().SetRed();
+                        newNode = newNode.GrandParent();
+                    } else {
+                    // Else if newNode is the left child of p then, assign p to newNode
+                    // and Right-Rotate newNode.
+                        if (newNode == newNode.Parent().Left()) {
+                            newNode = newNode.Parent();
+                            RotateRight(newNode);
+                        }
+                        // Set color of p as BLACK and color of gP as RED.
+                        // Then Left-Rotate gP.
+                        newNode.Parent().SetBlack();
+                        newNode.GrandParent().SetRed();
+                        RotateLeft(newNode.GrandParent());
+                    }
+                } else {
+                    // p is the left child of grandParent gP of z
+                    u = newNode.GrandParent().Right();
+
+                    if (u.IsRed()) {
+                    // If the color of the right child of gP of z is RED, set the color of
+                    // both the children of gP as BLACK and the color of gP as RED. Then
+                    // assign gP to newNode.
+                        u.SetBlack();
+                        newNode.Parent().SetBlack();
+                        newNode.GrandParent().SetRed();
+                        newNode = newNode.GrandParent();
+                    } else {
+                        // Else if newNode is the right child of p then, assign p to
+                        // newNode. Then rotate left newNode.
+                        if (newNode == newNode.Parent().Right()) {
+                            newNode = newNode.Parent();
+                            RotateLeft(newNode);
+                        }
+
+                        // Set color of p as BLACK and color of gP as RED. Then rotate
+                        // right gp. 
+                        newNode.Parent().SetBlack();
+                        newNode.GrandParent().SetRed();
+                        RotateRight(newNode.GrandParent());
+                    }
+                }
+                
+                if (newNode == Root) break;
+            }
+            Root.SetBlack();
+        }
+
+        private RBTreeNode Insert(RBTreeNode root, int data) {
+            
+            // lil sapling :)
+            if (root == null) return new RBTreeNode(data);
+            
+            // nodes with duplicate data values (in a single dimension) should be
+            // impossible under current implementation of node generation
+            if (data == root.GetData())
+                throw new Exception("Attempting insert of node with data value already " +
+                                    "present in Red Black Tree.");
+
+            // recurse left if data value is less than that of current node
+            if (data < root.GetData()) root.SetLeft(Insert(root.Left(), data));
+            
+            // recurse right if data value is >= current node
+            else root.SetRight(Insert(root.Right(), data));
+
+            return root;
+        }
+        
+        public void Insert(int data) {
+            Root = Insert(Root, data);
         }
 
         public string TraverseTree(int order) {
             return h.PrintTreeTraversal(order, Root);
+        }
+
+        public void PrintTree() {
+            h.PrintSubTree(Root);
+            // h.print2D(Root);
         }
 
         public RBTreeNode GetRoot() {

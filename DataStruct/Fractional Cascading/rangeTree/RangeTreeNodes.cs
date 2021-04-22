@@ -4,7 +4,7 @@ namespace Fractional_Cascading {
     interface RangeTreeNodeBase {
         int GetDim();
         bool IsLeaf();
-        RangeTreeNodeBase GetNextDimNode();
+        RangeTreeNodeBase GetNextDimRoot();
     }
     
     class RangeTreeNode : RangeTreeNodeBase {
@@ -13,20 +13,20 @@ namespace Fractional_Cascading {
         private int Dimension;
         private int MinIndex;
         private int MaxIndex;
-        private RangeTreeNode NextDimBranch;
+        private RangeTreeNode NextDimRoot;
         private RangeTreeNodeBase Parent;
         private RangeTreeNodeBase LeftChild;
         private RangeTreeNodeBase RightChild;
         
         public void SetNextDimNode(RangeTreeNode nextDimBranchNode) {
-            if (NextDimBranch.IsLeaf())
+            if (NextDimRoot.IsLeaf())
                 throw new Exception("nextDimBranchNode must be a BranchNode");
             else
-                NextDimBranch = nextDimBranchNode;
+                NextDimRoot = nextDimBranchNode;
         }
 
-        public RangeTreeNodeBase GetNextDimNode() {
-            return NextDimBranch;
+        public RangeTreeNodeBase GetNextDimRoot() {
+            return NextDimRoot;
         }
         
         public void SetLeftChild(RangeTreeNodeBase leftChildNode)  {
@@ -94,7 +94,7 @@ namespace Fractional_Cascading {
             return Parent;
         }
 
-        public RangeTreeNodeBase GetNextDimNode() {
+        public RangeTreeNodeBase GetNextDimRoot() {
             return NextDimLeaf;
         }
 

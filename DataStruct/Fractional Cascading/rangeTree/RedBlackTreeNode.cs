@@ -3,12 +3,12 @@ using System;
 namespace Fractional_Cascading {
 
     public class RBTreeNode {
-        private int Key;
+        private int Data;
         private bool Leaf, Red;
-        private RBTreeNode Parent, LeftChild, RightChild;
+        private RBTreeNode ParentNode, LeftChild, RightChild;
 
-        public int GetKey() {
-            return Key;
+        public int GetData() {
+            return Data;
         }
 
         public bool IsLeaf() {
@@ -23,11 +23,11 @@ namespace Fractional_Cascading {
             Red = !(Red);
         }
 
-        public void MakeRed() {
+        public void SetRed() {
             Red = true;
         }
 
-        public void MakeBlack() {
+        public void SetBlack() {
             Red = false;
         }
 
@@ -39,42 +39,75 @@ namespace Fractional_Cascading {
             return !(Red);
         }
 
-        public RBTreeNode GetParent() {
-            return Parent;
-        }
-
-        public RBTreeNode GetGrandParent() {
-            return Parent.GetParent();
+        public RBTreeNode Parent() {
+            return ParentNode;
         }
 
         public void SetParent(RBTreeNode parent) {
-            Parent = parent;
+            ParentNode = parent;
         }
 
-        public RBTreeNode GetLeftChild() {
+        public RBTreeNode GrandParent() {
+            return ParentNode.Parent();
+        }
+
+        public RBTreeNode Left() {
             return LeftChild;
         }
 
-        public void SetLeftChild(RBTreeNode leftChild) {
+        public void SetLeft(RBTreeNode leftChild) {
             LeftChild = leftChild;
         }
 
-        public RBTreeNode GetRightChild() {
+        public RBTreeNode Right() {
             return RightChild;
         }
 
-        public void SetRightChild(RBTreeNode rightChild) {
+        public void SetRight(RBTreeNode rightChild) {
             RightChild = rightChild;
         }
 
-        // public override bool Equals(RBTreeNode n) {
-
-        // }
+        public int Size() {
+            int nodeCount = 0;
+            void FindSize(RBTreeNode n) {
+                if (n == null) return;
+                FindSize(n.Left());
+                nodeCount++;
+                FindSize(n.Right());
+            }
+            return nodeCount;
+        }
         
-        public RBTreeNode(int key, bool leaf=false, bool red = true) {
-            Key = key;
+        public RBTreeNode(int data, bool leaf=false, bool red = true) {
+            Data = data;
             Leaf = leaf;
             Red = red;
+        }
+
+        public override bool Equals(object obj) {
+            var nodeForComparison = obj as RBTreeNode;
+            if (nodeForComparison == null) return false;
+            else if (nodeForComparison.GetData() != Data) return false;
+            else return true;
+        }
+
+        public static bool operator ==(RBTreeNode x, RBTreeNode y) {
+            
+            // Handle null equality check
+            if (System.Object.ReferenceEquals(x, null)) {
+                if (System.Object.ReferenceEquals(y, null)) return true;
+                else return false;
+
+            // Otherwise compare class instances
+            } else return x.Equals(y);
+        }
+
+        public static bool operator !=(RBTreeNode x, RBTreeNode y) { 
+            return !(x == y);
+        }
+        
+        public override int GetHashCode() {
+            return Data.GetHashCode();
         }
     }
 }
