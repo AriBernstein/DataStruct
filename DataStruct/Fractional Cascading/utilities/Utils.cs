@@ -9,26 +9,27 @@ namespace Fractional_Cascading {
                    new String('-', separatorLength) +
                    new String('\n', newLinesBelow);
         }
+        
         public string PrettyNumApprox(int n) {
             /**
             Generate string with approximation of large numer
             ex. n = 5001243, return "5 million" */
             double num = (double)n;
 
-            if(num <= 9999) return num.ToString();   // to small for this
+            if (num <= 9999) return num.ToString();   // to small for this
             
             double numDigits = Math.Floor(Math.Log(num, 10)) + 1;
             
             // Get leading values
             double numLeadingVals = numDigits % 3;
-            if(numLeadingVals == 0) numLeadingVals = 3;
+            if (numLeadingVals == 0) numLeadingVals = 3;
             int leadingVal =
                 (int)Math.Truncate((n / Math.Pow(10, numDigits - numLeadingVals)));
             
             // Get size label
             double sizeClass = Math.Floor(numDigits / 3);
             // so that 555555 returns "555 thousand" instead of "555 million"
-            if(numLeadingVals == 3) sizeClass -= 1;
+            if (numLeadingVals == 3) sizeClass -= 1;
 
             string sizeClassLabel;
             if      (sizeClass == 1) sizeClassLabel = "thousand";
@@ -73,6 +74,7 @@ namespace Fractional_Cascading {
             Console.WriteLine(s);
             return s;
         }
+
         public String PrintNodeMatrix(Node[][] matrix) {
             String s = "";
             for(int i = 0; i < matrix.Length; i++)  s = s + PrintNodeArray(matrix[i]);

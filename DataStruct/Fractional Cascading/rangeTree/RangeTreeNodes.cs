@@ -9,66 +9,70 @@ namespace Fractional_Cascading {
     
     class RangeTreeNode : RangeTreeNodeBase {
         // Key is the average of minIndex and maxIndex 
-        private bool root;
-        private int dimension;
-        private int minIndex;
-        private int maxIndex;
-        private RangeTreeNode nextDimBranch;
-        private RangeTreeNodeBase parent;
-        private RangeTreeNodeBase leftChild;
-        private RangeTreeNodeBase rightChild;
+        private bool Root;
+        private int Dimension;
+        private int MinIndex;
+        private int MaxIndex;
+        private RangeTreeNode NextDimBranch;
+        private RangeTreeNodeBase Parent;
+        private RangeTreeNodeBase LeftChild;
+        private RangeTreeNodeBase RightChild;
         
         public void SetNextDimNode(RangeTreeNode nextDimBranchNode) {
-            if(nextDimBranch.IsLeaf())
+            if (NextDimBranch.IsLeaf())
                 throw new Exception("nextDimBranchNode must be a BranchNode");
             else
-                nextDimBranch = nextDimBranchNode;
+                NextDimBranch = nextDimBranchNode;
         }
+
         public RangeTreeNodeBase GetNextDimNode() {
-            return nextDimBranch;
+            return NextDimBranch;
         }
         
         public void SetLeftChild(RangeTreeNodeBase leftChildNode)  {
-            leftChild = leftChildNode;
+            LeftChild = leftChildNode;
         }
+
         public RangeTreeNodeBase GetLeftChild() {
-            return leftChild;
+            return LeftChild;
         }
 
         public void SetRightChild(RangeTreeNodeBase rightChildNode)  {
-            rightChild = rightChildNode;
+            RightChild = rightChildNode;
         }
+
         public RangeTreeNodeBase GetRightChild() {
-            return rightChild;
+            return RightChild;
         }
 
         public int GetDim() {
-            return dimension;
+            return Dimension;
         }
         public bool IsRoot() {
-            return root;
+            return Root;
         }
         public bool IsLeaf() {
             return false;
         }
-        public RangeTreeNode(int dimensionVal, RangeTreeNode parentNode, int minIndexVal,
-                             int maxIndexVal, bool rootVal=false) {
-            dimension = dimensionVal;
-            parent = parentNode;
-            minIndex = minIndexVal;
-            maxIndex = maxIndexVal;
-            root = rootVal;
+        public RangeTreeNode(int dimension, RangeTreeNode parent, int minIndex,
+                             int maxIndex, bool root=false) {
+            Dimension = dimension;
+            Parent = parent;
+            MinIndex = minIndex;
+            MaxIndex = maxIndex;
+            Root = root;
         }
     }
 
     class RangeTreeLeaf: RangeTreeNodeBase {
-        private int dimension;
-        private int location;   // location in dimension
-        private RangeTreeLeaf nextDimLeaf;
-        private RangeTreeNode parent;
-        private DataNode data;
+        private int Dimension;
+        private int Location;   // location in dimension
+        private RangeTreeLeaf NextDimLeaf;
+        private RangeTreeNode Parent;
+        private DataNode Data;
+
         public int GetDim() {
-            return dimension;
+            return Dimension;
         }
 
         public bool IsLeaf() {
@@ -76,27 +80,28 @@ namespace Fractional_Cascading {
         }
 
         public void SetNextDimNode(RangeTreeLeaf nextDimLeafNode) {
-            if(!(nextDimLeafNode.IsLeaf()))
+            if (!(nextDimLeafNode.IsLeaf()))
                 throw new Exception("nextDimLeafNode must be a LeafNode");
             else
-                nextDimLeaf = nextDimLeafNode;
+                NextDimLeaf = nextDimLeafNode;
         }
 
         public void SetParent(RangeTreeNode parentNode) {
-            parent = parentNode;
+            Parent = parentNode;
         }
+        
         public RangeTreeNode GetParent() {
-            return parent;
+            return Parent;
         }
 
         public RangeTreeNodeBase GetNextDimNode() {
-            return nextDimLeaf;
+            return NextDimLeaf;
         }
 
         public RangeTreeLeaf(DataNode dataNode, int dimensionVal, int locationVal) {
-            dimension = dimensionVal;
-            location = locationVal;
-            data = dataNode;
+            Dimension = dimensionVal;
+            Location = locationVal;
+            Data = dataNode;
         }
     }
 }

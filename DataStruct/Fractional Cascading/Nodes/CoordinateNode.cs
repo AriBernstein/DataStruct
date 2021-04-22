@@ -30,6 +30,7 @@ namespace Fractional_Cascading {
         public void SetData(int newData) {
             data = new DataNode(newData);
         }
+
         public DataNode GetDataNode() {
             return data;
         }
@@ -59,24 +60,11 @@ namespace Fractional_Cascading {
 
         public override string ToString() {
             int d = GetDimensionality();
-            switch (d) {
-                case 1:
-                    return "Data: " + data + 
-                           " (x: "  + xLoc + ")";
-
-                case 2:
-                    return "Data: " + data +
-                           ", (x: " + xLoc + 
-                           ", y: "  + yLoc + ")";
-
-                case 3:
-                    return "Data: " + data +
-                           ", (x: " + xLoc + 
-                           ", y: "  + yLoc + 
-                           ", z: "  + zLoc + ")";
-
-            } throw new Exception("Invalid dimensionality value on " + 
-                                  "coordinateNode at time of print.");
+            if (d == 1) return $"Data: {data} (x: {xLoc})";
+            if (d == 2) return $"Data: {data}, (x: {xLoc}, y: {yLoc})";
+            if (d == 3) return $"Data: {data}, (x: {xLoc}, y: {yLoc}, z: {zLoc})";
+            throw new Exception("Invalid dimensionality value on " + 
+                                "coordinateNode at time of print.");
         }
     }
 }

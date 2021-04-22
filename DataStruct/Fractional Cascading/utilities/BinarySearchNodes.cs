@@ -14,17 +14,17 @@ namespace Fractional_Cascading {
                     attrCode:       node[i].getAttr(attrCode) returns the attrubute by
                                     which nodeArray is ordered
             */
-            if(nodeArray.Length == 0) 
+            if (nodeArray.Length == 0)
                 throw new Exception("Attempting binarySearch on empty array");
             return BinarySearch(nodeArray, 0, nodeArray.Length-1, searchValue, attrCode);
         }
 
         private int BinarySearch(Node[] nodeArray, int l, int r, int x, int attrCode) {
-            if(l >= r) {
-                if(nodeArray[r].GetAttr(attrCode) == x) return r;
+            if (l >= r) {
+                if (nodeArray[r].GetAttr(attrCode) == x) return r;
                 String xNotInArrException =
-                    "value: " + x + " cannot be found in node array during binary " + 
-                    "search\n\tl-index: " + l +  "\tr-index: " + r + "\tx: " + x + "\n";      
+                    $"x value: {x} cannot be found in node array during binary search" + 
+                    $"\n\tl-index: {l}\tr-index: {r}\tx: {x}\n";      
                 throw new Exception(xNotInArrException); // Base case            
             }
             

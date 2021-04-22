@@ -31,7 +31,7 @@ namespace Fractional_Cascading {
                     else insert J in S   */
                         
             Random random;
-            if(randomSeed == -1) random = new Random();
+            if (randomSeed == -1) random = new Random();
             else random = new Random(randomSeed);
 
             if (max <= min || n < 0 ||  // max - min > 0 required to avoid overflow
@@ -57,7 +57,7 @@ namespace Fractional_Cascading {
             // load them in to a list, to sort
             List<int> result = candidates.ToList();
 
-            if(randomizeOrder) {
+            if (randomizeOrder) {
             // shuffle the results because HashSet has messed with the order, and the
             // algorithm does not produce random-ordered results
             // -> (ex. max-1 will never be the first value)
@@ -71,6 +71,7 @@ namespace Fractional_Cascading {
              
             return (result.ToArray(), candidates);
         }
+        
         public CoordNode[] GetCoordNodeList(int n, int insertData, bool sort=true,
                                             int sortAttrCode=0, int dimensions=1,
                                             int rangeMin=0, int rangeMax=10000000,
@@ -116,7 +117,7 @@ namespace Fractional_Cascading {
                                                              randomSeed, randomizeOrder);
                 zList = zL; zSet = zS;
             }
-            if(dimensions > 3 || dimensions < 1) {
+            if (dimensions > 3 || dimensions < 1) {
                 string errMsg =
                     "Invalid dimensions parameter value when calling getCoordNodeList";
                 throw new Exception(errMsg);
@@ -144,9 +145,8 @@ namespace Fractional_Cascading {
             return nodeList;
         }
 
-        
         public RBTreeNode[] GetRandomBSTNodes(int n, int min=0, int max=-1) {
-            if(max == -1) max = n * 10;
+            if (max == -1) max = n * 10;
             RBTreeNode[] nodeList = new RBTreeNode[n];
             (int[] keyList, HashSet<int> keySet) = RandUniqueInts(n, min, max);
             for(int i = 0; i < n; i++) nodeList[i] = new RBTreeNode(keyList[i]);

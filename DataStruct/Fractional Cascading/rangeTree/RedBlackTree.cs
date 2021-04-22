@@ -83,7 +83,7 @@ namespace Fractional_Cascading {
         }
 
         public string TraverseTree(int order) {
-            return h.TraverseTree(order, Root);
+            return h.PrintTreeTraversal(order, Root);
         }
 
         public RBTreeNode GetRoot() {

@@ -5,11 +5,10 @@ namespace Fractional_Cascading {
 
         private RBTreeNode Root = null;
 
-        Utils u = new Utils();
-
         public void Insert(int key) {
             Root = Insert(Root, key);
         }
+
         private RBTreeNode Insert(RBTreeNode curr, int key) {
             
             // lil sapling :)
@@ -35,7 +34,7 @@ namespace Fractional_Cascading {
             order = 1 -> Inorder
                     2 -> Preorder
                     3 -> Postorder  */
-            if(order == 1) {
+            if (order == 1) {
                 Console.Write("\nInorder traversal: ");
                 InOrderTraversal(Root);
             } else if (order == 2) {

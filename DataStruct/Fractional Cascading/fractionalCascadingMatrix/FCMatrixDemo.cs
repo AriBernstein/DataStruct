@@ -76,7 +76,7 @@ namespace Fractional_Cascading {
                 }
             }
             
-            new CSVHelper(CSVFileName).writeCSV(fractionalCascadingStats);
+            new CSVHelper(CSVFileName).WriteCSV(fractionalCascadingStats);
             Console.WriteLine("\n\nAll done :)\n\n");
         }
     }

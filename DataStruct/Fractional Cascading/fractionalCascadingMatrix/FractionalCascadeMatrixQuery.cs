@@ -31,7 +31,7 @@ namespace Fractional_Cascading {
                 
                 // Memory issues, this is a stupid amount of space especially
                 // when we're only trying to record function timing
-                if(k < 10000) locationsOfData.Add(i + 1, nodeData);
+                if (k < 10000) locationsOfData.Add(i + 1, nodeData);
             }
 
             return locationsOfData;
@@ -64,10 +64,10 @@ namespace Fractional_Cascading {
             int lowRange, highRange;
             int targetDimIndex = targetDimension - 1;
 
-            if(prevNode == null) lowRange = 0;
+            if (prevNode == null) lowRange = 0;
             else lowRange = prevNode.GetPreviouslyAugmentedIndex();
 
-            if(nextNode == null) highRange = NodeMatrixPrime[targetDimIndex].Length;
+            if (nextNode == null) highRange = NodeMatrixPrime[targetDimIndex].Length;
             else highRange = nextNode.GetPreviouslyAugmentedIndex();
 
             IEnumerable<int> range = Enumerable.Range(lowRange, highRange - lowRange);
@@ -77,13 +77,13 @@ namespace Fractional_Cascading {
             foreach (int j in range) {
                 dataNode = NodeMatrixPrime[targetDimIndex][j];
                 
-                if(TargetNodeCheck(dataNode, targetData, targetDimension)) {
+                if (TargetNodeCheck(dataNode, targetData, targetDimension)) {
                     found = true;
                     break;
                 }
             }
             
-            if(!(found)) throw new Exception("Can't find node with data " + targetData +
+            if (!(found)) throw new Exception("Can't find node with data " + targetData +
                                              " in dimension: " + targetDimension +
                                              " during fractional cascading search");
             return dataNode;
@@ -110,7 +110,7 @@ namespace Fractional_Cascading {
             dataNode = NodeMatrixPrime[0][dataIndex];
             
             // Ensure that dataNode is in the correct dimension - if not check neghbors
-            if(dataNode.GetDim() != currentDim) {
+            if (dataNode.GetDim() != currentDim) {
                 FCNode next = dataNode.GetNextPointer();
                 FCNode prev = dataNode.GetPrevPointer();
                 if      (TargetNodeCheck(next, data, currentDim)) dataNode = next;
@@ -126,7 +126,7 @@ namespace Fractional_Cascading {
                 }
             }
 
-            if(k < 10000) // This takes up too much memmory
+            if (k < 10000) // This takes up too much memmory
                 // Assign first dimension location in return dictionary
                 locationsOfData[currentDim] = dataNode.GetAttr(1);
 
@@ -144,14 +144,13 @@ namespace Fractional_Cascading {
 
 
         public FCMatrixQuery(int numValsPerList, int numLists, int unitFracDen=2,
-                               bool print=true, int insertData=-1,
-                               bool randNodeAttrOrders=true) {
+                             bool print=true, int insertData=-1,
+                             bool randNodeAttrOrders=true) {
             FractionalCascadingMatrix fcm;
             n = numValsPerList;
             k = numLists;
             fcm = new FractionalCascadingMatrix(n, k, insertData: insertData, print:print,
                                                 randNodeAttrOrders: randNodeAttrOrders);
-            
             InputCoordMatrix = fcm.GetInputCoordMatrix();
             NodeMatrixPrime = fcm.GetFCNodeMatixPrime();
         }

@@ -24,6 +24,7 @@ namespace Fractional_Cascading {
         public CoordNode[][] GetInputCoordMatrix() {
             return InputCoordMatrix;
         }
+
         public FCNode[][] GetFCNodeMatixPrime() {
             return NodeMatrixPrime;
         }
@@ -43,18 +44,18 @@ namespace Fractional_Cascading {
             FCNode lastPromotedNode = null;    FCNode lastNotPromotedNode = null;
             void setPointers(FCNode currentNode) {
                 // Assign prev and next pointers to closest non-promoted nodes
-                if(currentNode.IsPromoted()) {
+                if (currentNode.IsPromoted()) {
                     lastPromotedNode = currentNode;
                     currentNode.SetPrevPointer(lastNotPromotedNode);
-                    if(lastNotPromotedNode != null)
-                        if(lastNotPromotedNode.GetNextPointer() == null)
+                    if (lastNotPromotedNode != null)
+                        if (lastNotPromotedNode.GetNextPointer() == null)
                             lastNotPromotedNode.SetNextPointer(currentNode);
 
                 } else {    // Assign prev and next pointers to closest promoted nodes
                     lastNotPromotedNode = currentNode;
                     currentNode.SetPrevPointer(lastPromotedNode);
                     if (lastPromotedNode != null)
-                        if(lastPromotedNode.GetNextPointer() == null)
+                        if (lastPromotedNode.GetNextPointer() == null)
                             lastPromotedNode.SetNextPointer(currentNode);
                 }
 
@@ -124,7 +125,7 @@ namespace Fractional_Cascading {
             NodeMatrixPrime = new FCNode[k][];
             
             // Convert coordNodes -> FCNodes
-            if(print) Console.WriteLine("Instantiating (not-yet-promoted) FCNodes " +
+            if (print) Console.WriteLine("Instantiating (not-yet-promoted) FCNodes " +
                                         "from coordNode data.");
             for (int i = 0; i < k; i++) {
                 NodeMatrixPrime[i] = new FCNode[n];
@@ -136,7 +137,7 @@ namespace Fractional_Cascading {
             }
             
             // Begin Fractional Cascading Transformation
-            if(print) Console.WriteLine("Performing Fractional Cascading transformation" +
+            if (print) Console.WriteLine("Performing Fractional Cascading transformation" +
                                         " on FCNode matrix.");
 
             // Perform transformation on all lists in reverse order
@@ -164,8 +165,7 @@ namespace Fractional_Cascading {
 
         public FractionalCascadingMatrix(int numValsPerList, int numLists,
                                          int unitFracDen=2, int insertData=-1,
-                                         bool print=true,
-                                         bool randNodeAttrOrders=true) {
+                                         bool print=true, bool randNodeAttrOrders=true) {
             /**
             Parameters:
                 numValsPerList: k
@@ -184,16 +184,16 @@ namespace Fractional_Cascading {
             n = numValsPerList;
             k = numLists;
             
-            if(print) Console.WriteLine($"N: {n}\tK: {k}\tX: {insertData}");
+            if (print) Console.WriteLine($"N: {n}\tK: {k}\tX: {insertData}");
 
-            if(unitFracDen <= 1)
+            if (unitFracDen <= 1)
                 throw new Exception("Invalid unitFracDen, must be greater than 1");
             
             // Convert coordNodeMatrix to one of FCNodes, assign as nodeMatrix
             // -> start with matrix of coordNodes sorted by their location (xLoc)
-            if(print) Console.WriteLine($"Generating matrix of {k} sorted lists of {n} " +
-                                        "randomly generated coordNodest (totalling " +
-                                        $"{new Utils().PrettyNumApprox(k*n)} nodes).");
+            if (print) Console.WriteLine($"Generating matrix of {k} sorted lists of {n} " +
+                                         "randomly generated coordNodest (totalling " +
+                                         $"{new Utils().PrettyNumApprox(k*n)} nodes).");
             SetCoordMatrix(insertData);
 
             // Build and assign nodeMatrixPrime from just-assigned nodeMatrix

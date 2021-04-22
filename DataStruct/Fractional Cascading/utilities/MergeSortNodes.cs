@@ -49,7 +49,7 @@ namespace Fractional_Cascading {
         }
 
         public void Sort(CoordNode[] unsortedArr, int sortAttributeCode) {
-            if(unsortedArr.Length == 0) throw new Exception("unsortedArr is empty");
+            if (unsortedArr.Length == 0) throw new Exception("unsortedArr is empty");
             int lIndex = 0;
             int rIndex = unsortedArr.Length - 1;
             MergeSort(unsortedArr, lIndex, rIndex, sortAttributeCode); 

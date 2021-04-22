@@ -11,16 +11,16 @@ namespace Fractional_Cascading {
         public int k { get; set; }
         public int x { get; set; }
         public float kBinarySearchesTime { get; set; }
-        public float fractionalCascadingTime { get; set; }
+        public float FractionalCascadingTime { get; set; }
         public float Ratio { get; set; }
-        public Record(int nVal, int kVal, int xVal,
-                      float trivialTimeVal, float FCTimeVal, float ratio) {
+        public Record(int nVal, int kVal, int xVal, float trivialTimeVal,
+                      float FCTimeVal, float ratio) {
             n = nVal;
             k = kVal;
             x = xVal;
             Ratio = ratio;
             kBinarySearchesTime = trivialTimeVal;
-            fractionalCascadingTime = FCTimeVal;
+            FractionalCascadingTime = FCTimeVal;
         }
     }
 
@@ -28,17 +28,17 @@ namespace Fractional_Cascading {
         /**
         Functionality to output search stats to a CSV file  */
 
-        private string filePath;
+        private string FilePath;
         
-        public void writeCSV(List<Record> recs) {
-            using (StreamWriter writer = new StreamWriter(filePath))
+        public void WriteCSV(List<Record> recs) {
+            using (StreamWriter writer = new StreamWriter(FilePath))
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture)) {
                 csv.WriteRecords(recs);
             }
         }
 
         public CSVHelper(string filePathString) {
-            filePath = filePathString;
+            FilePath = filePathString;
         }
     }
 }

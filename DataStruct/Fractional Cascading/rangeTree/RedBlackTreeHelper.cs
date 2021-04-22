@@ -4,40 +4,42 @@ using System.IO;
 namespace Fractional_Cascading {
     class RBTreeHelper {
 
-        public string TraverseTree(int order, RBTreeNode treeRoot) {
+        public string PrintTreeTraversal(int order, RBTreeNode treeRoot) {
             /**
             Output to console & return as string.
 
-            Patameter:  order = 1 -> Inorder
-                                2 -> Preorder
-                                3 -> Postorder  */
+            Patameters:
+                order:  1 -> Inorder
+                        2 -> Preorder
+                        3 -> Postorder
+                treeRoot: the root node of the Red-Black tree to traverse   */
 
             // Helpers:
-            void PrintInOrder(RBTreeNode root) {
-                if (root == null) return;
-                PrintInOrder(root.GetLeftChild());
-                Console.Write($"{root.GetKey()}, ");
-                PrintInOrder(root.GetRightChild());
+            void PrintInOrder(RBTreeNode currRoot) {
+                if (currRoot == null) return;
+                PrintInOrder(currRoot.GetLeftChild());
+                Console.Write($"{currRoot.GetKey()}, ");
+                PrintInOrder(currRoot.GetRightChild());
             }
 
-            void PrintPreOrder(RBTreeNode root) {
-                if (root == null) return;
-                Console.Write($"{root.GetKey()}, ");
-                PrintPreOrder(root.GetLeftChild());
-                PrintPreOrder(root.GetRightChild());
+            void PrintPreOrder(RBTreeNode currRoot) {
+                if (currRoot == null) return;
+                Console.Write($"{currRoot.GetKey()}, ");
+                PrintPreOrder(currRoot.GetLeftChild());
+                PrintPreOrder(currRoot.GetRightChild());
             }
 
-            void PrintPostOrder(RBTreeNode root) {
-                if (root == null) return;
-                PrintPostOrder(root.GetLeftChild());
-                PrintPostOrder(root.GetRightChild());
-                Console.Write($"{root.GetKey()}, ");
+            void PrintPostOrder(RBTreeNode currRoot) {
+                if (currRoot == null) return;
+                PrintPostOrder(currRoot.GetLeftChild());
+                PrintPostOrder(currRoot.GetRightChild());
+                Console.Write($"{currRoot.GetKey()}, ");
             }
 
             // Write to string using console:
             StringWriter sw = new StringWriter();
             Console.SetOut(sw);
-            if(order == 1) {
+            if (order == 1) {
                 Console.Write("Inorder traversal: ");
                 PrintInOrder(treeRoot);
             } else if (order == 2) {

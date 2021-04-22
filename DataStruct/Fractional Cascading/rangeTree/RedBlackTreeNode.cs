@@ -14,6 +14,7 @@ namespace Fractional_Cascading {
         public bool IsLeaf() {
             return Leaf;
         }
+
         public void MakeLeaf() {
             Leaf = true;
         }
@@ -21,9 +22,19 @@ namespace Fractional_Cascading {
         public void ChangeColor() {
             Red = !(Red);
         }
+
+        public void MakeRed() {
+            Red = true;
+        }
+
+        public void MakeBlack() {
+            Red = false;
+        }
+
         public bool IsRed() {
             return Red;
         }
+
         public bool IsBlack() {
             return !(Red);
         }
@@ -31,6 +42,11 @@ namespace Fractional_Cascading {
         public RBTreeNode GetParent() {
             return Parent;
         }
+
+        public RBTreeNode GetGrandParent() {
+            return Parent.GetParent();
+        }
+
         public void SetParent(RBTreeNode parent) {
             Parent = parent;
         }
@@ -38,6 +54,7 @@ namespace Fractional_Cascading {
         public RBTreeNode GetLeftChild() {
             return LeftChild;
         }
+
         public void SetLeftChild(RBTreeNode leftChild) {
             LeftChild = leftChild;
         }
@@ -45,6 +62,7 @@ namespace Fractional_Cascading {
         public RBTreeNode GetRightChild() {
             return RightChild;
         }
+
         public void SetRightChild(RBTreeNode rightChild) {
             RightChild = rightChild;
         }
@@ -52,12 +70,11 @@ namespace Fractional_Cascading {
         // public override bool Equals(RBTreeNode n) {
 
         // }
-
+        
         public RBTreeNode(int key, bool leaf=false, bool red = true) {
             Key = key;
             Leaf = leaf;
             Red = red;
         }
-
     }
 }
