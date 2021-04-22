@@ -7,6 +7,7 @@ namespace Fractional_Cascading {
         LLRBTree -> Left Leaning Red Black Tree */
 
         private RBTreeNode Root = null;
+        private RBTreeHelper h = new RBTreeHelper();
 
         Utils u = new Utils();
 
@@ -34,7 +35,7 @@ namespace Fractional_Cascading {
             return curr;
         }
 
-        private void RotateRight(RBTreeNode y) {
+        public void RotateRight(RBTreeNode y) {
             // setup x & y
             RBTreeNode x = y.GetLeftChild();
             y.SetLeftChild(x.GetRightChild());
@@ -43,7 +44,7 @@ namespace Fractional_Cascading {
             if (x.GetRightChild() != null) x.GetRightChild().SetParent(y);
             x.SetParent(y.GetParent());
             
-            // if the parent of y is NULL, make x the root of the tree.
+            // if y has no parent, make x the root of the tree.
             if (y.GetParent() == null) Root = x;
             
             // else if y is the right child of its parent p, make x the right child of p.
@@ -58,7 +59,7 @@ namespace Fractional_Cascading {
         }
 
 
-        private void RotateLeft(RBTreeNode x) {
+        public void RotateLeft(RBTreeNode x) {
             // setup x & y
             RBTreeNode y = x.GetRightChild();
             x.SetRightChild(y.GetLeftChild());
@@ -67,7 +68,7 @@ namespace Fractional_Cascading {
             if (y.GetLeftChild() != null) y.GetLeftChild().SetParent(x);
             y.SetParent(x.GetParent());
 
-            // if the parent of x is NULL, make y the root of the tree.
+            // if x has no parent, make y the root of the tree.
             if (x.GetParent() == null) Root = y;
             
             // else if x is the left child of p, make y the left child of p.
@@ -82,58 +83,7 @@ namespace Fractional_Cascading {
         }
 
         public string TraverseTree(int order) {
-            /**
-            Output to console & return as string.
-
-            Patameter:  order = 1 -> Inorder
-                                2 -> Preorder
-                                3 -> Postorder  */
-
-            // Helpers:
-            void PrintInOrder(RBTreeNode root) {
-                if (root == null) return;
-                PrintInOrder(root.GetLeftChild());
-                Console.Write($"{root.GetKey()}, ");
-                PrintInOrder(root.GetRightChild());
-            }
-
-            void PrintPreOrder(RBTreeNode root) {
-                if (root == null) return;
-                Console.Write($"{root.GetKey()}, ");
-                PrintPreOrder(root.GetLeftChild());
-                PrintPreOrder(root.GetRightChild());
-            }
-
-            void PrintPostOrder(RBTreeNode root) {
-                if (root == null) return;
-                PrintPostOrder(root.GetLeftChild());
-                PrintPostOrder(root.GetRightChild());
-                Console.Write($"{root.GetKey()}, ");
-            }
-
-            // Write to string using console:
-            StringWriter sw = new StringWriter();
-            Console.SetOut(sw);
-            if(order == 1) {
-                Console.Write("\nInorder traversal: ");
-                PrintInOrder(Root);
-            } else if (order == 2) {
-                Console.Write("\nPreorder traversal: ");
-                PrintPreOrder(Root);
-            } else if (order == 3) {
-                Console.Write("\nPostorder traversal: ");
-                PrintPostOrder(Root);
-            } else throw new Exception($"Invalid order paramter {order} when "+
-                                       "calling traverse.");
-            String ret = sw.ToString();
-            ret = ret.Remove(ret.Length - 2, 2);   // remove trailing comma & space
-
-            // close StringWriter, reset standard out, return
-            sw.Close();
-            var standardOutput = new StreamWriter(Console.OpenStandardOutput());
-            standardOutput.AutoFlush = true;
-            Console.SetOut(standardOutput);
-            return ret;
+            return h.TraverseTree(order, Root);
         }
 
         public RBTreeNode GetRoot() {
