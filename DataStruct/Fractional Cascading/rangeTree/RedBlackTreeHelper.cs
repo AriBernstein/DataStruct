@@ -48,15 +48,18 @@ namespace Fractional_Cascading {
                 PrintPostOrder(treeRoot);
             } else throw new Exception($"Invalid order paramter {order} when "+
                                        "calling traverse.");
-            String ret = sw.ToString();
-            ret = ret.Remove(ret.Length - 2, 2);   // remove trailing comma & space
+            
+            // store string & remove trailing comma & space
+            String output = sw.ToString();
+            output = output.Remove(output.Length - 2, 2);
 
-            // close StringWriter, reset standard out, return
+            // close StringWriter, reset standard out, print, and return
             sw.Close();
             var standardOutput = new StreamWriter(Console.OpenStandardOutput());
             standardOutput.AutoFlush = true;
             Console.SetOut(standardOutput);
-            return ret;
+            Console.WriteLine(output);
+            return output;
         }
     }
 }
