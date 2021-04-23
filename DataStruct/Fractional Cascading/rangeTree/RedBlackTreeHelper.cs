@@ -5,7 +5,7 @@ using System.Text;
 namespace Fractional_Cascading {
     class RBTreeHelper {
 
-        public string PrintTreeTraversal(int order, RBTreeNode treeRoot) {
+        public string PrintTreeTraversalOrder(int order, RBTreeNode treeRoot) {
             /**
             Output to console & return as string.
 
@@ -65,51 +65,70 @@ namespace Fractional_Cascading {
             return output;
         }
 
-        public String PrintSubTree(RBTreeNode node) {
+        public string PrintSubTree(RBTreeNode node, int verticalSpacing=1,
+                                   int indentPerLevel=6) {
             /**
-            Note, functionality largely taken from this article:
+            Note, functionality inspired by the following Baeldung article:
                     https://www.baeldung.com/java-print-binary-tree-diagram */
+
+            string pointerChars = new string('-', indentPerLevel);
+            string oneChildPointer = "└" + pointerChars;
+            string twoChildrenPointer = "├" + pointerChars;
+
+            string paddingChars = new string(' ', indentPerLevel + 1);
+            string twoChildrenIndent = "│" + paddingChars;
+            string whiteSpaceIndent = " " + paddingChars;
 
             void Traverse(StringBuilder sb, String padding, String pointer,
                           RBTreeNode node, bool hasRightSibling) {
-                if (node != null) {
-                    sb.Append("\n");
-                    sb.Append(padding);
-                    sb.Append(pointer);
-                    sb.Append(" " + node.GetData());
-                    if(node.IsRed()) sb.Append(" (R)");
-                    else sb.Append(" (B)");
 
-                    StringBuilder paddingBuilder = new StringBuilder(padding);
-                    
-                    if (hasRightSibling) paddingBuilder.Append("│   ");
-                    else paddingBuilder.Append("    ");
+                if (node == null) return;
 
-                    String paddingForBoth = paddingBuilder.ToString();
-                    String pointerRight = "└────";
-                    String pointerLeft = (node.Right() != null) ? "├────" : "└────";
-
-                    Traverse(sb, paddingForBoth, pointerLeft, node.Left(), node.Right() != null);
-                    Traverse(sb, paddingForBoth, pointerRight, node.Right(), false);
+                // Append vertical line spacing
+                for(int i = 0; i < verticalSpacing; i++) {
+                    sb.Append("\n" + padding);
+                    if(pointer == whiteSpaceIndent) sb.Append('|');
+                    else sb.Append("| ");
                 }
+                
+                // Append line rows with values
+                sb.Append("\n" + padding + pointer + " " + node.GetData());
+                if(node.IsRed()) sb.Append(" (R)");
+                else sb.Append(" (B)");
+
+                // Calculate and append padding next row
+                StringBuilder paddingSB = new StringBuilder(padding);
+                if (hasRightSibling) paddingSB.Append(twoChildrenIndent);
+                else paddingSB.Append(whiteSpaceIndent);
+                string newPadding = paddingSB.ToString();
+                
+                // Determine pointer for next row
+                string pointerLeft = 
+                    (node.Right() != null) ? twoChildrenPointer : oneChildPointer;
+                
+                // Recurse
+                Traverse(sb, newPadding, pointerLeft, node.Left(), node.Right() != null);
+                Traverse(sb, newPadding, oneChildPointer, node.Right(), false);
             }
 
-            String TraversePreOrder(RBTreeNode root) {
-                if (root == null) return "";
-
+            string TraversePreOrder(RBTreeNode root) {
+                
+                // Handle root
+                if (root == null) return "Empty binary tree.";
                 StringBuilder sb = new StringBuilder();
-                sb.Append(root.GetData());
+                sb.Append(root.GetData() + " (B)");
 
-                String pointerRight = "└──";
-                String pointerLeft = (root.Right() != null) ? "├──" : "└──";
-
+                // Determine initial pointer
+                string pointerLeft =
+                    (root.Right() != null) ? twoChildrenPointer : oneChildPointer;
+                
                 Traverse(sb, "", pointerLeft, root.Left(), root.Right() != null);
-                Traverse(sb, "", pointerRight, root.Right(), false);
+                Traverse(sb, "", oneChildPointer, root.Right(), false);
                 return sb.ToString();
             }
 
-            String prettyBinaryTree = TraversePreOrder(node);
-            Console.WriteLine(TraversePreOrder(node));
+            string prettyBinaryTree = TraversePreOrder(node);
+            Console.WriteLine(prettyBinaryTree);
             return prettyBinaryTree;
 
         }

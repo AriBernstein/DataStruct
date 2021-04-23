@@ -148,7 +148,7 @@ namespace Fractional_Cascading {
         }
 
         public string TraverseTree(int order) {
-            return h.PrintTreeTraversal(order, Root);
+            return h.PrintTreeTraversalOrder(order, Root);
         }
 
         public void PrintTree() {
