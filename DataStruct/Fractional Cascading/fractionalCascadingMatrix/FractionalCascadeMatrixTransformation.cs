@@ -76,7 +76,7 @@ namespace Fractional_Cascading {
             int d = 0; // index counter for FCNodeList1
             int j = 0; // index counter for FCNodeListPrime
 
-            for(int i = 0; i < FCNodeList2.Length; i += unitFracDen) {
+            for (int i = 0; i < FCNodeList2.Length; i += unitFracDen) {
                 // It is essential that nodes be copied from here because this is the only
                 // state at which we can easily both store their locations in their
                 // previous lists and flag them as promoted.
@@ -129,7 +129,7 @@ namespace Fractional_Cascading {
                                         "from coordNode data.");
             for (int i = 0; i < k; i++) {
                 NodeMatrixPrime[i] = new FCNode[n];
-                for(int j = 0; j < n; j++) {
+                for (int j = 0; j < n; j++) {
                     CoordNode thisCoordNode = InputCoordMatrix[i][j];
                     FCNode thisFCNode = new FCNode(thisCoordNode, (i + 1), j);                    
                     NodeMatrixPrime[i][j] = thisFCNode;
@@ -143,7 +143,7 @@ namespace Fractional_Cascading {
             // Perform transformation on all lists in reverse order
             // Re. i = (k-2): as nodes are always promoted from higher dimensions into
             //                lower ones, for (highest dim) k, list(k) = list(k')
-            for(int i = k-2; i >= 0; i--)
+            for (int i = k-2; i >= 0; i--)
                 NodeMatrixPrime[i] = BuildListPrime(NodeMatrixPrime[i],
                                                     NodeMatrixPrime[i + 1],
                                                     unitFracDen);

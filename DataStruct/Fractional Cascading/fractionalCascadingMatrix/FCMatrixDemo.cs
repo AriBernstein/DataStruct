@@ -47,9 +47,9 @@ namespace Fractional_Cascading {
             System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
             Random random = new Random();
             int x;
-            for(int k = kMin; k <= kMax; k+= kIncr) {
+            for (int k = kMin; k <= kMax; k+= kIncr) {
                 Console.WriteLine("K: " + k);
-                    for(int n = nMin; n <= nMax; n += nIncr){
+                    for (int n = nMin; n <= nMax; n += nIncr){
                         x = random.Next(0, nMin * kMin);
                         FCMatrixQuery fcmq =
                             new FCMatrixQuery(n, k, insertData:x, print:false,

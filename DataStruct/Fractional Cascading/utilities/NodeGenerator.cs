@@ -123,7 +123,7 @@ namespace Fractional_Cascading {
                 throw new Exception(errMsg);
             }
 
-            for(int i = 0; i < n; i++) {  // Build nodes using newly generated lists/sets
+            for (int i = 0; i < n; i++) {  // Build nodes using newly generated lists/sets
                 if (dimensions == 1) {
                     nodeList[i] = new CoordNode(dataList[i], xList[i]);
                 } else if (dimensions == 2) {
@@ -149,7 +149,7 @@ namespace Fractional_Cascading {
             if (max == -1) max = n * 10;
             RBTreeNode[] nodeList = new RBTreeNode[n];
             (int[] keyList, HashSet<int> keySet) = RandUniqueInts(n, min, max);
-            for(int i = 0; i < n; i++) nodeList[i] = new RBTreeNode(keyList[i]);
+            for (int i = 0; i < n; i++) nodeList[i] = new RBTreeNode(keyList[i]);
             return nodeList;
         }
     }

@@ -89,15 +89,15 @@ namespace Fractional_Cascading {
                 if (node == null) return;
 
                 // Append vertical line spacing
-                for(int i = 0; i < verticalSpacing; i++) {
+                for (int i = 0; i < verticalSpacing; i++) {
                     sb.Append("\n" + padding);
-                    if(pointer == whiteSpaceIndent) sb.Append('|');
+                    if (pointer == whiteSpaceIndent) sb.Append('|');
                     else sb.Append("| ");
                 }
                 
                 // Append line rows with values
                 sb.Append("\n" + padding + pointer + " " + node.GetData());
-                if(node.IsRed()) sb.Append(" (R)");
+                if (node.IsRed()) sb.Append(" (R)");
                 else sb.Append(" (B)");
 
                 // Calculate and append padding next row

@@ -24,7 +24,7 @@ namespace Fractional_Cascading {
             // Return dictionary w/ key=dimension, pair=location in dimension
             Dictionary<int, int> locationsOfData = new Dictionary<int, int>();
             BinarySearchNodes bsn = new BinarySearchNodes();
-            for(int i = 0; i < k; i++) {
+            for (int i = 0; i < k; i++) {
                 CoordNode[] arr = InputCoordMatrix[i];
                 int nodeIndex = bsn.BinarySearch(arr, data, 0);
                 int nodeData = arr[nodeIndex].GetAttr(1);
@@ -130,7 +130,7 @@ namespace Fractional_Cascading {
                 // Assign first dimension location in return dictionary
                 locationsOfData[currentDim] = dataNode.GetAttr(1);
 
-            for(int i = 1; i < NodeMatrixPrime.Length; i++) {
+            for (int i = 1; i < NodeMatrixPrime.Length; i++) {
                 // Walk through promoted node pointers, starting with the list 2' until
                 // list (k-1)', then do a final check on list k (not prime)
                 // -> This logic is handled in findNodeFromPointerRange

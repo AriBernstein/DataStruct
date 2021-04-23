@@ -137,7 +137,7 @@ namespace Fractional_Cascading {
             RBTreeNode y = null; // Will represent a leaf node
             RBTreeNode x;
 
-            if(Root == null) { // Empty tree
+            if (Root == null) { // Empty tree
                 Root = new RBTreeNode(data, red:false);
                 return;
             } 
@@ -148,7 +148,7 @@ namespace Fractional_Cascading {
             //  Traverse with x until y is a leaf node
             while (x != null) {
                 y = x;
-                if(newNode < x) x = x.Left();
+                if (newNode < x) x = x.Left();
                 else x = x.Right();
             }
 
@@ -158,7 +158,7 @@ namespace Fractional_Cascading {
             else y.SetRight(newNode);
 
             // In this case, the tree is already balanced :)
-            if(newNode.GrandParent() == null) return;
+            if (newNode.GrandParent() == null) return;
             else RebalancePostInsert(newNode);
         }
 

@@ -77,7 +77,7 @@ namespace Fractional_Cascading {
 
         public String PrintNodeMatrix(Node[][] matrix) {
             String s = "";
-            for(int i = 0; i < matrix.Length; i++)  s = s + PrintNodeArray(matrix[i]);
+            for (int i = 0; i < matrix.Length; i++)  s = s + PrintNodeArray(matrix[i]);
             return s;
         }
     }
