@@ -84,8 +84,8 @@ namespace Fractional_Cascading {
             }
             
             if (!(found)) throw new Exception("Can't find node with data " + targetData +
-                                             " in dimension: " + targetDimension +
-                                             " during fractional cascading search");
+                                              " in dimension: " + targetDimension +
+                                              " during fractional cascading search");
             return dataNode;
         }
 

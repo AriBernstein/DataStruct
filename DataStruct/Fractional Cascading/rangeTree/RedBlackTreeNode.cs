@@ -84,6 +84,7 @@ namespace Fractional_Cascading {
             Red = red;
         }
 
+        // Overide default methods and operators
         public override bool Equals(object obj) {
             var nodeForComparison = obj as RBTreeNode;
             if (nodeForComparison == null) return false;
@@ -104,6 +105,22 @@ namespace Fractional_Cascading {
 
         public static bool operator !=(RBTreeNode x, RBTreeNode y) { 
             return !(x == y);
+        }
+
+        public static bool operator >(RBTreeNode x, RBTreeNode y) {
+            return x.GetData() > y.GetData();
+        }
+
+        public static bool operator >=(RBTreeNode x, RBTreeNode y) {
+            return x.GetData() >= y.GetData();
+        }
+
+        public static bool operator <(RBTreeNode x, RBTreeNode y) {
+            return x.GetData() < y.GetData();
+        }
+
+        public static bool operator <=(RBTreeNode x, RBTreeNode y) {
+            return x.GetData() <= y.GetData();
         }
         
         public override int GetHashCode() {

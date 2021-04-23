@@ -65,13 +65,17 @@ namespace Fractional_Cascading {
             return output;
         }
 
-        public string PrintSubTree(RBTreeNode node, int verticalSpacing=1,
-                                   int indentPerLevel=6) {
+        public string PrintSubTree(RBTreeNode node, int verticalSpacing,
+                                   int indentPerLevel) {
             /**
             Note, functionality inspired by the following Baeldung article:
                     https://www.baeldung.com/java-print-binary-tree-diagram */
 
-            string pointerChars = new string('-', indentPerLevel);
+            // Note: the full width horizontal bar character (distinct from the much more
+            //       common dash char) seemed to occasionally break the string builder.       
+            string pointerChars = new string('─', indentPerLevel);
+            // string pointerChars = new string('-', indentPerLevel);
+
             string oneChildPointer = "└" + pointerChars;
             string twoChildrenPointer = "├" + pointerChars;
 
@@ -130,7 +134,6 @@ namespace Fractional_Cascading {
             string prettyBinaryTree = TraversePreOrder(node);
             Console.WriteLine(prettyBinaryTree);
             return prettyBinaryTree;
-
         }
     }
 }
