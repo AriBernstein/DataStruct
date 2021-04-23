@@ -19,10 +19,6 @@ namespace Fractional_Cascading {
             Leaf = true;
         }
 
-        public void ChangeColor() {
-            Red = !(Red);
-        }
-
         public void SetRed() {
             Red = true;
         }
@@ -33,10 +29,6 @@ namespace Fractional_Cascading {
 
         public bool IsRed() {
             return Red;
-        }
-
-        public bool IsBlack() {
-            return !(Red);
         }
 
         public RBTreeNode Parent() {
@@ -67,15 +59,20 @@ namespace Fractional_Cascading {
             RightChild = rightChild;
         }
 
-        public int Size() {
+        public int SubTreeSize() {
             int nodeCount = 0;
-            void FindSize(RBTreeNode n) {
+            void CountChildren(RBTreeNode n) {
                 if (n == null) return;
-                FindSize(n.Left());
+                CountChildren(n.Left());
+                CountChildren(n.Right());
                 nodeCount++;
-                FindSize(n.Right());
             }
+            CountChildren(this);
             return nodeCount;
+        }
+
+        public int NumChildren() {
+            return SubTreeSize() - 1;
         }
         
         public RBTreeNode(int data, bool leaf=false, bool red = true) {
@@ -84,7 +81,19 @@ namespace Fractional_Cascading {
             Red = red;
         }
 
+        public String PrintSubTree(int verticalSpacing=1, int indentPerLevel=5,
+                                   bool print=true) {
+            return new RBTreeHelper().PrintSubTree(this, verticalSpacing,
+                                                   indentPerLevel, print);
+        }
+
         // Overide default methods and operators
+        public override String ToString() {
+            String color = IsRed() ? "Red" : "Black";
+            String leaf = IsLeaf() ? "true" : "false"; 
+            return $"Data: {Data}, Color: {color}, Leaf: {leaf}";
+        }
+
         public override bool Equals(object obj) {
             var nodeForComparison = obj as RBTreeNode;
             if (nodeForComparison == null) return false;

@@ -66,7 +66,7 @@ namespace Fractional_Cascading {
         }
 
         public string PrintSubTree(RBTreeNode node, int verticalSpacing,
-                                   int indentPerLevel) {
+                                   int indentPerLevel, bool print=true) {
             /**
             Note, functionality inspired by the following Baeldung article:
                     https://www.baeldung.com/java-print-binary-tree-diagram */
@@ -132,7 +132,7 @@ namespace Fractional_Cascading {
             }
 
             string prettyBinaryTree = TraversePreOrder(node);
-            Console.WriteLine(prettyBinaryTree);
+            if(print) Console.WriteLine(prettyBinaryTree);
             return prettyBinaryTree;
         }
     }

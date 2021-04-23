@@ -58,12 +58,15 @@ namespace Fractional_Cascading {
             x.SetParent(y);
         }
 
-        private void RebalancePostInsert(RBTreeNode newNode) {
+        private void RebalancePostInsertion(RBTreeNode newNode) {
             /**
             Insert places newNode as an appropriate leaf. Now use the RED and BLACK labels
-            of newNode's neighbors to balance.  */
+            of newNode's neighbors to balance.
+            
+            Note on conceptualizing the implementation, 
+            */
 
-            RBTreeNode u;   // Will denote pibling (aunt/uncle) or parent of newNode.
+            RBTreeNode u;   // Will represent pibling (aunt/uncle) or parent of newNode.
                             // ie. given newNode's grandparent (gP), u can be either gP's
                             // left or right child
             
@@ -119,7 +122,7 @@ namespace Fractional_Cascading {
                         }
 
                         // Set color of p as BLACK and color of gP as RED. Then right
-                        // rotate gp. 
+                        // rotate gP. 
                         newNode.Parent().SetBlack();
                         newNode.GrandParent().SetRed();
                         RotateRight(newNode.GrandParent());
@@ -134,7 +137,7 @@ namespace Fractional_Cascading {
         public void Insert(int data) {
 
             RBTreeNode newNode;
-            RBTreeNode y = null; // Will represent a leaf node
+            RBTreeNode y = null;
             RBTreeNode x;
 
             if (Root == null) { // Empty tree
@@ -157,9 +160,8 @@ namespace Fractional_Cascading {
             if (newNode < y) y.SetLeft(newNode);
             else y.SetRight(newNode);
 
-            // In this case, the tree is already balanced :)
             if (newNode.GrandParent() == null) return;
-            else RebalancePostInsert(newNode);
+            else RebalancePostInsertion(newNode);
         }
 
         public string TraverseTree(int order) {
@@ -170,8 +172,17 @@ namespace Fractional_Cascading {
             h.PrintSubTree(Root, verticalSpacing, indentPerLevel);
         }
 
+        public int Size() {
+            return Root.SubTreeSize();
+        }
+
         public RBTreeNode GetRoot() {
             return Root;
         }
+
+        public override String ToString() {
+            return h.PrintSubTree(Root, 1, 5, false);
+        }
+        
     }
 }
