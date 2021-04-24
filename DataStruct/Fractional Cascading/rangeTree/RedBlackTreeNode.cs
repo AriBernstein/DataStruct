@@ -83,8 +83,8 @@ namespace Fractional_Cascading {
 
         public String PrintSubTree(int verticalSpacing=1, int indentPerLevel=5,
                                    bool print=true) {
-            return new RBTreeHelper().PrintSubTree(this, verticalSpacing,
-                                                   indentPerLevel, print);
+            return new RBTreeHelper().VisualizeTree(this, verticalSpacing,
+                                                    indentPerLevel, print);
         }
 
         // Overide default methods and operators

@@ -65,8 +65,8 @@ namespace Fractional_Cascading {
             return output;
         }
 
-        public string PrintSubTree(RBTreeNode node, int verticalSpacing,
-                                   int indentPerLevel, bool print=true) {
+        public string VisualizeTree(RBTreeNode node, int verticalSpacing,
+                                    int indentPerLevel, bool print=true) {
             /**
             Note, functionality inspired by the following Baeldung article:
                     https://www.baeldung.com/java-print-binary-tree-diagram */

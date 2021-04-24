@@ -169,7 +169,7 @@ namespace Fractional_Cascading {
         }
 
         public void PrintTree(int verticalSpacing=1, int indentPerLevel=5) {
-            h.PrintSubTree(Root, verticalSpacing, indentPerLevel);
+            h.VisualizeTree(Root, verticalSpacing, indentPerLevel);
         }
 
         public int Size() {
@@ -181,7 +181,7 @@ namespace Fractional_Cascading {
         }
 
         public override String ToString() {
-            return h.PrintSubTree(Root, 1, 5, false);
+            return h.VisualizeTree(Root, 0, 5, false);
         }
         
     }
