@@ -2,6 +2,23 @@ using System;
 
 namespace Fractional_Cascading {
     class RBTree {
+        /**
+        Implementation of a Red-Black tree, a type of self-balancing binary search trees. 
+        Here, each node is colored either red or black. If the following color-related
+        conditions are met, the tree will be balanced such that search, insertion, and
+        deletion (not implemented here) can be accomplished in O(log n) time in all cases.
+        
+        Red-Black conditions:
+            1. Root of the tree is always black.
+            2. No two successive red nodes (red node can have a red parent or red child.
+            3. Every path from a given node to any leaf in its subtree will always have
+               the same number of black nodes.
+
+        Note that meeting these conditions will not result in a perfectly balanced tree.
+        They guarantee that the tree's height is less than or equal to 2 * Log2(n+1),
+        which means only one more step during search than a perfectly balanced tree. Also
+        note that this slight imbalance comes with the advantage of fewer rotations,
+        which make for faster insertion and deletion.   */
 
         private RBTreeNode Root = null;
         private RBTreeHelper h = new RBTreeHelper();
@@ -60,37 +77,49 @@ namespace Fractional_Cascading {
 
         private void RebalancePostInsertion(RBTreeNode newNode) {
             /**
-            Insert places newNode as an appropriate leaf. Now use the RED and BLACK labels
-            of newNode's neighbors to balance.
-            
-            Note on conceptualizing the implementation, 
-            */
+            Insert function places newNode as an appropriate leaf for a regular BST but
+            not necessarily a Red-black tree. Check if newNode's parent is red (ie. if it
+            breaks the only red-black tree condition it can). If so, use the RED and
+            BLACK labels of newNode's neighbors to balance.
+   
+            Note on conceptualizing this process:
+                At this point, newNode is a RED leaf whose addition may cause the tree to
+                not meet the required RED-BLACK conditions (noted in class description)
+                such that it is imbalanced beyond the red-black tree threshold. In order
+                to correct for this, we re-balance / recolor the subtree rooted at
+                newNode's grandparent. We perform this process iteratively through
+                newNode's decendants until we reach the root. At no point do we consider
+                ansestors of newNode.
+
+                See this page for a more detailed overview of the process:
+                    https://www.geeksforgeeks.org/red-black-tree-set-2-insert/  */
+
+            if (newNode.GrandParent() == null) return;
 
             RBTreeNode u;   // Will represent pibling (aunt/uncle) or parent of newNode.
                             // ie. given newNode's grandparent (gP), u can be either gP's
                             // left or right child
             
-            // While the parent of newNode (p) is RED.
             while (newNode.Parent().IsRed()) {
 
-                // If p is the RIGHT pibling of newNode:
+                // Case: p is the RIGHT child of gP:
                 if (newNode.Parent() == newNode.GrandParent().Right()) {
                     
-                    // Set u as the LEFT pibling of newNode
+                    // Set u as the (LEFT) pibling of newNode
                     u = newNode.GrandParent().Left();
 
-                    // If the color of the LEFT pibling of newNode is RED, set both
-                    // piblings of newNode to BLACK, set gP to RED, assign newNode = gP.
+                    // Case: u exists and is RED: set both u & p to BLACK, set gP to RED,
+                    // assign newNode = gP
                     if (u != null && u.IsRed()) {
                         u.SetBlack();
                         newNode.Parent().SetBlack();
                         newNode.GrandParent().SetRed();
                         newNode = newNode.GrandParent();
                     
-                    } else {  // If the color of the LEFT pibling is BLACK
+                    } else {  // Case: the (LEFT) pibling of newNode is BLACK
 
-                        // If newNode is the left child of p, set
-                        // newNode = p and right rotate newNode
+                        // Case: newNode is the left child of p: assign newNode = p and
+                        // right rotate newNode
                         if (newNode == newNode.Parent().Left()) {
                             newNode = newNode.Parent();
                             RotateRight(newNode);
@@ -101,21 +130,21 @@ namespace Fractional_Cascading {
                         newNode.GrandParent().SetRed();
                         RotateLeft(newNode.GrandParent());
                     }
-                } else {
-                    // if p is the left child of grandParent gP of z
+                } else { // Case: p is the LEFT child of gP:
+                    
+                    // Assign u as the (RIGHT) pibling of newNode
                     u = newNode.GrandParent().Right();
 
-                    // If the color of the right child of gP of z is RED, set the color of
-                    // both the children of gP as BLACK and the color of gP as RED. Then
-                    // assign gP to newNode.
+                    // Case: u is RED: set the color of both children of gP to BLACK, set
+                    // gp to RED. Assign gP = newNode.
                     if (u != null && u.IsRed()) {
                         u.SetBlack();
                         newNode.Parent().SetBlack();
                         newNode.GrandParent().SetRed();
                         newNode = newNode.GrandParent();
                     } else {
-                        // Else if newNode is the right child of p then, assign p to
-                        // newNode. Then left rotate newNode.
+                        // Case: newNode is the right child of p then: set p = newNode.
+                        // Then left rotate newNode.
                         if (newNode == newNode.Parent().Right()) {
                             newNode = newNode.Parent();
                             RotateLeft(newNode);
@@ -160,8 +189,7 @@ namespace Fractional_Cascading {
             if (newNode < y) y.SetLeft(newNode);
             else y.SetRight(newNode);
 
-            if (newNode.GrandParent() == null) return;
-            else RebalancePostInsertion(newNode);
+            RebalancePostInsertion(newNode);
         }
 
         public string TraverseTree(int order) {
@@ -183,6 +211,5 @@ namespace Fractional_Cascading {
         public override String ToString() {
             return h.VisualizeTree(Root, 0, 5, false);
         }
-        
     }
 }
