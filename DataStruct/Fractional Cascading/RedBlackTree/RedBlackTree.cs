@@ -78,18 +78,18 @@ namespace Fractional_Cascading {
         private void RebalancePostInsertion(RBTreeNode newNode) {
             /**
             Insert function places newNode as an appropriate leaf for a regular BST but
-            not necessarily a Red-black tree. Check if newNode's parent is red (ie. if it
-            breaks the only red-black tree condition it can). If so, use the RED and
-            BLACK labels of newNode's neighbors to balance.
+            not necessarily a Red-black tree. Check if newNode's parent is RED (ie. if it
+            breaks a only red-black tree condition). If so, use the RED and BLACK labels
+            of newNode's parent, grandparent, and/or pibling (aunt/uncle) to balance.
    
             Note on conceptualizing this process:
                 At this point, newNode is a RED leaf whose addition may cause the tree to
                 not meet the required RED-BLACK conditions (noted in class description)
                 such that it is imbalanced beyond the red-black tree threshold. In order
-                to correct for this, we re-balance / recolor the subtree rooted at
-                newNode's grandparent. We perform this process iteratively through
-                newNode's decendants until we reach the root. At no point do we consider
-                ansestors of newNode.
+                to correct for this, we re-balance and/or recolor the subtree rooted at
+                newNode's grandparent. We perform this process iteratively, reassigning
+                newNode to its ancestors (parents/grandparents), until we reach the root.
+                At no point do we consider decendants of newNode.
 
                 See this page for a more detailed overview of the process:
                     https://www.geeksforgeeks.org/red-black-tree-set-2-insert/  */

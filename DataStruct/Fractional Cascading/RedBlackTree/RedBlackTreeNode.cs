@@ -4,7 +4,6 @@ namespace Fractional_Cascading {
 
     public class RBTreeNode {
         private int SortAttribute;
-        // private Node[] Nodes;
         
         private bool Leaf, Red;
         private RBTreeNode ParentNode, LeftChild, RightChild;
@@ -12,22 +11,7 @@ namespace Fractional_Cascading {
         public int GetData() {
             return SortAttribute;
         }
-
-        // public Node GetBaseNode() {
-        //     if(Nodes == null) throw new Exception("Node list is null.");
-            
-        //     if(!Leaf) throw new Exception("Trying to find BaseNode of a non-leaf node.");
-            
-        //     if(Nodes.Length == 0)
-        //         throw new Exception("Node list has more than one node. (This " +
-        //                             "RBTreeNode is marked as a leaf.)");
-            
-        //     if(Nodes.Length > 1) throw new Exception("Node list has more than one node " +
-        //                                              "in it.  (This RBTreeNode is " +
-        //                                              "marked as a leaf.)");
-        //     return Nodes[0];
-        // }
-
+        
         public bool IsLeaf() {
             return Leaf;
         }
