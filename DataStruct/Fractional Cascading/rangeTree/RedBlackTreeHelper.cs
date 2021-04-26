@@ -66,15 +66,25 @@ namespace Fractional_Cascading {
         }
 
         public string VisualizeTree(RBTreeNode node, int verticalSpacing,
-                                    int indentPerLevel, bool print=true) {
+                                    int indentPerLevel, bool print=true, 
+                                    bool safeChars=false) {
             /**
-            Note, functionality inspired by the following Baeldung article:
-                    https://www.baeldung.com/java-print-binary-tree-diagram */
+            Parameters:
+                node:   RBTree node treated as the root in the visualization
+                verticalSpacing: number of lines between each displayed node
+                indentPerLevel: width of the line separating each level of the tree
+                print: if true, write output to console
+                safeChars: if true, use standard dash '-' character for horizontal lines.
+                           else, use the special full-width horizontal bar character
+                           which seems to occasionally break StringBuilder
 
-            // Note: the full width horizontal bar character (distinct from the much more
-            //       common dash char) seemed to occasionally break the string builder.       
-            string pointerChars = new string('─', indentPerLevel);
-            // string pointerChars = new string('-', indentPerLevel);
+            Note: functionality inspired by the following Baeldung article:
+                    https://www.baeldung.com/java-print-binary-tree-diagram */       
+            
+            string pointerChars;
+            if(safeChars) pointerChars = new string('-', indentPerLevel);
+            else pointerChars = new string('─', indentPerLevel);
+            
 
             string oneChildPointer = "└" + pointerChars;
             string twoChildrenPointer = "├" + pointerChars;
