@@ -1,7 +1,7 @@
 using System;
 
 namespace Fractional_Cascading {
-    public class SinCoordNode {
+    public class SingleCoordNode {
         private DataNode Data;
         private int Location;
         int GetAttr(int attrCode) {
@@ -17,7 +17,7 @@ namespace Fractional_Cascading {
             return Location;
         }
 
-        public SinCoordNode(DataNode data, int location) {
+        public SingleCoordNode(DataNode data, int location) {
             Data = data;
             Location = location;
         }
