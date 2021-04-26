@@ -8,8 +8,8 @@ namespace Fractional_Cascading {
             else throw new Exception("getAttr != 0 when called on DataNode");
         }
         
-        public DataNode(int dataVal) {
-            Data = dataVal;
+        public DataNode(int data) {
+            Data = data;
         }
 
         public override string ToString() {

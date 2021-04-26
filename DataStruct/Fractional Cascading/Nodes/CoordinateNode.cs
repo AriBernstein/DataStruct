@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Fractional_Cascading {
     public class CoordNode : Node {
-        private DataNode data; // attr code 0
+        private DataNode Data; // attr code 0
 
         // attr codes 1, 2, 3
         private int xLoc = -1, yLoc = -1, zLoc = -1;
@@ -11,32 +11,32 @@ namespace Fractional_Cascading {
             xLoc = xVal;
             yLoc = yVal;
             zLoc = zVal;
-            data = new DataNode(dataVal);
+            Data = new DataNode(dataVal);
         }
 
         public CoordNode(int dataVal, int xVal, int yVal) {
             // 2-dimensional constructor
             xLoc = xVal;
             yLoc = yVal;
-            data = new DataNode(dataVal);
+            Data = new DataNode(dataVal);
         }
 
         public CoordNode(int dataVal, int xVal) {
             // 1-dimensional constructor
             xLoc = xVal;
-            data = new DataNode(dataVal);
+            Data = new DataNode(dataVal);
         }
 
         public void SetData(int newData) {
-            data = new DataNode(newData);
+            Data = new DataNode(newData);
         }
 
         public DataNode GetDataNode() {
-            return data;
+            return Data;
         }
 
         public int GetAttr(int attrCode) {
-            if      (attrCode == 0) return data.GetAttr(attrCode);
+            if      (attrCode == 0) return Data.GetAttr(attrCode);
             else if (attrCode == 1) return xLoc;
             else if (attrCode == 2) return yLoc;
             else if (attrCode == 3) return zLoc;
@@ -60,9 +60,9 @@ namespace Fractional_Cascading {
 
         public override string ToString() {
             int d = GetDimensionality();
-            if (d == 1) return $"Data: {data} (x: {xLoc})";
-            if (d == 2) return $"Data: {data}, (x: {xLoc}, y: {yLoc})";
-            if (d == 3) return $"Data: {data}, (x: {xLoc}, y: {yLoc}, z: {zLoc})";
+            if (d == 1) return $"Data: {Data} (x: {xLoc})";
+            if (d == 2) return $"Data: {Data}, (x: {xLoc}, y: {yLoc})";
+            if (d == 3) return $"Data: {Data}, (x: {xLoc}, y: {yLoc}, z: {zLoc})";
             throw new Exception("Invalid dimensionality value on " + 
                                 "coordinateNode at time of print.");
         }
