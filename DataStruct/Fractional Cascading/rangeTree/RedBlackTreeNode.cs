@@ -3,13 +3,30 @@ using System;
 namespace Fractional_Cascading {
 
     public class RBTreeNode {
-        private int Data;
+        private int SortAttribute;
+        // private Node[] Nodes;
+        
         private bool Leaf, Red;
         private RBTreeNode ParentNode, LeftChild, RightChild;
 
         public int GetData() {
-            return Data;
+            return SortAttribute;
         }
+
+        // public Node GetBaseNode() {
+        //     if(Nodes == null) throw new Exception("Node list is null.");
+            
+        //     if(!Leaf) throw new Exception("Trying to find BaseNode of a non-leaf node.");
+            
+        //     if(Nodes.Length == 0)
+        //         throw new Exception("Node list has more than one node. (This " +
+        //                             "RBTreeNode is marked as a leaf.)");
+            
+        //     if(Nodes.Length > 1) throw new Exception("Node list has more than one node " +
+        //                                              "in it.  (This RBTreeNode is " +
+        //                                              "marked as a leaf.)");
+        //     return Nodes[0];
+        // }
 
         public bool IsLeaf() {
             return Leaf;
@@ -75,8 +92,8 @@ namespace Fractional_Cascading {
             return SubTreeSize() - 1;
         }
         
-        public RBTreeNode(int data, bool leaf=false, bool red = true) {
-            Data = data;
+        public RBTreeNode(int sortAttribute, bool leaf=false, bool red=true) {
+            SortAttribute = sortAttribute;
             Leaf = leaf;
             Red = red;
         }
@@ -91,13 +108,13 @@ namespace Fractional_Cascading {
         public override String ToString() {
             String color = IsRed() ? "Red" : "Black";
             String leaf = IsLeaf() ? "true" : "false"; 
-            return $"Data: {Data}, Color: {color}, Leaf: {leaf}";
+            return $"Data: {SortAttribute}, Color: {color}, Leaf: {leaf}";
         }
 
         public override bool Equals(object obj) {
             var nodeForComparison = obj as RBTreeNode;
             if (nodeForComparison == null) return false;
-            else if (nodeForComparison.GetData() != Data) return false;
+            else if (nodeForComparison.GetData() != SortAttribute) return false;
             else return true;
         }
 
@@ -133,7 +150,7 @@ namespace Fractional_Cascading {
         }
         
         public override int GetHashCode() {
-            return Data.GetHashCode();
+            return SortAttribute.GetHashCode();
         }
     }
 }
