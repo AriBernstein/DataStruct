@@ -4,14 +4,14 @@ using System;
 namespace Fractional_Cascading {
     public class MergeSortNodes {
         
-        private void Merge(CoordNode[] initialArray, int l, int m, int r, int attrCode) {
+        private void Merge(Node[] initialArray, int l, int m, int r, int attrCode) {
             // Find sizes of two subarrays to be merged
             int n1 = m - l + 1;
             int n2 = r - m;
     
             // Create temp arrays
-            CoordNode[] leftArr = new CoordNode[n1];
-            CoordNode[] rightArr = new CoordNode[n2];
+            Node[] leftArr = new Node[n1];
+            Node[] rightArr = new Node[n2];
             int i, j, k;
     
             // Copy data to temp arrays
@@ -33,7 +33,7 @@ namespace Fractional_Cascading {
             while (j < n2) initialArray[k++] = rightArr[j++];
         }
 
-        private void MergeSort(CoordNode[] unsortedArr, int lIndex,
+        private void MergeSort(Node[] unsortedArr, int lIndex,
                                int rIndex, int sortAttrCode) {
             if (lIndex < rIndex) {  // base case
             
@@ -48,7 +48,7 @@ namespace Fractional_Cascading {
             }
         }
 
-        public void Sort(CoordNode[] unsortedArr, int sortAttributeCode) {
+        public void Sort(Node[] unsortedArr, int sortAttributeCode) {
             if (unsortedArr.Length == 0) throw new Exception("unsortedArr is empty");
             int lIndex = 0;
             int rIndex = unsortedArr.Length - 1;
