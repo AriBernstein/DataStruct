@@ -25,7 +25,7 @@ namespace Fractional_Cascading {
             return InputCoordMatrix;
         }
 
-        public FCNode[][] GetFCNodeMatixPrime() {
+        public FCNode[][] GetFCNodeMatrixPrime() {
             return NodeMatrixPrime;
         }
         
@@ -177,7 +177,7 @@ namespace Fractional_Cascading {
                 randNodeAttrOrders:
                                 (first read documentation in of method RandUniqueIntsRange
                                 in CoordinateNodeListGenerator.cs).
-                                Random order of nodes' data attribute is irrlelvant as
+                                Random order of nodes' data attribute is irrelevant as
                                 they are later sorted on it. The order of their xLoc
                                 attribute is relevant if demonstrating the correctness of
                                 the search but irrelevant if testing the speed. */
@@ -191,8 +191,8 @@ namespace Fractional_Cascading {
             
             // Convert coordNodeMatrix to one of FCNodes, assign as nodeMatrix
             // -> start with matrix of coordNodes sorted by their location (xLoc)
-            if (print) Console.WriteLine($"Generating matrix of {k} sorted lists of {n} " +
-                                         "randomly generated coordNodest (totalling " +
+            if (print) Console.WriteLine($"Generating matrix of {k} sorted lists of {n}" +
+                                         " randomly generated coordNodest (totalling " +
                                          $"{new Utils().PrettyNumApprox(k*n)} nodes).");
             SetCoordMatrix(insertData);
 

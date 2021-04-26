@@ -22,7 +22,7 @@ namespace Fractional_Cascading {
         }
 
         public CoordNode(int dataVal, int xVal) {
-            // 1-dimenstional constructor
+            // 1-dimensional constructor
             xLoc = xVal;
             data = new DataNode(dataVal);
         }

@@ -79,7 +79,7 @@ namespace Fractional_Cascading {
             /**
             Return a list of coordNodes with random x, y, and z values ranging locRangeMin
             to locRangeMax and data values ranging from dataRangeMin to dataRangeMax
-            (inclusive min, exlusive max). 
+            (inclusive min, exclusive max). 
 
             Parameters:
                 n: the length of the list of nodes to return
@@ -102,9 +102,8 @@ namespace Fractional_Cascading {
                 RandUniqueInts(n, rangeMin, rangeMax, randomSeed, randomizeOrder);
 
             // We will always have at least one dimension
-            (int[] xL, HashSet<int> xS) = RandUniqueInts(n, rangeMin, rangeMax,
-                                                        randomSeed, randomizeOrder);
-            xList = xL; xSet = xS;
+            (xList, xSet) = RandUniqueInts(n, rangeMin, rangeMax, randomSeed,
+                                           randomizeOrder);
             
             // Check for further dimensionality before constructing random lists
             if (dimensions >= 2) {

@@ -9,7 +9,7 @@ namespace Fractional_Cascading {
             /**
             Output to console & return as string.
 
-            Patameters:
+            Parameters:
                 order:  1 -> Inorder
                         2 -> Preorder
                         3 -> Postorder
@@ -49,7 +49,7 @@ namespace Fractional_Cascading {
             } else if (order == 3) {
                 Console.Write("Postorder traversal: ");
                 PrintPostOrder(treeRoot);
-            } else throw new Exception($"Invalid order paramter {order} when "+
+            } else throw new Exception($"Invalid order parameter {order} when "+
                                        "calling traverse.");
             
             // store string & remove trailing comma & space

@@ -126,7 +126,7 @@ namespace Fractional_Cascading {
                 }
             }
 
-            if (k < 10000) // This takes up too much memmory
+            if (k < 10000) // This takes up too much memory
                 // Assign first dimension location in return dictionary
                 locationsOfData[currentDim] = dataNode.GetAttr(1);
 
@@ -152,7 +152,7 @@ namespace Fractional_Cascading {
             fcm = new FractionalCascadingMatrix(n, k, insertData: insertData, print:print,
                                                 randNodeAttrOrders: randNodeAttrOrders);
             InputCoordMatrix = fcm.GetInputCoordMatrix();
-            NodeMatrixPrime = fcm.GetFCNodeMatixPrime();
+            NodeMatrixPrime = fcm.GetFCNodeMatrixPrime();
         }
     }
 }

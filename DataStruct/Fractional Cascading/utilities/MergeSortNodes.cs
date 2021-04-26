@@ -20,7 +20,7 @@ namespace Fractional_Cascading {
     
             // Merge the temp arrays
             i = j = 0;  // Initial indexes of first and second subarrays
-            k = l;      // Initial index of merged subarry
+            k = l;      // Initial index of merged subarray
 
             while (i < n1 && j < n2) {
                 if (leftArr[i].GetAttr(attrCode) <= rightArr[j].GetAttr(attrCode)) {
