@@ -5,7 +5,7 @@ namespace Fractional_Cascading {
     class RangeTreeNode {
         // Key is the average of minIndex and maxIndex 
         private bool Root;
-        private SinCoordNode[] Data;
+        private SingleCoordNode[] Data;
         private int Dimension;
         private int Location;   // Coordinate in Dimension
         private int MinIndex;
@@ -47,11 +47,11 @@ namespace Fractional_Cascading {
             return Data.Length == 1;
         }
 
-        public SinCoordNode[] GetData() {
+        public SingleCoordNode[] GetData() {
             return Data;
         }
 
-        public RangeTreeNode(SinCoordNode[] data, int dimension, RangeTreeNode parent,
+        public RangeTreeNode(SingleCoordNode[] data, int dimension, RangeTreeNode parent,
                              int minIndex, int maxIndex, bool root=false) {
             Data = data;
             Dimension = dimension;
