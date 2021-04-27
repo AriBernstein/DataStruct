@@ -31,6 +31,9 @@ namespace Fractional_Cascading {
         public bool IsRed() {
             return Red;
         }
+        public bool IsBlack() {
+            return !Red;
+        }
 
         public RBTreeNode Parent() {
             return ParentNode;
