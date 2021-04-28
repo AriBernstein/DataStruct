@@ -75,6 +75,92 @@ namespace Fractional_Cascading {
             x.SetParent(y);
         }
 
+        private void Transplant(RBTreeNode oldNode, RBTreeNode newNode) {
+            // Replace oldNode with newNode
+            RBTreeNode parent = oldNode.Parent();
+            if (parent == null) Root = newNode;
+            else if (oldNode == parent.Left()) parent.SetLeft(newNode);
+            else parent.SetRight(newNode);
+
+            // Null check for when newNode is null
+            if(newNode != null) newNode.SetParent(parent);
+        }
+
+        private RBTreeNode Minimum(RBTreeNode root) {
+            // Find the node with the smallest sort-value in the given subtree
+            while(root.Left() != null) {
+                root = root.Left();
+            }
+            return root;
+        }
+
+        public void Delete(RBTreeNode node, int value) {
+            // Traverse until we find nodeToDelete
+            RBTreeNode nodeToDelete = null;
+            while(node != null) {
+                if (node.GetData() == value) {
+                    nodeToDelete = node;
+                    break;
+                }
+                node = (value < node.GetData()) ? node.Left() : node.Right();
+            }
+            if (node == null) throw new Exception("Cannot find node to delete with " +
+                                                  $"value {value} in Red Black Tree");
+
+            RBTreeNode x, y;
+
+            // Save the color of nodeToDelete
+            bool originallyRed = nodeToDelete.IsRed();
+            
+            // For traversing tree starting at nodeToDelete without reassigning it
+            y = nodeToDelete;
+            
+            // If nodeToDelete only has left children, replace with its left subtree
+            if (nodeToDelete.Left() == null) {
+                x = nodeToDelete.Right();
+                Transplant(nodeToDelete, x);
+
+            // If nodeToDelete only has right children, replace with its right subtree
+            } else if (nodeToDelete.Right() == null) {
+                x = nodeToDelete.Left();
+                Transplant(nodeToDelete, x);
+            
+            } else {    // nodeToDelete either has two children or is a leaf
+                
+                // y = smallest node whose value is greater than that of nodeToDelete
+                // will replace nodeToDelete
+                y = Minimum(nodeToDelete.Right());
+                originallyRed = y.IsRed();
+
+                // x = subtree root with values greater than y
+                x = y.Right();
+
+                // if y is a child of nodeToDelete, x is already stored in the right place
+                if (y.Parent() == nodeToDelete) {
+                    x.SetParent(y);
+                } else { // else replace y with its right subtree and update attributes
+                    Transplant(y, y.Right());
+                    y.SetRight(nodeToDelete.Right());
+                    y.Right().SetParent(y);
+                }
+
+                // replace nodeToDelete with y and update attributes
+                Transplant(nodeToDelete, y);
+                y.SetLeft(nodeToDelete.Left());
+                y.Left().SetParent(y);
+
+                // as y is to replace nodeToDelete's location in tree, update its color
+                if (originallyRed) y.SetRed();
+                else y.SetBlack();
+            }
+            // if(!originallyRed) FixDelete(x);
+        }
+
+        public void Delete(int key) {
+            Delete(Root, key);
+        }
+
+
         private void RebalancePostInsertion(RBTreeNode newNode) {
             /**
             Insert function places newNode as an appropriate leaf for a regular BST but
