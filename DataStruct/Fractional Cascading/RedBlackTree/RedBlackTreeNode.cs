@@ -5,7 +5,7 @@ namespace Fractional_Cascading {
     public class RBTreeNode {
         private int SortAttribute;
         
-        private bool Leaf, Red;
+        private bool Leaf, Red, EmptyNode;
         private RBTreeNode ParentNode, LeftChild, RightChild;
 
         public int GetData() {
@@ -14,6 +14,10 @@ namespace Fractional_Cascading {
         
         public bool IsLeaf() {
             return Leaf;
+        }
+
+        public bool IsEmpty() {
+            return EmptyNode;
         }
 
         public void MakeLeaf() {
@@ -83,11 +87,13 @@ namespace Fractional_Cascading {
             SortAttribute = sortAttribute;
             Leaf = leaf;
             Red = red;
+            EmptyNode = false;
         }
 
         public RBTreeNode() {
-            // Create empty node
+            // Create empty BLACK node
             Red = false;
+            EmptyNode = true;
         }
 
         public String PrintSubTree(int verticalSpacing=1, int indentPerLevel=5,

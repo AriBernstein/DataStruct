@@ -96,8 +96,7 @@ namespace Fractional_Cascading {
             void Traverse(StringBuilder sb, String padding, String pointer,
                           RBTreeNode node, bool hasRightSibling) {
 
-                // Re. "node.Left() == node", checking if NullNode from RedBlackTree.cs
-                if (node == null || node.Left() == node) return;
+                if (node == null || node.IsEmpty()) return;
 
                 // Append vertical line spacing
                 for (int i = 0; i < verticalSpacing; i++) {
