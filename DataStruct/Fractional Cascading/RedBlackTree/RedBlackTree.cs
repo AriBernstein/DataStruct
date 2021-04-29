@@ -21,6 +21,7 @@ namespace Fractional_Cascading {
         which make for faster insertion and deletion.   */
 
         private RBTreeNode Root = null;
+        private RBTreeNode NullNode = new RBTreeNode();
         private RBTreeHelper h = new RBTreeHelper();
 
         private void RotateRight(RBTreeNode y) {
@@ -94,6 +95,123 @@ namespace Fractional_Cascading {
             return root;
         }
 
+        //   private void fixDelete(Node x) {
+        private void RebalancePostDeletion(RBTreeNode x) {
+        //     Node s;
+            RBTreeNode s;
+        //     while (x != root && x.color == 0) {
+            while(x != Root && x.IsBlack()) {
+        //         if (x == x.parent.left) {
+                if (x == x.Parent().Left()) {
+        //             s = x.parent.right;
+                    s = x.Parent().Right();
+        //             if (s.color == 1) {
+                    if (s.IsBlack()) {
+        //                 s.color = 0;
+                        s.SetBlack();
+        //                 x.parent.color = 1;
+                        x.Parent().SetRed();
+        //                 leftRotate(x.parent);
+                        RotateLeft(x.Parent());
+        //                 s = x.parent.right;
+                        s = x.Parent().Right();
+        //             }
+                    }
+        //             if (s.left.color == 0 && s.right.color == 0) {
+                    if (s.Left().IsBlack() && s.Right().IsBlack()) {
+        //                 s.color = 1;
+                        s.SetRed();
+        //                 x = x.parent;
+                        x = x.Parent();
+        //             } else {
+                    } else {
+        //                 if (s.right.color == 0) {
+                        if (s.Right().IsBlack()) {
+        //                     s.left.color = 0;
+                            s.Left().SetBlack();
+        //                     s.color = 1;
+                            s.SetRed();
+        //                     rightRotate(s);
+                            RotateRight(s);
+        //                     s = x.parent.right;
+                            s = x.Parent().Right();
+        //                 }
+                        }
+        //                 s.color = x.parent.color;
+                        if (s.Parent().IsRed()) s.SetRed();
+                        else s.SetBlack();
+        //                 x.parent.color = 0;
+                        x.Parent().SetBlack();
+        //                 s.right.color = 0;
+                        s.Right().SetBlack();
+        //                 leftRotate(x.parent);
+                        RotateLeft(s.Parent());
+        //                 x = root;
+                        x = Root;
+        //             }
+                    }
+        //         } else {
+                } else {
+        //             s = x.parent.left;
+                    s = x.Parent().Left();
+        //             if (s.color == 1) {
+                    if (s.IsRed()) {
+        //                 s.color = 0;
+                        s.SetBlack();
+        //                 x.parent.color = 1;
+                        x.Parent().SetRed();
+        //                 rightRotate(x.parent);
+                        RotateRight(x.Parent());
+        //                 s = x.parent.left;
+                        s = x.Parent().Left();
+        //             }
+                    }
+        //             if (s.right.color == 0 && s.right.color == 0) {
+                    if (s.Right() == null) s.SetRight(NullNode);
+                    if (s.Left() == null) s.SetLeft(NullNode);
+                    if (s.Right().IsBlack() && s.Left().IsBlack()) {
+        //                 s.color = 1;
+                        s.SetRed();
+        //                 x = x.parent;
+                        x = x.Parent();
+        //             } else {
+                    } else {
+        //                 if (s.left.color == 0) {
+                        if (s.Left().IsBlack()) {
+        //                     s.right.color = 0;
+                            s.Right().SetBlack();
+        //                     s.color = 1;
+                            s.SetRed();
+        //                     leftRotate(s);
+                            RotateLeft(s);
+        //                     s = x.parent.left;
+                            s = x.Parent().Left();
+        //                 }
+                        }
+
+        //                 s.color = x.parent.color;
+                        if(s.Parent().IsRed()) s.SetRed();
+                        else s.SetBlack();
+
+        //                 x.parent.color = 0;
+                        x.Parent().SetBlack();
+        //                 s.left.color = 0;
+                        s.Left().SetBlack();
+        //                 rightRotate(x.parent);
+                        RotateRight(x.Parent());
+        //                 x = root;
+                        x = Root;
+        //             }
+                    }
+        //         }
+                }
+        //     }
+            }
+        //     x.color = 0;
+            x.SetBlack();
+        // }
+        }
+
         public void Delete(RBTreeNode node, int value) {
             // Traverse until we find nodeToDelete
             RBTreeNode nodeToDelete = null;
@@ -104,25 +222,25 @@ namespace Fractional_Cascading {
                 }
                 node = (value < node.GetData()) ? node.Left() : node.Right();
             }
-            if (node == null) throw new Exception("Cannot find node to delete with " +
-                                                  $"value {value} in Red Black Tree");
+            if (nodeToDelete == null)
+                throw new Exception("Cannot find node to delete with " +
+                                    $"value {value} in Red Black Tree");
 
             RBTreeNode x, y;
 
             // Save the color of nodeToDelete
             bool originallyRed = nodeToDelete.IsRed();
             
-            // For traversing tree starting at nodeToDelete without reassigning it
-            y = nodeToDelete;
-            
             // If nodeToDelete only has left children, replace with its left subtree
             if (nodeToDelete.Left() == null) {
                 x = nodeToDelete.Right();
+                if (x == null) x = NullNode;
                 Transplant(nodeToDelete, x);
 
             // If nodeToDelete only has right children, replace with its right subtree
             } else if (nodeToDelete.Right() == null) {
                 x = nodeToDelete.Left();
+                if (x == null) x = NullNode;
                 Transplant(nodeToDelete, x);
             
             } else {    // nodeToDelete either has two children or is a leaf
@@ -134,7 +252,8 @@ namespace Fractional_Cascading {
 
                 // x = subtree root with values greater than y
                 x = y.Right();
-
+                if (x == null) x = NullNode;
+                
                 // if y is a child of nodeToDelete, x is already stored in the right place
                 if (y.Parent() == nodeToDelete) {
                     x.SetParent(y);
@@ -149,11 +268,14 @@ namespace Fractional_Cascading {
                 y.SetLeft(nodeToDelete.Left());
                 y.Left().SetParent(y);
 
-                // as y is to replace nodeToDelete's location in tree, update its color
+                // y will replace nodeToDelete's location in tree, update its color
                 if (originallyRed) y.SetRed();
                 else y.SetBlack();
             }
-            // if(!originallyRed) FixDelete(x);
+            if(!(originallyRed)) {
+                Console.WriteLine("Fixing tree :)");
+                RebalancePostDeletion(x);
+            }
         }
 
         public void Delete(int key) {
@@ -276,6 +398,11 @@ namespace Fractional_Cascading {
             else y.SetRight(newNode);
 
             RebalancePostInsertion(newNode);
+        }
+
+        public RBTree() {
+            NullNode.SetLeft(NullNode);
+            NullNode.SetRight(NullNode);   
         }
 
         public string TraverseTree(int order) {

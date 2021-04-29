@@ -85,6 +85,11 @@ namespace Fractional_Cascading {
             Red = red;
         }
 
+        public RBTreeNode() {
+            // Create empty node
+            Red = false;
+        }
+
         public String PrintSubTree(int verticalSpacing=1, int indentPerLevel=5,
                                    bool print=true) {
             return new RBTreeHelper().VisualizeTree(this, verticalSpacing,

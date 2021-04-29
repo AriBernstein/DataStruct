@@ -14,7 +14,6 @@ namespace Fractional_Cascading {
         private RangeTreeNode Parent;
         private RangeTreeNode LeftChild;
         private RangeTreeNode RightChild;
-
         public RangeTreeNode GetNextDimRoot() {
             return NextDimRoot;
         }
@@ -22,7 +21,7 @@ namespace Fractional_Cascading {
         public void SetLeft(RangeTreeNode leftChildNode)  {
             LeftChild = leftChildNode;
         }
-
+        
         public RangeTreeNode Left() {
             return LeftChild;
         }

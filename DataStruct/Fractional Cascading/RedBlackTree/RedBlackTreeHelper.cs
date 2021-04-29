@@ -67,7 +67,7 @@ namespace Fractional_Cascading {
 
         public string VisualizeTree(RBTreeNode node, int verticalSpacing,
                                     int indentPerLevel, bool print=true, 
-                                    bool safeChars=false) {
+                                    bool safeChars=true) {
             /**
             Parameters:
                 node:   RBTree node treated as the root in the visualization
@@ -96,7 +96,8 @@ namespace Fractional_Cascading {
             void Traverse(StringBuilder sb, String padding, String pointer,
                           RBTreeNode node, bool hasRightSibling) {
 
-                if (node == null) return;
+                // Re. "node.Left() == node", checking if NullNode from RedBlackTree.cs
+                if (node == null || node.Left() == node) return;
 
                 // Append vertical line spacing
                 for (int i = 0; i < verticalSpacing; i++) {
