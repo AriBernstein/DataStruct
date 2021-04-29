@@ -46,7 +46,7 @@ namespace Fractional_Cascading {
             return Data.Length == 1;
         }
 
-        public SingleCoordNode[] GetData() {
+        public SingleCoordNode[] GetNodeList() {
             return Data;
         }
 

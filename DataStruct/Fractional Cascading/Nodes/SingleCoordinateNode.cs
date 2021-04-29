@@ -1,10 +1,10 @@
 using System;
 
 namespace Fractional_Cascading {
-    public class SingleCoordNode {
+    public class SingleCoordNode : Node {
         private DataNode Data;
         private int Location;
-        int GetAttr(int attrCode) {
+        public int GetAttr(int attrCode) {
             if (attrCode == 0) return Data.GetAttr(0);
             else if (attrCode == 1) return Location;
             else throw new Exception("getAttr != 0 or 1 when called on OneDimNode");

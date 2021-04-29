@@ -5,7 +5,7 @@ namespace Fractional_Cascading {
 
         public int GetAttr(int attrCode) {
             if (attrCode == 0) return Data;
-            else throw new Exception("getAttr != 0 when called on DataNode");
+            else throw new Exception("getAttr does not equal 0 when called on DataNode");
         }
         
         public DataNode(int data) {
