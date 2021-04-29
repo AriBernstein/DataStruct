@@ -82,7 +82,7 @@ namespace Fractional_Cascading {
                     https://www.baeldung.com/java-print-binary-tree-diagram */       
             
             string pointerChars;
-            if(safeChars) pointerChars = new string('-', indentPerLevel);
+            if (safeChars) pointerChars = new string('-', indentPerLevel);
             else pointerChars = new string('─', indentPerLevel);
             
 
@@ -142,7 +142,7 @@ namespace Fractional_Cascading {
             }
 
             string prettyBinaryTree = TraversePreOrder(node);
-            if(print) Console.WriteLine(prettyBinaryTree);
+            if (print) Console.WriteLine(prettyBinaryTree);
             return prettyBinaryTree;
         }
     }

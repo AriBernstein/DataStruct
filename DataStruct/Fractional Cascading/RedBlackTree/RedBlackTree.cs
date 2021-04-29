@@ -84,7 +84,7 @@ namespace Fractional_Cascading {
             else parent.SetRight(newNode);
 
             // Null check for when newNode is null
-            if(newNode != null) newNode.SetParent(parent);
+            if (newNode != null) newNode.SetParent(parent);
         }
 
         private RBTreeNode Minimum(RBTreeNode root) {
@@ -153,7 +153,7 @@ namespace Fractional_Cascading {
                             s = node.Parent().Left();
                         }
 
-                        if(s.Parent().IsRed()) s.SetRed();
+                        if (s.Parent().IsRed()) s.SetRed();
                         else s.SetBlack();
 
                         node.Parent().SetBlack();
@@ -226,7 +226,7 @@ namespace Fractional_Cascading {
                 if (originallyRed) y.SetRed();
                 else y.SetBlack();
             }
-            if(!(originallyRed)) RebalancePostDeletion(x);
+            if (!(originallyRed)) RebalancePostDeletion(x);
         }
 
         public void Delete(int key) {
