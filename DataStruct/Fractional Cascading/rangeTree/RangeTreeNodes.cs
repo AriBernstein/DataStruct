@@ -4,16 +4,17 @@ namespace Fractional_Cascading {
     
     class RangeTreeNode {
         // Key is the average of minIndex and maxIndex 
-        private bool Root;
         private SingleCoordNode[] Data;
         private int Dimension;
-        private int Location;   // Coordinate in Dimension
+        private int Location;   // If leaf, the location in Dimension of the single node
+                                // in Data. Else, the highest Location value in Data
         private int MinIndex;
         private int MaxIndex;
         private RangeTreeNode NextDimRoot;
         private RangeTreeNode Parent;
         private RangeTreeNode LeftChild;
         private RangeTreeNode RightChild;
+
         public RangeTreeNode GetNextDimRoot() {
             return NextDimRoot;
         }
@@ -38,10 +39,6 @@ namespace Fractional_Cascading {
             return Dimension;
         }
 
-        public bool IsRoot() {
-            return Root;
-        }
-
         public bool IsLeaf() {
             return Data.Length == 1;
         }
@@ -51,13 +48,21 @@ namespace Fractional_Cascading {
         }
 
         public RangeTreeNode(SingleCoordNode[] data, int dimension, RangeTreeNode parent,
-                             int minIndex, int maxIndex, bool root=false) {
+                             int minIndex, int maxIndex) {
             Data = data;
             Dimension = dimension;
             Parent = parent;
             MinIndex = minIndex;
             MaxIndex = maxIndex;
-            Root = root;
+            Location = data[maxIndex].GetLocation();
+        }
+
+        public override string ToString() {
+            if(IsLeaf()) return $"Leaf: {Data[0].ToString()}";
+            else return $"[Size: {MaxIndex - MinIndex}, Index range: " +
+                        $"({MinIndex}, {MaxIndex}), location range: " +
+                        $"({Data[MinIndex].GetLocation()}, " +
+                        $"{Data[MaxIndex].GetLocation()})]";
         }
     }
 }

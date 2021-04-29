@@ -10,7 +10,7 @@ namespace Fractional_Cascading {
             return Root;
         }
 
-        private void setRangeTreeNodes(CoordNode[] coordNodes) {
+        private void PrepSingleCoordNodes(CoordNode[] coordNodes) {
             
             // Populate SingleCoordNode lists
             SingleCoordNode[] dimOneNodes = new SingleCoordNode[coordNodes.Length];
@@ -32,10 +32,12 @@ namespace Fractional_Cascading {
             msn.Sort(dimOneNodes, 1);
             msn.Sort(dimTwoNodes, 1);
             msn.Sort(dimThreeNodes, 1);
+            SingleCoordNode[][] singleCoords =
+                new SingleCoordNode[][]{dimOneNodes, dimTwoNodes, dimThreeNodes};
         }
 
-        // public void BuildRangeTree(SingleCoordNode[][] coords) {
-        // }
+        public void BuildRangeTree(SingleCoordNode[][] coords) {
+        }
 
         public RangeTree(CoordNode[] coordNodes) {
             Dimensionality = coordNodes[0].GetDimensionality();
