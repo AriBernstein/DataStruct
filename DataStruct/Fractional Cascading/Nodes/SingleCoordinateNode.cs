@@ -25,7 +25,5 @@ namespace Fractional_Cascading {
         public override string ToString() {
             return $"(Data: {Data}, Location: {Location})";
         }
-
-
     }
 }

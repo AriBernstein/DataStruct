@@ -6,19 +6,27 @@ namespace Fractional_Cascading {
         // Key is the average of minIndex and maxIndex 
         private CoordNode[] Data;
         private int Dimension;
-        private int Location;   // If leaf, the location in Dimension of the single node
-                                // in Data. Else, the highest Location value in Data
-        private RangeTreeNode NextDimRoot;
+        private int LocationVal; // If leaf, location in Dimension of the node in Data
+                                 // Else, highest location value in the LeftChild subtree
+        private RangeTreeNode NextDimRootNode;
         private RangeTreeNode ParentNode;
         private RangeTreeNode LeftChild;
         private RangeTreeNode RightChild;
 
-        public RangeTreeNode GetNextDimRoot() {
-            return NextDimRoot;
+        public RangeTreeNode NextDimRoot() {
+            return NextDimRootNode;
         }
 
         public void SetNextDimRoot(RangeTreeNode root) {
-            NextDimRoot = root;
+            NextDimRootNode = root;
+        }
+
+        public int GetLocation() {
+            return LocationVal;
+        }
+
+        public void SetLocation(int location) {
+            LocationVal = location;
         }
 
         public void SetParent(RangeTreeNode parent) {
@@ -62,7 +70,6 @@ namespace Fractional_Cascading {
                 throw new Exception("Invalid dimensionality value, must be 1, 2, or 3.");
             Data = data;
             Dimension = dimension;
-            Location = data[data.Length - 1].GetAttr(dimension);
         }
 
         public override string ToString() {
