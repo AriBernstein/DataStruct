@@ -11,7 +11,7 @@ namespace Fractional_Cascading {
         
         public string PrettyNumApprox(int n) {
             /**
-            Generate string with approximation of large numer
+            Generate string with approximation of large number
             ex. n = 5001243, return "5 million" */
             double num = (double)n;
 
@@ -78,6 +78,20 @@ namespace Fractional_Cascading {
             String s = "";
             for (int i = 0; i < matrix.Length; i++)  s = s + PrintNodeArray(matrix[i]);
             return s;
+        }
+
+        public SingleCoordNode[] ExtractSingleCoordNodes(CoordNode[] coordNodes,
+                                                         int dimension) {
+            int n = coordNodes.Length;
+            SingleCoordNode[] singleCoordNodes = new SingleCoordNode[n];
+
+            for (int i = 0; i < n; i++)
+                singleCoordNodes[i] =
+                    new SingleCoordNode(coordNodes[i].GetDataNode(),
+                                        coordNodes[i].GetAttr(dimension));
+            
+            new MergeSortNodes().Sort(singleCoordNodes, dimension);
+            return singleCoordNodes;
         }
     }
 }
