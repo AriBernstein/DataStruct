@@ -1,8 +1,8 @@
 using System;
 
 namespace Fractional_Cascading {
-    // C# program for using Binary Search to find location of a
-    // fractional cascading node in a list by a given attribute
+    // C# program for using Binary Search to find location of a node in a list by a
+    // given attribute
     public class BinarySearchNodes {
         public int BinarySearch(Node[] nodeArray, int searchValue, int attrCode) {
             /** Parameters:
@@ -13,6 +13,8 @@ namespace Fractional_Cascading {
 
                     attrCode:       node[i].getAttr(attrCode) returns the attrubute by
                                     which nodeArray is ordered
+
+                Return: index of searchValue in nodeArray
             */
             if (nodeArray.Length == 0)
                 throw new Exception("Attempting binarySearch on empty array");
