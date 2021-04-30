@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 namespace Fractional_Cascading {
     public class Utils {
-        public String Separator(int separatorLength, int newLinesAbove=1, int newLinesBelow=1) {
+        public String Separator(int separatorLength, int newLinesAbove=1,
+                                int newLinesBelow=1) {
             return new String('\n', newLinesAbove) +
                    new String('-', separatorLength) +
                    new String('\n', newLinesBelow);

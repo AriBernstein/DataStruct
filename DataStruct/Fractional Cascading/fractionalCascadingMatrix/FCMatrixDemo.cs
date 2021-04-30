@@ -32,7 +32,7 @@ namespace Fractional_Cascading {
             watch.Stop();
             int fcMS = (int)watch.ElapsedMilliseconds;
 
-            Console.WriteLine("\n------------");
+            Console.WriteLine(u.Separator(12, newLinesBelow:0));
             Console.WriteLine("n: " + n + ", " + "\tk: " + k + "\tx: " + x);
             Console.WriteLine($"Execution Time of trivial solution: {trivialMS} ms");
             Console.WriteLine($"Execution Time of fractional cascading solution: {fcMS} ms");

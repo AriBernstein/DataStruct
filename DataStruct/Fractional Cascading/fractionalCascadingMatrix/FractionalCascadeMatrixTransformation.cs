@@ -155,12 +155,12 @@ namespace Fractional_Cascading {
             Build k lists of n CoordinateNodes each, sorted by their data value. Each list 
             will have nodes with random xLoc and data values, except for insertData, which
             will be present in each list. Set as inputCoordMatrix */
-            NodeGenerator cnlg = new NodeGenerator();
             InputCoordMatrix = new CoordNode[k][];
             
             for (int i = 0; i < k; i++)
                 InputCoordMatrix[i] =
-                    cnlg.GetCoordNodeList(n, insertData, randomizeOrder:randomizeOrder);
+                    NodeGenerator.GetCoordNodeList(n, insertData,
+                                                   randomizeOrder:randomizeOrder);
         }
 
         public FractionalCascadingMatrix(int numValsPerList, int numLists,

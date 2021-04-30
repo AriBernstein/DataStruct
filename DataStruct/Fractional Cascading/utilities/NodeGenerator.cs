@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Fractional_Cascading {
-    public class NodeGenerator {
-        public (int[], HashSet<int>) RandUniqueInts(int n, int min, int max,
-                                                    int randomSeed=-1,
-                                                    bool randomizeOrder=true) {
+    public static class NodeGenerator {
+        public static (int[], HashSet<int>) RandUniqueInts(int n, int min, int max,
+                                                           int randomSeed=-1,
+                                                           bool randomizeOrder=true) {
             /**
             Note: this function is a modified implementation the following solution:
                   https://codereview.stackexchange.com/a/61372
@@ -72,7 +72,7 @@ namespace Fractional_Cascading {
             return (result.ToArray(), candidates);
         }
         
-        public CoordNode[] GetCoordNodeList(int n, int insertData, bool sort=true,
+        public static CoordNode[] GetCoordNodeList(int n, int insertData, bool sort=true,
                                             int sortAttrCode=0, int dimensions=1,
                                             int rangeMin=0, int rangeMax=10000000,
                                             int randomSeed=-1, bool randomizeOrder=true) {
@@ -144,7 +144,7 @@ namespace Fractional_Cascading {
             return nodeList;
         }
 
-        public RBTreeNode[] GetRandomBSTNodes(int n, int min=0, int max=-1) {
+        public static RBTreeNode[] GetRandomBSTNodes(int n, int min=0, int max=-1) {
             if (max == -1) max = n * 10;
             RBTreeNode[] nodeList = new RBTreeNode[n];
             (int[] keyList, HashSet<int> keySet) = RandUniqueInts(n, min, max);
