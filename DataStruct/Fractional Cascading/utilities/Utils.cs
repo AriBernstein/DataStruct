@@ -9,6 +9,10 @@ namespace Fractional_Cascading {
                    new String('-', separatorLength) +
                    new String('\n', newLinesBelow);
         }
+
+        public int RoundInt(int num, int place) {
+            return (num + 50) / place * place;
+        }
         
         public string PrettyNumApprox(int n) {
             /**
@@ -19,16 +23,22 @@ namespace Fractional_Cascading {
             if (num <= 9999) return num.ToString();   // to small for this
             
             double numDigits = Math.Floor(Math.Log(num, 10)) + 1;
-            
-            // Get leading values
             double numLeadingVals = numDigits % 3;
+            
+            // Round num to the nearest place that would affect the leading vals, update n
+            double numTrailingVals = (int)(numDigits - numLeadingVals);
+            n = RoundInt(n, Int32.Parse('1' + new String('0', (int)numTrailingVals -1)));
+            numDigits = Math.Floor(Math.Log(num, 10)) + 1;
+            numLeadingVals = numDigits % 3;
+            numTrailingVals = numDigits - numLeadingVals;
+
+            // Handle case where numDigits is evenly divisible by three
             if (numLeadingVals == 0) numLeadingVals = 3;
-            int leadingVal =
-                (int)Math.Truncate((n / Math.Pow(10, numDigits - numLeadingVals)));
+                int leadingVal =
+                    (int)Math.Truncate((n / Math.Pow(10, numTrailingVals)));
             
             // Get size label
             double sizeClass = Math.Floor(numDigits / 3);
-            // so that 555555 returns "555 thousand" instead of "555 million"
             if (numLeadingVals == 3) sizeClass -= 1;
 
             string sizeClassLabel;
