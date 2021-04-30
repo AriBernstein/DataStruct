@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic; 
 
 namespace Fractional_Cascading {
     class RangeTree {
@@ -15,9 +14,9 @@ namespace Fractional_Cascading {
                                                  int y1=-1, int y2=-1,
                                                  int z1=-1, int z2=-1,
                                                  bool sortOnDataAfterQuery=true) {
-            if(x1 < x2) throw new Exception("x1 must be greater than x2");
-            if(y1 < y2) throw new Exception("y1 must be greater than y2");
-            if(z1 < z2) throw new Exception("z1 must be greater than Z2");
+            if (x1 < x2) throw new Exception("x1 must be greater than x2");
+            if (y1 < y2) throw new Exception("y1 must be greater than y2");
+            if (z1 < z2) throw new Exception("z1 must be greater than Z2");
 
             if (Dimensionality <= 2 && (y1 == -1 || y2 == -1))
                 throw new Exception("y parameters are required for " +

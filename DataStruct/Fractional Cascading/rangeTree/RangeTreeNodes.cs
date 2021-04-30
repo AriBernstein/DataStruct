@@ -73,7 +73,7 @@ namespace Fractional_Cascading {
         }
 
         public override string ToString() {
-            if(IsLeaf()) return $"Leaf: {Data[0].ToString()}";
+            if (IsLeaf()) return $"Leaf: {Data[0].ToString()}";
             else return $"[Size: {Data.Length}, Index range: " +
                         $"location range: ({Data[0].GetAttr(Dimension)}, " +
                         $"{Data[Data.Length - 1].GetAttr(Dimension)})]";
