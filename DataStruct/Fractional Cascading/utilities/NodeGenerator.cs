@@ -72,10 +72,14 @@ namespace Fractional_Cascading {
             return (result.ToArray(), candidates);
         }
         
-        public static CoordNode[] GetCoordNodeList(int n, int insertData, bool sort=true,
-                                            int sortAttrCode=0, int dimensions=1,
-                                            int rangeMin=0, int rangeMax=10000000,
-                                            int randomSeed=-1, bool randomizeOrder=true) {
+        public static CoordNode[] GetCoordNodeList(int n, int insertData=-1,
+                                                   bool sort=true, int sortAttrCode=0,
+                                                   int dimensions=1, int randomSeed=-1,
+                                                   int dataRangeMin=0,
+                                                   int dataRangeMax=10000000,
+                                                   int locRangeMin=0,
+                                                   int locRangeMax=10000000,
+                                                   bool randomizeOrder=true) {
             /**
             Return a list of coordNodes with random x, y, and z values ranging locRangeMin
             to locRangeMax and data values ranging from dataRangeMin to dataRangeMax
@@ -85,8 +89,8 @@ namespace Fractional_Cascading {
                 n: the length of the list of nodes to return
                 sort: if true, sort return list ordered by coordNode.getAttr(sortAttrCode)
                 dimensions: between one and three
-                locRangeMin: locRangeMax: randomized range of xyz values
-                dataRangeMin: dataRangeMax: randomized range of node data values
+                dataRangeMin, dataRangeMax: randomized range of node data values
+                locRangeMin, locRangeMax: randomized range of xyz values
                 randomSeed: random seed used dataList generation, system default if -1
                 insertData: if not -1, replace the data attribute of the node at a
                             random index in the return list  */
@@ -99,20 +103,20 @@ namespace Fractional_Cascading {
             int[] zList = new int[0];   HashSet<int> zSet = new HashSet<int>{0};
 
             (int[] dataList, HashSet<int> dataSet) = // We will always need data
-                RandUniqueInts(n, rangeMin, rangeMax, randomSeed, randomizeOrder);
+                RandUniqueInts(n, locRangeMin, dataRangeMax, randomSeed, randomizeOrder);
 
             // We will always have at least one dimension
-            (xList, xSet) = RandUniqueInts(n, rangeMin, rangeMax, randomSeed,
+            (xList, xSet) = RandUniqueInts(n, locRangeMin, locRangeMax, randomSeed,
                                            randomizeOrder);
             
             // Check for further dimensionality before constructing random lists
             if (dimensions >= 2) {
-                (int[] yL, HashSet<int> yS) = RandUniqueInts(n, rangeMin, rangeMax,
-                                                            randomSeed, randomizeOrder);
+                (int[] yL, HashSet<int> yS) = RandUniqueInts(n, locRangeMin, locRangeMax,
+                                                             randomSeed, randomizeOrder);
                 yList = yL; ySet = yS;
             }
             if (dimensions == 3) {
-                (int[] zL, HashSet<int> zS) = RandUniqueInts(n, rangeMin, rangeMax,
+                (int[] zL, HashSet<int> zS) = RandUniqueInts(n, locRangeMin, locRangeMax,
                                                              randomSeed, randomizeOrder);
                 zList = zL; zSet = zS;
             }
@@ -134,9 +138,8 @@ namespace Fractional_Cascading {
             }
 
             // Insert expected search value
-            if (insertData >= 0) {   // note: n/2 index in nodeList is arbitrary
+            if (insertData >= 0)    // note: n/2 index in nodeList is arbitrary
                 if (!(dataSet.Contains(insertData))) nodeList[n/2].SetData(insertData);
-            } else throw new Exception("insertData parameter must be positive");
             
             // Sort randomly generated attributes on sortAttrCode
             if (sort) new MergeSortNodes().Sort(nodeList, sortAttrCode);
