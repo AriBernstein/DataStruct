@@ -150,7 +150,7 @@ namespace Fractional_Cascading {
 
         }
 
-        private void SetCoordMatrix(int insertData, bool randomizeOrder=true) {
+        private void SetCoordMatrix(int insertData) {
             /**
             Build k lists of n CoordinateNodes each, sorted by their data value. Each list 
             will have nodes with random xLoc and data values, except for insertData, which
@@ -158,13 +158,13 @@ namespace Fractional_Cascading {
             InputCoordMatrix = new CoordNode[k][];
             
             for (int i = 0; i < k; i++)
-                InputCoordMatrix[i] =
-                    NodeGenerator.GetCoordNodeList(n, insertData,
-                                                   randomizeOrder:randomizeOrder);
+                InputCoordMatrix[i] = NodeGenerator.GetCoordNodeList(n, insertData,
+                                                                     dataRangeMin:0,
+                                                                     dataRangeMax:n*k);
         }
 
         public FractionalCascadingMatrix(int numValsPerList, int numLists,
-                                         int unitFracDen=2, int insertData=-1,
+                                         int insertData, int unitFracDen=2,
                                          bool print=true, bool randNodeAttrOrders=true) {
             /**
             Parameters:
@@ -192,7 +192,7 @@ namespace Fractional_Cascading {
             // Convert coordNodeMatrix to one of FCNodes, assign as nodeMatrix
             // -> start with matrix of coordNodes sorted by their location (xLoc)
             if (print) Console.WriteLine($"Generating matrix of {k} sorted lists of {n}" +
-                                         " randomly generated coordNodest (totalling " +
+                                         " randomly generated coordNodes (totalling " +
                                          $"{new Utils().PrettyNumApprox(k*n)} nodes).");
             SetCoordMatrix(insertData);
 
