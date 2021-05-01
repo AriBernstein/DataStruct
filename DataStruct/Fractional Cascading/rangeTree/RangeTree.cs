@@ -10,21 +10,27 @@ namespace Fractional_Cascading {
             return Root;
         }
 
-        public CoordNode[] OrthogonalRangeSearch(int x1,    int x2,
-                                                 int y1=-1, int y2=-1,
-                                                 int z1=-1, int z2=-1,
+        public CoordNode[] OrthogonalRangeSearch(int[] rangeMins, int[] rangeMaxes,
                                                  bool sortOnDataAfterQuery=true) {
-            if (x1 < x2) throw new Exception("x1 must be greater than x2");
-            if (y1 < y2) throw new Exception("y1 must be greater than y2");
-            if (z1 < z2) throw new Exception("z1 must be greater than Z2");
+            int x1 = rangeMins[0];
+            int x2 = rangeMaxes[0];
+            int y1 = -1;    int y2 = -1;    int z1 = -1;    int z2 = -1;
+            if (x1 > x2) throw new Exception($"x1 ({x1}) must be less than x2 ({x2})");
+            
+            if (Dimensionality >= 2) {
+                y1 = rangeMins[1];
+                y2 = rangeMaxes[1];
+                if (y1 > y2)
+                    throw new Exception($"y1 ({y1}) must be less than y2 ({y2})");
 
-            if (Dimensionality <= 2 && (y1 == -1 || y2 == -1))
-                throw new Exception("y parameters are required for " +
-                                    "OrthogonalRangeSearch of 2+ dimensions.");
+            }
 
-            if (Dimensionality == 3 && (z1 == -1 || z2 == -1))
-                throw new Exception("z parameters are required for " +
-                                    "OrthogonalRangeSearch of 3 dimensions.");
+            if (Dimensionality == 3) {
+                z1 = rangeMins[2];
+                z2 = rangeMaxes[2];
+                if (z1 > z2)
+                    throw new Exception($"z1 ({z1}) must be less than Z2 ({z2})");
+            }
             
             RangeTreeNode SearchRec(RangeTreeNode root, int currDim)  {
                 int lowRange, highRange;
@@ -40,15 +46,11 @@ namespace Fractional_Cascading {
                 }
 
                 // Find canonical subset
-                if (root.Left() != null && highRange <= root.Left().GetData())
+                if (root.Left() != null && highRange < root.Left().GetData())
                     root = SearchRec(root.Left(), currDim);
-                if (root.Left().GetData() < highRange)  // If left loc == lowRange
-                    root = root.Parent();
 
-                if (root.Right() != null && lowRange >= root.Right().GetData())
+                if (root.Right() != null && lowRange > root.Right().GetData())
                     root = SearchRec(root.Right(), currDim);
-                if (root.Right().GetData() > lowRange)  // if right loc == highRange
-                    root = root.Parent();
                 
                 // Recurse on next dimension
                 if (currDim < Dimensionality)
@@ -63,10 +65,6 @@ namespace Fractional_Cascading {
         }
 
         private RangeTreeNode BuildRangeTree(CoordNode[] coordSubset, int currentDim) {
-            // Sort coordSubset based on location in currentDim
-            msn.Sort(coordSubset, currentDim);
-
-            int subsetSize = coordSubset.Length;
 
             // Instantiate current Node
             RangeTreeNode thisNode = new RangeTreeNode(coordSubset, currentDim);
@@ -75,6 +73,11 @@ namespace Fractional_Cascading {
             if (currentDim < Dimensionality)
                 thisNode.SetNextDimRoot(BuildRangeTree(coordSubset, currentDim + 1));
                 
+            // Sort coordSubset based on location in currentDim
+            msn.Sort(coordSubset, currentDim);
+
+            int subsetSize = coordSubset.Length;
+
             // Base case - check if leaf
             if (subsetSize == 1) {
                 thisNode.SetLocation(thisNode.GetNodeList()[0].GetAttr(currentDim));

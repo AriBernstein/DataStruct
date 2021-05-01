@@ -78,6 +78,7 @@ namespace Fractional_Cascading {
 
             if (this.IsLeaf()) return s;
             else s = s + " (";
+            new MergeSortNodes().Sort(Data, Dimension);
             int n = Data.Length;
             for (int i = 0; i < (n-1); i++)
                 s = s + (Data[i].GetAttr(Dimension) + ", ");
