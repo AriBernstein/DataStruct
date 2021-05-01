@@ -66,7 +66,7 @@ namespace Fractional_Cascading {
                 // Handle root
                 if (root == null) return "Empty binary tree.";
                 StringBuilder sb = new StringBuilder();
-                sb.Append(root.GetData());
+                sb.Append(root.VisualizerString());
 
                 // Determine initial pointer
                 string pointerLeft =
@@ -81,5 +81,11 @@ namespace Fractional_Cascading {
             if (print) Console.WriteLine(prettyBinaryTree);
             return prettyBinaryTree;
         }
+
+        // public string VisualizeTree(RangeTreeNode node, int verticalSpacing,
+        //                             int indentPerLevel, bool print=true, 
+        //                             bool safeChars=true) {
+            
+        // }
     }
 }

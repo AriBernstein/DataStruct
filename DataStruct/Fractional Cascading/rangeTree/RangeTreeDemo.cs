@@ -3,23 +3,37 @@ using System;
 namespace Fractional_Cascading {
     class RangeTreeDemo {
         RangeTreeHelper rth = new RangeTreeHelper();
-        public RangeTreeDemo(int n, int dim, int[] lowRanges, int[] highRanges) {
-            if (n < 1) throw new Exception("n parameter must be greater than 0,");
-            if (dim > 3 || dim < 0)
-                throw new Exception("dimension parameter must be greater than 0 and " +
-                                    $"less than 4. Currently, dim = {dim}.");
-            if (lowRanges.Length != dim || highRanges.Length != dim)
-                throw new Exception("lowRanges and highRanges list sizes must equal " +
-                                    "dimensionality.\nCurrently, lowRanges size = " +
-                                    $"{lowRanges.Length}, highRanges size = " +
-                                    $"{highRanges.Length}, dimensionality = {dim}");
+        Utils u = new Utils();
+        public RangeTreeDemo(int n, int dim, int locMin, int locMax,
+                             int[] rangeMins, int[] rangeMaxes) {
+            if (n < 1) throw new Exception("n parameter must be greater than 0.");
+            if (locMin > locMax)
+                throw new Exception($"locMin value ({locMin}) must be less than or " +
+                                    $"equal to locMax value ({locMax})");
+            if (locMax - locMin < n)
+                throw new Exception($"Space between locMin ({locMin}) and " +
+                                    $"locMax ({locMax} must be greater than or " +
+                                    $"equal to n ({n}).)");
+            if (rangeMins.Length != dim || rangeMaxes.Length != dim)
+                throw new Exception($"Sizes of arrays lowRanges ({rangeMins.Length}) " +
+                                    $"and highRanges must equal dimensionality ({dim}).");
+            for (int i = 0; i < dim; i++)
+                if (rangeMins[i] >= rangeMaxes[i])
+                    throw new Exception($"Minimum ({rangeMins[i]}) in orthogonal range " +
+                                        "search must be less than or equal to maximum " +
+                                        $"({rangeMaxes[i]}) in dimension {dim}");
             
             CoordNode[] nodes = 
                 NodeGenerator.GetCoordNodeList(n, sort:false, dimensions:dim,
-                                               dataRangeMin:n / 10, dataRangeMax:n * 10);
+                                               dataRangeMin:locMin,
+                                               dataRangeMax:locMax,
+                                               locRangeMin:locMin,
+                                               locRangeMax:locMax);
             RangeTree rt = new RangeTree(nodes);
-            rth.VisualizeTree(rt.GetRoot(), 2, 10);
-
+            for (int i = 1; i <= dim; i++) {
+                rth.VisualizeTree(rt.GetRootByDimension(i), 2, 10);
+                Console.WriteLine(u.Separator(100));
+            }
         }
     }
 }

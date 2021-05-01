@@ -76,7 +76,10 @@ namespace Fractional_Cascading {
                 thisNode.SetNextDimRoot(BuildRangeTree(coordSubset, currentDim + 1));
                 
             // Base case - check if leaf
-            if (subsetSize == 1) return thisNode;
+            if (subsetSize == 1) {
+                thisNode.SetLocation(thisNode.GetNodeList()[0].GetAttr(currentDim));
+                return thisNode;
+            }
 
             // Else recurse on left and right subsets of coordSubset
             int highestIndex = subsetSize - 1;
@@ -100,6 +103,17 @@ namespace Fractional_Cascading {
             thisNode.SetLocation(sortAttribute);
 
             return thisNode;
+        }
+
+        public RangeTreeNode GetRootByDimension(int dimensions) {
+            if (Dimensionality < 1 || Dimensionality > 3)
+                throw new Exception("GetRootByDimension method has invalid " +
+                                    " dimensions parameter.");
+            RangeTreeNode root = Root;
+            for (int i = 2; i <= dimensions; i++)
+                root = root.NextDimRoot();
+            
+            return root;
         }
 
         public RangeTree(CoordNode[] coordNodes) {
