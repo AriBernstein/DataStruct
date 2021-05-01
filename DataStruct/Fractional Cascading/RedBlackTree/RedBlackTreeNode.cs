@@ -82,6 +82,11 @@ namespace Fractional_Cascading {
         public int NumChildren() {
             return SubTreeSize() - 1;
         }
+
+        public string VisualizerString() {
+            char color = IsRed() ? 'R' : 'B';
+            return $"{SortAttribute} ({color})";
+        }
         
         public RBTreeNode(int sortAttribute, bool leaf=false, bool red=true) {
             SortAttribute = sortAttribute;
@@ -96,16 +101,16 @@ namespace Fractional_Cascading {
             EmptyNode = true;
         }
 
-        public String PrintSubTree(int verticalSpacing=1, int indentPerLevel=5,
+        public string PrintSubTree(int verticalSpacing=1, int indentPerLevel=5,
                                    bool print=true) {
             return new RBTreeHelper().VisualizeTree(this, verticalSpacing,
                                                     indentPerLevel, print);
         }
 
         // Overide default methods and operators
-        public override String ToString() {
-            String color = IsRed() ? "Red" : "Black";
-            String leaf = IsLeaf() ? "true" : "false"; 
+        public override string ToString() {
+            string color = IsRed() ? "Red" : "Black";
+            string leaf = IsLeaf() ? "true" : "false"; 
             return $"Data: {SortAttribute}, Color: {color}, Leaf: {leaf}";
         }
 

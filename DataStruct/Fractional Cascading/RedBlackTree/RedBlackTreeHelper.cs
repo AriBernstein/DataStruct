@@ -106,9 +106,7 @@ namespace Fractional_Cascading {
                 }
                 
                 // Append line rows with values
-                sb.Append("\n" + padding + pointer + " " + node.GetData());
-                if (node.IsRed()) sb.Append(" (R)");
-                else sb.Append(" (B)");
+                sb.Append($"\n{padding}{pointer} {node.VisualizerString()}");
 
                 // Calculate and append padding next row
                 StringBuilder paddingSB = new StringBuilder(padding);
