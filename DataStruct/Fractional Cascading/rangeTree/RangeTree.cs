@@ -40,14 +40,14 @@ namespace Fractional_Cascading {
                 }
 
                 // Find canonical subset
-                if (root.Left() != null && highRange <= root.Left().GetLocation())
+                if (root.Left() != null && highRange <= root.Left().GetData())
                     root = SearchRec(root.Left(), currDim);
-                if (root.Left().GetLocation() < highRange)  // If left loc == lowRange
+                if (root.Left().GetData() < highRange)  // If left loc == lowRange
                     root = root.Parent();
 
-                if (root.Right() != null && lowRange >= root.Right().GetLocation())
+                if (root.Right() != null && lowRange >= root.Right().GetData())
                     root = SearchRec(root.Right(), currDim);
-                if (root.Right().GetLocation() > lowRange)  // if right loc == highRange
+                if (root.Right().GetData() > lowRange)  // if right loc == highRange
                     root = root.Parent();
                 
                 // Recurse on next dimension

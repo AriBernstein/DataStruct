@@ -21,7 +21,7 @@ namespace Fractional_Cascading {
             NextDimRootNode = root;
         }
 
-        public int GetLocation() {
+        public int GetData() {
             return LocationVal;
         }
 
@@ -61,8 +61,27 @@ namespace Fractional_Cascading {
             return Data.Length == 1;
         }
 
+        public bool IsEmpty() {
+            return Data == null;
+        }
+
         public CoordNode[] GetNodeList() {
             return Data;
+        }
+
+        public string VisualizerString(bool print=true) {
+            
+            /**
+            Return visualization of array with each element separated by sep
+            Note that the type objects array contains must have a ToString method.  */
+            
+            string s = "(";
+            int n = Data.Length;
+            for (int i = 0; i < (n-1); i++)
+                s = s + (Data[i].GetAttr(Dimension) + ", ");
+            s = s + (Data[n-1].GetAttr(Dimension)) + ')';
+            if(print) Console.WriteLine(s);
+            return s;
         }
 
         public RangeTreeNode(CoordNode[] data, int dimension) {
