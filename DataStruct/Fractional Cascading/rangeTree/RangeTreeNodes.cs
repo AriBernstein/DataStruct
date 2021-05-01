@@ -69,13 +69,13 @@ namespace Fractional_Cascading {
             return Data;
         }
 
-        public string VisualizerString(bool print=true) {
+        public string VisualizerString(bool print=false) {
             
             /**
             Return visualization of array with each element separated by sep
             Note that the type objects array contains must have a ToString method.  */
             
-            string s = "(";
+            string s = $"[{LocationVal}] (";
             int n = Data.Length;
             for (int i = 0; i < (n-1); i++)
                 s = s + (Data[i].GetAttr(Dimension) + ", ");
