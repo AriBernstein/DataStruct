@@ -2,10 +2,10 @@ using System;
 using System.Text;
 
 namespace Fractional_Cascading {
-    class RangeTreeHelper {
-        public string VisualizeTree(RangeTreeNode node, int verticalSpacing,
-                                    int indentPerLevel, bool print=true, 
-                                    bool safeChars=true) {
+    static class RangeTreeHelper {
+        public static string VisualizeTree(RangeTreeNode node, int verticalSpacing,
+                                           int indentPerLevel, bool print=true, 
+                                           bool safeChars=true) {
             /**
             Parameters:
                 node:   RBTree node treated as the root in the visualization
@@ -81,11 +81,5 @@ namespace Fractional_Cascading {
             if (print) Console.WriteLine(prettyBinaryTree);
             return prettyBinaryTree;
         }
-
-        // public string VisualizeTree(RangeTreeNode node, int verticalSpacing,
-        //                             int indentPerLevel, bool print=true, 
-        //                             bool safeChars=true) {
-            
-        // }
     }
 }

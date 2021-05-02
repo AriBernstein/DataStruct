@@ -2,7 +2,6 @@ using System;
 
 namespace Fractional_Cascading {
     class RangeTreeDemo {
-        RangeTreeHelper rth = new RangeTreeHelper();
         Utils u = new Utils();
         public RangeTreeDemo(int n, int dim, int locMin, int locMax,
                              int[] rangeMins, int[] rangeMaxes, int randomSeed=-1) {
@@ -38,13 +37,15 @@ namespace Fractional_Cascading {
             if (n <= 15) {
                 for (int i = 1; i <= dim; i++) {
                     Console.WriteLine($"\n\nDimension {i} {u.Separator(85, 0)}");
-                    rth.VisualizeTree(rt.GetRootByDimension(i), 2, 10);
+                    RangeTreeHelper.VisualizeTree(rt.GetRootByDimension(i), 2, 10);
                 }
             }
 
             // Show orthogonal range search
-            
-            Console.WriteLine($"CoordNodes located in range\n\tx: ({rangeMins[0]}, {rangeMaxes[0]}), \ty: ({rangeMins[1]}, {rangeMaxes[1]}), \tz: ({rangeMins[2]}, {rangeMaxes[2]})");
+            Console.WriteLine($"CoordNodes located in range\n" +
+                              $"\tx: ({rangeMins[0]}, {rangeMaxes[0]}), " +
+                              $"\ty: ({rangeMins[1]}, " + $"{rangeMaxes[1]}), " +
+                              $"\tz: ({rangeMins[2]}, {rangeMaxes[2]})");
             ArrayUtils.PrintArray(rt.OrthogonalRangeSearch(rangeMins, rangeMaxes), sep: "\n");
         }
     }

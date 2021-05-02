@@ -72,6 +72,11 @@ namespace Fractional_Cascading {
             return s;
         }
 
+        public int Minimum(int x, int y) {
+            if (x < y) return x;
+            else return y;
+        }
+
         public SingleCoordNode[] ExtractSingleCoordNodes(CoordNode[] coordNodes,
                                                          int dimension) {
             int n = coordNodes.Length;
