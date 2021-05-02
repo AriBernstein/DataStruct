@@ -65,7 +65,7 @@ namespace Fractional_Cascading {
             return Data == null;
         }
 
-        public CoordNode[] GetNodeList() {
+        public CoordNode[] GetCoordNodeList() {
             return Data;
         }
 
@@ -83,7 +83,7 @@ namespace Fractional_Cascading {
             for (int i = 0; i < (n-1); i++)
                 s = s + (Data[i].GetAttr(Dimension) + ", ");
             s = s + (Data[n-1].GetAttr(Dimension)) + ')';
-            if(print) Console.WriteLine(s);
+            if (print) Console.WriteLine(s);
             return s;
         }
 

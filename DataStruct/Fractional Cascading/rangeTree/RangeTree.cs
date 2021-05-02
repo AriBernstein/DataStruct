@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Fractional_Cascading {
@@ -59,7 +60,7 @@ namespace Fractional_Cascading {
                 throw new Exception("This one really shouldn't ever be hit :/");
             }
             
-            RangeTreeNode SearchRec(RangeTreeNode root, int currDim)  {
+            List<RangeTreeNode> SearchRec(RangeTreeNode root, int currDim)  {
                 
                 int lowRange, highRange;
                 List<(int, RangeTreeNode)> rangeMinPath, rangeMaxPath;
@@ -98,41 +99,50 @@ namespace Fractional_Cascading {
                     else break;
                 }
 
-                // Recurse on next dimension at split point
-                (int _, RangeTreeNode RangeTreeSplitNode) =
-                    rangeMinPath[rangeSplitNodeIndex];
-                if (currDim < Dimensionality)
-                    root = SearchRec(root.NextDimRoot(), currDim + 1);
+                // Find canonical subsets
+                List<RangeTreeNode> canonicalSubsets = new List<RangeTreeNode>();
 
-                // // Find canonical subsets
-                // List<RangeTreeNode> canonicalSubsets = new List<RangeTreeNode>();
+                // -> Handle low range
+                for (int i = rangeSplitNodeIndex; i < rangeMinPath.Count; i++) {
+                    (int step, RangeTreeNode subtree) = rangeMaxPath[i];
+                    if (subtree.IsLeaf()) canonicalSubsets.Add(subtree);
+                    else if (step == 0 && subtree.Right() != null)
+                        canonicalSubsets.Add(subtree.Right());
+                }
 
-                // // -> Handle low range
-                // for(int i = rangeSplitNodeIndex; i < rangeMinPath.Count; i++) {
-                //     (int step, RangeTreeNode subtree) = rangeMaxPath[i];
-                //     if (subtree.IsLeaf()) canonicalSubsets.Add(subtree);
-                //     else if (step == 0 && subtree.Right() != null)
-                //         canonicalSubsets.Add(subtree.Right());
-                // }
-
-                // // -> Handle high range
-                // for(int i = rangeSplitNodeIndex; i < rangeMaxPath.Count; i++) {
-                //     (int step, RangeTreeNode subtree) = rangeMaxPath[i];
+                // -> Handle high range
+                for (int i = rangeSplitNodeIndex; i < rangeMaxPath.Count; i++) {
+                    (int step, RangeTreeNode subtree) = rangeMaxPath[i];
                     
-                //     // At this point, last canonical subset will be an element either
-                //     // equal to rangeMax or the lowest element greater than rangeMax
-                //     if (subtree.IsLeaf() && subtree.GetData() == highRange)
-                //         canonicalSubsets.Add(subtree);
-                //     else if (step == 1 && subtree.Left() != null)
-                //         canonicalSubsets.Add(subtree.Left());
-                // }
+                    // At this point, last canonical subset will be an element either
+                    // equal to rangeMax or the lowest element greater than rangeMax
+                    if (subtree.IsLeaf() && subtree.GetData() == highRange)
+                        canonicalSubsets.Add(subtree);
+                    else if (step == 1 && subtree.Left() != null)
+                        canonicalSubsets.Add(subtree.Left());
+                }
 
-                if (sortOnDataAfterQuery) msn.Sort(root.GetNodeList(), 0);
+                // Recurse on next dimension on each canonical subset
+                List<RangeTreeNode> nodesInRange = new List<RangeTreeNode>();
+                if (currDim < Dimensionality) {
+                    foreach (RangeTreeNode canonicalRoot in canonicalSubsets) {
+                        nodesInRange.AddRange(SearchRec(canonicalRoot, currDim + 1));
+                    }
+                } else nodesInRange = canonicalSubsets;
 
-                return root;
+                return nodesInRange;
             }
 
-            return SearchRec(Root, 1).GetNodeList();
+            // Find canonical subsets, extract and combine lists of coordNodes
+            List<RangeTreeNode> canonicalSubsetsInSearchRange = SearchRec(Root, 1);
+            List<CoordNode> nodesInSearchRange = new List<CoordNode>();
+            foreach (RangeTreeNode rtNode in canonicalSubsetsInSearchRange) {
+                nodesInSearchRange.AddRange(rtNode.GetCoordNodeList());
+            }
+
+            if (sortOnDataAfterQuery) msn.Sort(nodesInSearchRange.ToArray(), 0);
+            return nodesInSearchRange.ToArray();
+
         }
 
         private RangeTreeNode BuildRangeTree(CoordNode[] coordSubset, int currentDim) {
@@ -151,7 +161,7 @@ namespace Fractional_Cascading {
 
             // Base case - check if leaf
             if (subsetSize == 1) {
-                thisNode.SetLocation(thisNode.GetNodeList()[0].GetAttr(currentDim));
+                thisNode.SetLocation(thisNode.GetCoordNodeList()[0].GetAttr(currentDim));
                 return thisNode;
             }
 
