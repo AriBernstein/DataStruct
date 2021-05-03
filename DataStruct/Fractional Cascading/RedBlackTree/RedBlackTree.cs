@@ -3,16 +3,17 @@ using System;
 namespace Fractional_Cascading {
     class RBTree {
         /**
-        Implementation of a Red-Black tree, a type of self-balancing binary search trees. 
+        Implementation of a Red-Black tree, one type of self-balancing binary search tree. 
         Here, each node is colored either red or black. If the following color-related
         conditions are met, the tree will be balanced such that search, insertion, and
-        deletion (not implemented here) can be accomplished in O(log n) time in all cases.
+        deletion (only partial implemented here) can be accomplished in O(log n) time in 
+        all cases.
         
         Red-Black conditions:
-            1. Root of the tree is always black.
-            2. No two successive red nodes (red node can have a red parent or red child.
-            3. Every path from a given node to any leaf in its subtree will always have
-               the same number of black nodes.
+        1. The Root of the tree is always black.
+        2. No two successive red nodes (no red node can have a red parent or red child.)
+        3. Every path from a given node to any leaf in its subtree will always contain the
+           same number of black nodes.
 
         Note that meeting these conditions will not result in a perfectly balanced tree.
         They guarantee that the tree's height is less than or equal to 2 * Log2(n+1),
@@ -247,8 +248,8 @@ namespace Fractional_Cascading {
                 such that it is imbalanced beyond the red-black tree threshold. In order
                 to correct for this, we re-balance and/or recolor the subtree rooted at
                 newNode's grandparent. We perform this process iteratively, reassigning
-                newNode to its ancestors (parents/grandparents), until we reach the root.
-                At no point do we consider decendants of newNode.
+                newNode to its decendants (parents/grandparents), until we reach the root.
+                At no point do we consider ancestors of newNode.
 
                 See this page for a more detailed overview of the process:
                     https://www.geeksforgeeks.org/red-black-tree-set-2-insert/  */
