@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Fractional_Cascading {
     class RangeTreeDemo {
@@ -26,15 +27,21 @@ namespace Fractional_Cascading {
                                         $"({rangeMaxes[i]}) in dimension {dim}");
             
             // Build range tree
-            CoordNode[] nodes = 
-                NodeGenerator.GetCoordNodeList(n, sort:false, dimensions:dim,
-                                               dataRangeMin:locMin, dataRangeMax:locMax,
-                                               locRangeMin:locMin, locRangeMax:locMax,
-                                               randomSeed:-1);
-            RangeTree rt = new RangeTree(nodes);
+            
+            List<CoordNode> nodes = new List<CoordNode>();
+            nodes.Add(new CoordNode(1, 68));
+            nodes.Add(new CoordNode(2, 72));
+            nodes.Add(new CoordNode(3, 76));
+            nodes.Add(new CoordNode(4, 83));
+            // CoordNode[] nodes = 
+            //     NodeGenerator.GetCoordNodeList(n, sort:false, dimensions:dim,
+            //                                    dataRangeMin:locMin, dataRangeMax:locMax,
+            //                                    locRangeMin:locMin, locRangeMax:locMax,
+            //                                    randomSeed:-1);
+            RangeTree rt = new RangeTree(nodes.ToArray());
             
             // Print range tree in each dimension
-            if (n <= 50) {
+            if (n <= 30) {
                 for (int i = 1; i <= dim; i++) {
                     Console.WriteLine($"\n\nDimension {i} {u.Separator(85, 0)}");
                     RangeTreeHelper.VisualizeTree(rt.GetRootByDimension(i), 2, 10);

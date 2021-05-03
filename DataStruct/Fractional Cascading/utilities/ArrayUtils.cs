@@ -20,7 +20,11 @@ namespace Fractional_Cascading {
             /**
             Return visualization of array with each element separated by sep
             Note that the type objects array contains must have a ToString method.  */
-            
+            if (array.Length == 0) {
+                if (print) Console.WriteLine("Empty Array");
+                return "Empty Array";
+            }
+
             string s = "";
             int n = array.Length;
             for (int i = 0; i < (n-1); i++)
