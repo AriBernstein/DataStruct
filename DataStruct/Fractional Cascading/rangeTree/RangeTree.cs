@@ -57,8 +57,7 @@ namespace Fractional_Cascading {
             NOTE: There is a rare edge case where a subtree stored during a low range
                   traversal contains an element greater than highRange. I could not figure
                   out how to solve this without walking through array. To see an example,
-                  input coordNodes with xLocations 68, 72, 76, 83 .
-*/
+                  input coordNodes with xLocations 68, 72, 76, 83 . */
 
             // Instantiate a bunch of stuff
             int x1 = rangeMins[0];
@@ -103,8 +102,6 @@ namespace Fractional_Cascading {
                 Parameters:
                     root: the root of the subtree on which we are searching
                     currDim: the current dimension in which we are searching    */
-                
-                
 
                 int lowRange, highRange;
                 List<RangeTreeNode> canonicalSubsets;
@@ -130,7 +127,7 @@ namespace Fractional_Cascading {
                     canonicalSubsets = zCanonicalSubsets;
                 }
 
-                // Find leftmost and rightmost nodes in range
+                // Find leftmost and rightmost nodes in range and populate path lists
                 // Note: rangeMaxNode will either be the smallest node with location
                 //       greater than lowRange or equal to it.
                 RangeTreeNode rangeMinNode = FindNode(Root, lowRange, rangeMinPath);
@@ -138,8 +135,8 @@ namespace Fractional_Cascading {
 
                 // Find rangeSplitNode (node at which lowRange & highRange paths diverge)
                 int rangeSplitNodeIndex = 0;
-                int n = u.Minimum(rangeMinPath.Count - 1, rangeMaxPath.Count - 1);
-                for (int i = 0; i < n; i++) {
+                int smallestPathSize = u.Minimum(rangeMinPath.Count, rangeMaxPath.Count);
+                for (int i = 0; i < (smallestPathSize - 1); i++) {
                     (int currentMinStep, RangeTreeNode currentMinNode) = rangeMinPath[i];
                     (int currentMaxStep, RangeTreeNode currentMaxNode) = rangeMaxPath[i];
                     
@@ -148,14 +145,17 @@ namespace Fractional_Cascading {
                     else break;
                 }
 
+                // Delete me
+                Console.WriteLine("V SPLIT INDEX: " + rangeSplitNodeIndex);
+
                 // Find canonical subsets by separately traversing the left and right
                 // subtrees of rangeSplitNode
 
                 // Check for edge case in which rangeMin and rangeMax paths are the same
                 // until they hit leaf nodes
                 bool pathsDiverge = true;
-                if (rangeMinPath.GetRange(0, rangeMinPath.Count - 2).SequenceEqual(
-                    rangeMaxPath.GetRange(0, rangeMaxPath.Count - 2))) {
+                if (rangeMinPath.GetRange(0, smallestPathSize - 2).SequenceEqual(
+                    rangeMaxPath.GetRange(0, smallestPathSize - 2))) {
                     pathsDiverge = false;
                 }
                 
@@ -187,15 +187,18 @@ namespace Fractional_Cascading {
                 // Handle edge case where no nodes are in range
                 if (canonicalSubsets.Count == 1 && canonicalSubsets[0].IsLeaf()) {
                     int singleNodeLocation = canonicalSubsets[0].GetData();
-                    if(singleNodeLocation < lowRange || singleNodeLocation > highRange) {
+                    if (singleNodeLocation < lowRange || singleNodeLocation > highRange) {
                         canonicalSubsets = new List<RangeTreeNode>();
                     }
                 }
-
-                Console.WriteLine($"DIM: {currDim}, Canonical Count: {canonicalSubsets.Count}");
-
+                
+                ///// Delete me
+                Console.WriteLine($"Dim: {currDim}, Canonical Count: {canonicalSubsets.Count}");
+                /////
 
                 // Recurse on next dimension on each canonical subset
+                // -> nodesInRange should contain the RangeTreeNodes that make up the
+                //    canonical subsets of the final dimension
                 List<RangeTreeNode> nodesInRange = new List<RangeTreeNode>();
                 if (currDim < Dimensionality) {
                     foreach (RangeTreeNode canonicalRoot in canonicalSubsets) {

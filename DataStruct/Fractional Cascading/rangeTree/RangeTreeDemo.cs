@@ -27,12 +27,14 @@ namespace Fractional_Cascading {
                                         $"({rangeMaxes[i]}) in dimension {dim}");
             
             // Build range tree
-            
-            // List<CoordNode> nodes = new List<CoordNode>();
-            // nodes.Add(new CoordNode(1, 68));
-            // nodes.Add(new CoordNode(2, 72));
-            // nodes.Add(new CoordNode(3, 76));
-            // nodes.Add(new CoordNode(4, 83));
+
+            // List<CoordNode> newNodes = new List<CoordNode>();
+            // newNodes.Add(new CoordNode(1, 68));
+            // newNodes.Add(new CoordNode(2, 72));
+            // newNodes.Add(new CoordNode(3, 76));
+            // newNodes.Add(new CoordNode(4, 83));
+            // CoordNode[] nodes = newNodes.ToArray();
+
             CoordNode[] nodes = 
                 NodeGenerator.GetCoordNodeList(n, sort:false, dimensions:dim,
                                                dataRangeMin:locMin, dataRangeMax:locMax,
@@ -48,16 +50,18 @@ namespace Fractional_Cascading {
                 }
             }
 
-            Console.WriteLine("//////////");
-            new MergeSortNodes().Sort(rt.GetRoot().GetCoordNodeList(), 2);
-            ArrayUtils.PrintArray(rt.GetRoot().GetCoordNodeList());
-            Console.WriteLine("----------");
-            RangeTreeHelper.VisualizeTree(rt.GetRoot().Left(), 2, 10);
-            Console.WriteLine("----------");
-            RangeTreeHelper.VisualizeTree(rt.GetRoot().Left().NextDimRoot(), 2, 10);
-            Console.WriteLine("//////////");
+            // // Print non leaf node and its next dimension pointer
+            // Console.WriteLine("//////////");
+            // new MergeSortNodes().Sort(rt.GetRoot().GetCoordNodeList(), 2);
+            // ArrayUtils.PrintArray(rt.GetRoot().GetCoordNodeList());
+            // Console.WriteLine("----------");
+            // RangeTreeHelper.VisualizeTree(rt.GetRoot().Left(), 2, 10);
+            // Console.WriteLine("----------");
+            // RangeTreeHelper.VisualizeTree(rt.GetRoot().Left().NextDimRoot(), 2, 10);
+            // Console.WriteLine("//////////");
 
             // Show orthogonal range search
+            Console.WriteLine(u.Separator());
             if (dim == 1) 
                 Console.WriteLine($"CoordNodes located in range: x: ({rangeMins[0]}, {rangeMaxes[0]})");
             if (dim == 2)

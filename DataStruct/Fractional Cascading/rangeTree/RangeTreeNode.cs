@@ -75,7 +75,7 @@ namespace Fractional_Cascading {
             
             string s = $"[{LocationVal}]";
 
-            if (this.IsLeaf()) return s;
+            if (this.IsLeaf()) return s + $" - {Data[0]}";
             else s = s + " (";
             new MergeSortNodes().Sort(Data, Dimension);
             int n = Data.Length;
