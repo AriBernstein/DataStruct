@@ -16,7 +16,6 @@ namespace Fractional_Cascading {
         public RangeTreeNode NextDimRoot() {
             return NextDimRootNode;
         }
-
         public void SetNextDimRoot(RangeTreeNode root) {
             NextDimRootNode = root;
         }

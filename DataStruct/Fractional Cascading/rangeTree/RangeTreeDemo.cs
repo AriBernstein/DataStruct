@@ -28,17 +28,17 @@ namespace Fractional_Cascading {
             
             // Build range tree
             
-            List<CoordNode> nodes = new List<CoordNode>();
-            nodes.Add(new CoordNode(1, 68));
-            nodes.Add(new CoordNode(2, 72));
-            nodes.Add(new CoordNode(3, 76));
-            nodes.Add(new CoordNode(4, 83));
-            // CoordNode[] nodes = 
-            //     NodeGenerator.GetCoordNodeList(n, sort:false, dimensions:dim,
-            //                                    dataRangeMin:locMin, dataRangeMax:locMax,
-            //                                    locRangeMin:locMin, locRangeMax:locMax,
-            //                                    randomSeed:-1);
-            RangeTree rt = new RangeTree(nodes.ToArray());
+            // List<CoordNode> nodes = new List<CoordNode>();
+            // nodes.Add(new CoordNode(1, 68));
+            // nodes.Add(new CoordNode(2, 72));
+            // nodes.Add(new CoordNode(3, 76));
+            // nodes.Add(new CoordNode(4, 83));
+            CoordNode[] nodes = 
+                NodeGenerator.GetCoordNodeList(n, sort:false, dimensions:dim,
+                                               dataRangeMin:locMin, dataRangeMax:locMax,
+                                               locRangeMin:locMin, locRangeMax:locMax,
+                                               randomSeed:-1);
+            RangeTree rt = new RangeTree(nodes);
             
             // Print range tree in each dimension
             if (n <= 30) {
@@ -47,6 +47,15 @@ namespace Fractional_Cascading {
                     RangeTreeHelper.VisualizeTree(rt.GetRootByDimension(i), 2, 10);
                 }
             }
+
+            Console.WriteLine("//////////");
+            new MergeSortNodes().Sort(rt.GetRoot().GetCoordNodeList(), 2);
+            ArrayUtils.PrintArray(rt.GetRoot().GetCoordNodeList());
+            Console.WriteLine("----------");
+            RangeTreeHelper.VisualizeTree(rt.GetRoot().Left(), 2, 10);
+            Console.WriteLine("----------");
+            RangeTreeHelper.VisualizeTree(rt.GetRoot().Left().NextDimRoot(), 2, 10);
+            Console.WriteLine("//////////");
 
             // Show orthogonal range search
             if (dim == 1) 

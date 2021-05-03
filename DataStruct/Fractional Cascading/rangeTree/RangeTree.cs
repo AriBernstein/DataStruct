@@ -103,6 +103,8 @@ namespace Fractional_Cascading {
                 Parameters:
                     root: the root of the subtree on which we are searching
                     currDim: the current dimension in which we are searching    */
+                
+                
 
                 int lowRange, highRange;
                 List<RangeTreeNode> canonicalSubsets;
@@ -155,8 +157,6 @@ namespace Fractional_Cascading {
                 if (rangeMinPath.GetRange(0, rangeMinPath.Count - 2).SequenceEqual(
                     rangeMaxPath.GetRange(0, rangeMaxPath.Count - 2))) {
                     pathsDiverge = false;
-
-                    Console.WriteLine("PathsDiverged = false");
                 }
                 
                 // Handle low range
@@ -192,11 +192,15 @@ namespace Fractional_Cascading {
                     }
                 }
 
+                Console.WriteLine($"DIM: {currDim}, Canonical Count: {canonicalSubsets.Count}");
+
+
                 // Recurse on next dimension on each canonical subset
                 List<RangeTreeNode> nodesInRange = new List<RangeTreeNode>();
                 if (currDim < Dimensionality) {
                     foreach (RangeTreeNode canonicalRoot in canonicalSubsets) {
-                        nodesInRange.AddRange(SearchRec(canonicalRoot, currDim + 1));
+                        nodesInRange.AddRange(
+                            SearchRec(canonicalRoot.NextDimRoot(), currDim + 1));
                     }
                 } else nodesInRange = canonicalSubsets;
 
@@ -210,9 +214,10 @@ namespace Fractional_Cascading {
                 nodesInSearchRange.AddRange(rtNode.GetCoordNodeList());
             }
 
+            // Return
             CoordNode[] nodesInSearchRangeArray = nodesInSearchRange.ToArray();
             if (sortOnDataAfterQuery && nodesInSearchRangeArray.Length > 1)
-                msn.Sort(nodesInSearchRangeArray, 1);
+                msn.Sort(nodesInSearchRangeArray, 0);
             return nodesInSearchRangeArray;
         }
 
