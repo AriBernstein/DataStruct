@@ -4,7 +4,9 @@ namespace Fractional_Cascading {
     class RangeTreeDemo {
         Utils u = new Utils();
         public RangeTreeDemo(int n, int dim, int locMin, int locMax,
-                             int[] rangeMins, int[] rangeMaxes, int randomSeed=-1) {
+                             int[] rangeMins, int[] rangeMaxes,
+                             int insertXValue=-1, int insertYValue=-1,
+                             int insertZValue=-1, int randomSeed=-1) {
             // Check arguments - if any are wrong, this can explode and I'm a pacifist
             if (n < 1) throw new Exception("n parameter must be greater than 0.");
             if (locMin > locMax)
@@ -26,15 +28,13 @@ namespace Fractional_Cascading {
             // Build range tree
             CoordNode[] nodes = 
                 NodeGenerator.GetCoordNodeList(n, sort:false, dimensions:dim,
-                                               dataRangeMin:locMin,
-                                               dataRangeMax:locMax,
-                                               locRangeMin:locMin,
-                                               locRangeMax:locMax,
+                                               dataRangeMin:locMin, dataRangeMax:locMax,
+                                               locRangeMin:locMin, locRangeMax:locMax,
                                                randomSeed:-1);
             RangeTree rt = new RangeTree(nodes);
             
             // Print range tree in each dimension
-            if (n <= 15) {
+            if (n <= 50) {
                 for (int i = 1; i <= dim; i++) {
                     Console.WriteLine($"\n\nDimension {i} {u.Separator(85, 0)}");
                     RangeTreeHelper.VisualizeTree(rt.GetRootByDimension(i), 2, 10);
@@ -42,10 +42,21 @@ namespace Fractional_Cascading {
             }
 
             // Show orthogonal range search
-            Console.WriteLine($"CoordNodes located in range\n" +
-                              $"\tx: ({rangeMins[0]}, {rangeMaxes[0]}), " +
-                              $"\ty: ({rangeMins[1]}, " + $"{rangeMaxes[1]}), " +
-                              $"\tz: ({rangeMins[2]}, {rangeMaxes[2]})");
+            if (dim == 1) 
+                Console.WriteLine($"CoordNodes located in range: x: ({rangeMins[0]}, {rangeMaxes[0]})");
+            if (dim == 2)
+                Console.WriteLine($"CoordNodes located in range:\n" +
+                                  $"\tx: ({rangeMins[0]}, {rangeMaxes[0]}), " +
+                                  $"\ty: ({rangeMins[1]}, {rangeMaxes[1]})");
+            if (dim == 3)
+                Console.WriteLine($"CoordNodes located in range:\n" +
+                                  $"\tx: ({rangeMins[0]}, {rangeMaxes[0]}), " +
+                                  $"\ty: ({rangeMins[1]}, {rangeMaxes[1]}), " +
+                                  $"\tz: ({rangeMins[2]}, {rangeMaxes[2]})");
+            
+            // int searchFor = rt.GetRoot().GetCoordNodeList()[3].GetAttr(1) + 1;
+            // Console.WriteLine($"Searching for {searchFor}");
+            // Console.WriteLine(rt.FindNode(rt.GetRoot(), searchFor));
             ArrayUtils.PrintArray(rt.OrthogonalRangeSearch(rangeMins, rangeMaxes), sep: "\n");
         }
     }
