@@ -4,7 +4,7 @@ namespace Fractional_Cascading {
     public static class ArrayUtils {
         public static T[] ArraySubset<T>(this T[] array, int startIndex, int endIndex) {
             /**
-            Copy elements in array between indexes startIndex & endindex inclusive into
+            Copy elements in array between indexes startIndex & endindex (inclusive) into
             new array   */
             if (startIndex > endIndex)
                 throw new Exception($"startIndex ({startIndex}) cannot be greater than " +
@@ -30,7 +30,7 @@ namespace Fractional_Cascading {
             for (int i = 0; i < (n-1); i++)
                 s = s + (array[i] + sep);
             s = s + (array[n-1]);
-            if(print) Console.WriteLine(s);
+            if (print) Console.WriteLine(s);
             return s;
         }
     }

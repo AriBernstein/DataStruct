@@ -12,35 +12,57 @@ namespace Fractional_Cascading {
             if (n < 1) throw new Exception("n parameter must be greater than 0.");
             if (locMin > locMax)
                 throw new Exception($"locMin value ({locMin}) must be less than or " +
-                                    $"equal to locMax value ({locMax})");
+                                    $"equal to locMax value ({locMax}).");
             if (locMax - locMin < n)
                 throw new Exception($"Space between locMin ({locMin}) and " +
                                     $"locMax ({locMax} must be greater than or " +
-                                    $"equal to n ({n}).)");
-            if (rangeMins.Length != dim || rangeMaxes.Length != dim)
+                                    $"equal to n ({n})).");
+            if (rangeMins.Length < dim || rangeMaxes.Length < dim)
                 throw new Exception($"Sizes of arrays lowRanges ({rangeMins.Length}) " +
                                     $"and highRanges must equal dimensionality ({dim}).");
             for (int i = 0; i < dim; i++)
                 if (rangeMins[i] >= rangeMaxes[i])
                     throw new Exception($"Minimum ({rangeMins[i]}) in orthogonal range " +
                                         "search must be less than or equal to maximum " +
-                                        $"({rangeMaxes[i]}) in dimension {dim}");
+                                        $"({rangeMaxes[i]}) in dimension {dim}.");
             
             // Build range tree
 
             // List<CoordNode> newNodes = new List<CoordNode>();
-            // newNodes.Add(new CoordNode(1, 68));
-            // newNodes.Add(new CoordNode(2, 72));
-            // newNodes.Add(new CoordNode(3, 76));
-            // newNodes.Add(new CoordNode(4, 83));
+            // newNodes.Add(new CoordNode(56, 10, 79));
+            // newNodes.Add(new CoordNode(41, 30, 39));
+            // newNodes.Add(new CoordNode(70, 34, 41));
+            // newNodes.Add(new CoordNode(28, 42, 62));
+            // newNodes.Add(new CoordNode(76, 45, 83));
+            // newNodes.Add(new CoordNode(87, 52, 15));
+            // newNodes.Add(new CoordNode(49, 55, 18));
+            // newNodes.Add(new CoordNode(10, 61, 45));
+            // newNodes.Add(new CoordNode(50, 71, 67));
+            // newNodes.Add(new CoordNode(74, 83, 27));
             // CoordNode[] nodes = newNodes.ToArray();
 
-            CoordNode[] nodes = 
-                NodeGenerator.GetCoordNodeList(n, sort:false, dimensions:dim,
-                                               dataRangeMin:locMin, dataRangeMax:locMax,
-                                               locRangeMin:locMin, locRangeMax:locMax,
-                                               randomSeed:-1);
-            RangeTree rt = new RangeTree(nodes);
+            List<CoordNode> newNodes = new List<CoordNode>();
+            newNodes.Add(new CoordNode(1, 56, 61));
+            newNodes.Add(new CoordNode(2, 41, 22));
+            newNodes.Add(new CoordNode(3, 70, 50));
+            newNodes.Add(new CoordNode(4, 28, 31));
+            newNodes.Add(new CoordNode(5, 69, 38));
+            newNodes.Add(new CoordNode(6, 87, 44));
+            newNodes.Add(new CoordNode(7, 49, 53));
+            newNodes.Add(new CoordNode(8, 10, 54));
+            newNodes.Add(new CoordNode(9, 50, 55));
+            newNodes.Add(new CoordNode(10, 74, 71));
+            CoordNode[] nodes = newNodes.ToArray();
+
+            // CoordNode[] nodes = 
+            //     NodeGenerator.GetCoordNodeList(n, sort:false, dimensions:dim,
+            //                                    dataRangeMin:locMin, dataRangeMax:locMax,
+            //                                    locRangeMin:locMin, locRangeMax:locMax,
+            //                                    randomSeed:-1);
+            
+            ArrayUtils.PrintArray(nodes, sep: "\n");
+
+            RangeTree rt = new RangeTree(nodes, dim);
             
             // Print range tree in each dimension
             if (n <= 30) {
@@ -50,14 +72,14 @@ namespace Fractional_Cascading {
                 }
             }
 
+            // // Delete me - or maybe use as demo to show different next dim roots for each non leaf
             // // Print non leaf node and its next dimension pointer
             // Console.WriteLine("//////////");
-            // new MergeSortNodes().Sort(rt.GetRoot().GetCoordNodeList(), 2);
-            // ArrayUtils.PrintArray(rt.GetRoot().GetCoordNodeList());
-            // Console.WriteLine("----------");
-            // RangeTreeHelper.VisualizeTree(rt.GetRoot().Left(), 2, 10);
-            // Console.WriteLine("----------");
-            // RangeTreeHelper.VisualizeTree(rt.GetRoot().Left().NextDimRoot(), 2, 10);
+            // ArrayUtils.PrintArray(rt.GetRoot().Left().GetCoordNodeList(), sep :"\n");
+            // Console.WriteLine("---------- Dimension 1, root.Left()");
+            // RangeTreeHelper.VisualizeTree(rt.GetRoot().Left(), 1, 10);
+            // Console.WriteLine("\n\n---------- Dimension 2");
+            // RangeTreeHelper.VisualizeTree(rt.GetRoot().Left().NextDimRoot(), 1, 10);
             // Console.WriteLine("//////////");
 
             // Show orthogonal range search
@@ -74,6 +96,7 @@ namespace Fractional_Cascading {
                                   $"\ty: ({rangeMins[1]}, {rangeMaxes[1]}), " +
                                   $"\tz: ({rangeMins[2]}, {rangeMaxes[2]})");
             
+            // Delete me
             // int searchFor = rt.GetRoot().GetCoordNodeList()[3].GetAttr(1) + 1;
             // Console.WriteLine($"Searching for {searchFor}");
             // Console.WriteLine(rt.FindNode(rt.GetRoot(), searchFor));

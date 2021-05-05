@@ -3,8 +3,8 @@ using System.Text;
 
 namespace Fractional_Cascading {
     static class RangeTreeHelper {
-        public static string VisualizeTree(RangeTreeNode node, int verticalSpacing,
-                                           int indentPerLevel, bool print=true, 
+        public static string VisualizeTree(RangeTreeNode node, int verticalSpacing=2,
+                                           int indentPerLevel=10, bool print=true, 
                                            bool safeChars=true) {
             /**
             Parameters:
@@ -64,7 +64,7 @@ namespace Fractional_Cascading {
             string TraversePreOrder(RangeTreeNode root) {
                 
                 // Handle root
-                if (root == null) return "Empty binary tree.";
+                if (root == null) return "Empty range tree.";
                 StringBuilder sb = new StringBuilder();
                 sb.Append(root.VisualizerString());
 

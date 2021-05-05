@@ -68,6 +68,10 @@ namespace Fractional_Cascading {
             return Data;
         }
 
+        public CoordNode GetLastCoordNode() {
+            return Data[Data.Length - 1];
+        }
+
         public string VisualizerString(bool print=false) {
             /**
             Return visualization of array with each element separated by sep
