@@ -2,7 +2,7 @@ using System;
 
 namespace Fractional_Cascading {
     public static class ArrayUtils {
-        public static T[] ArraySubset<T>(this T[] array, int startIndex, int endIndex) {
+        public static T[] Subset<T>(this T[] array, int startIndex, int endIndex) {
             /**
             Copy elements in array between indexes startIndex & endindex (inclusive) into
             new array   */
@@ -15,8 +15,7 @@ namespace Fractional_Cascading {
             return subsetArray;
         }
 
-        public static string PrintArray<T>(this T[] array, bool print=true,
-                                           String sep=", ") {
+        public static string Print<T>(this T[] array, bool print=true, String sep=", ") {
             /**
             Return visualization of array with each element separated by sep
             Note that the type objects array contains must have a ToString method.  */

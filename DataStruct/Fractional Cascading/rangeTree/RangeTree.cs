@@ -23,9 +23,9 @@ namespace Fractional_Cascading {
                 root: the root of the current subtree in which we are searching
                 key:  the location value in the node for which we are searching
                 pathList: list containing (int, RangeTreeNode) to denote search route
-                            int = 0 -> recurse left, int = 1 -> recurse right
-                            RangeTreeNode - node on which we are recursing left or right
-                            (only populate this list if it is not null)   */
+                          int = 0 -> recurse left, int = 1 -> recurse right
+                          RangeTreeNode - node on which we are recursing left or right
+                          (only populate this list if it is not null)   */ 
 
             if (root.IsLeaf()) {
                 if (pathList != null) pathList.Add((-1, root));
@@ -48,16 +48,9 @@ namespace Fractional_Cascading {
             Parameters:
                 rangeMins: ith list represents the (inclusive) lower bound of dimension i
                 rangeMaxes: ith list represents the (inclusive) upper bound of dimension i
-                sortOnDataAfterQuery: if true, return nodes in range sorted on data
-                
-            NOTE: There is a rare edge case where a subtree stored during a low range
-                  traversal contains an element greater than highRange. I could not figure
-                  out how to solve this without walking through array. To see an example,
-                  input coordNodes with xLocations 68, 72, 76, 83 . */
+                sortOnDataAfterQuery: if true, return nodes in range sorted on data */
 
             // Instantiate a bunch of stuff
-            var outOfRangeNodes = new HashSet<CoordNode>();
-
             int x1 = rangeMins[0];
             int x2 = rangeMaxes[0];
             int y1 = -1;    int y2 = -1;    int z1 = -1;    int z2 = -1;
@@ -90,7 +83,9 @@ namespace Fractional_Cascading {
                 
                 Parameters:
                     root: the root of the subtree on which we are searching
-                    currDim: the current dimension in which we are searching    */
+                    currDim: the current dimension in which we are searching
+                    
+                Return: Canonical subsets of the subtree root which are in range    */
                 
                 int rangeMin, rangeMax;
                 var rangeMinPath = new List<(int, RangeTreeNode)>();
@@ -115,41 +110,38 @@ namespace Fractional_Cascading {
                     return (rangeMin <= data && data <= rangeMax);
                 }
 
+                bool rangeMaxNodeInRange;
+
                 // Find leftmost and rightmost nodes in range and populate path lists
                 // Note: rangeMaxNode will either be the smallest node with location
                 //       greater than lowRange or equal to it.
                 RangeTreeNode rangeMinNode = FindNode(root, rangeMin, rangeMinPath);
                 RangeTreeNode rangeMaxNode = FindNode(root, rangeMax, rangeMaxPath);
+                rangeMaxNodeInRange = InRange(rangeMaxNode.GetData());
 
                 // Find rangeSplitNode (node at which lowRange & highRange paths diverge)
-                int rangeSplitNodeIndex = 0;
+                int rangeSplitPathIndex = 0;
                 int shortestPathLen = u.Minimum(rangeMinPath.Count, rangeMaxPath.Count);
                 for (int i = 0; i < (shortestPathLen - 1); i++) {
-                    (int currentMinStep, RangeTreeNode currentMinNode) = rangeMinPath[i];
-                    (int currentMaxStep, RangeTreeNode currentMaxNode) = rangeMaxPath[i];
+                    (int minStep, RangeTreeNode currentMinNode) = rangeMinPath[i];
+                    (int maxStep, RangeTreeNode currentMaxNode) = rangeMaxPath[i];
                     
                     // in this case, currentMinNode == currentMaxNode
-                    if (currentMinStep == currentMaxStep && i < rangeMinPath.Count)
-                        rangeSplitNodeIndex = i;
+                    if (minStep == maxStep && i < rangeMinPath.Count)
+                        rangeSplitPathIndex = i;
                     else break;
                 }
 
                 // Delete me
-                Console.WriteLine("V SPLIT INDEX: " + rangeSplitNodeIndex);
+                Console.WriteLine("V SPLIT INDEX: " + rangeSplitPathIndex);
                 Console.WriteLine($"Min Tree Path: (dim {currDim})");
-                foreach((int direction, RangeTreeNode rt) in rangeMinPath)
-                    Console.WriteLine($"{direction} - {rt}");
+                foreach((int step, RangeTreeNode rt) in rangeMinPath)
+                    Console.WriteLine($"{step} - {rt}");
 
                 Console.WriteLine($"\nMax Tree Path: (dim {currDim})");
-                foreach((int direction, RangeTreeNode rt) in rangeMaxPath)
-                    Console.WriteLine($"{direction} - {rt}");
-                
-                if (currDim == 2) {
-                    Console.WriteLine("OH haaayy");
-                    RangeTreeHelper.VisualizeTree(root, 2, 10);
-                    Console.WriteLine("\n\n");
-                }
-                //////
+                foreach((int step, RangeTreeNode rt) in rangeMaxPath)
+                    Console.WriteLine($"{step} - {rt}");                
+                ////
 
                 // Find canonical subsets by separately traversing the left and right
                 // subtrees of rangeSplitNode
@@ -162,44 +154,64 @@ namespace Fractional_Cascading {
                     rangeMaxPath.GetRange(0, shortestPathLen))) {
                     
                     // Delete me
-                    Console.WriteLine("Paths do not diverge, will not look for " +
-                                      $"canonical subsets for high range (dim {currDim}).");
+                    Console.WriteLine(
+                        "Paths do not diverge, will not look for canonical subsets for " +
+                        $"high range (dim {currDim}).");
                     pathsDiverge = false;
                 }
                 
                 // Handle low range
-                // -> save coordNodes from right subtrees when path veers left
-                for (int i = rangeSplitNodeIndex + 1; i < rangeMinPath.Count; i++) {
-                    (int step, RangeTreeNode subtree) = rangeMinPath[i];
+                // -> check for edge case of one leaf node in path
+                // -> else save coordNodes from right subtrees when path veers left
+                if (rangeMinPath.Count == 1) {
+                    (int _, RangeTreeNode subtree) = rangeMinPath[0];
                     if (subtree.IsLeaf() && InRange(subtree.GetData()))
                         canonicalSubsets.Add(subtree);
-                    else if (step == 0 && subtree.Right() != null) {
-                        // CoordNode lastNode = subtree.Right().GetLastCoordNode();
-                        // if (lastNode.GetAttr(currDim) > highRange)
-                        //     outOfRangeNodes.Add(lastNode);
+                } else {
+                    bool lastLeft;
+                    for (int i = rangeSplitPathIndex + 1; i < rangeMinPath.Count; i++) {
+                        (int direction, RangeTreeNode subtree) = rangeMinPath[i];
+                        
+                        // Delete me
+                        Console.WriteLine($"\n\nDim {currDim} - Low range recursion on ");
+                        RangeTreeHelper.VisualizeTree(subtree);
+                        // 
 
-                        canonicalSubsets.Add(subtree.Right());
+                        if (subtree.IsLeaf() && InRange(subtree.GetData())) {
+                            canonicalSubsets.Add(subtree);
+                        } else if (direction == 0 && subtree.Right() != null) {
+                            canonicalSubsets.Add(subtree.Right());
+                        }
                     }
                 }
 
                 // Handle high range
+                // -> check for edge case of one leaf node in path
                 // -> save coordNodes from left subtrees when path veers right
-                if (pathsDiverge) { // Else we will have duplicates
-                    for (int i = rangeSplitNodeIndex + 1; i < rangeMaxPath.Count; i++) {
-                        (int step, RangeTreeNode subtree) = rangeMaxPath[i];
+                if (rangeMaxPath.Count == 1) {
+                    (int _, RangeTreeNode subtree) = rangeMaxPath[0];
+                    if (subtree.IsLeaf() && InRange(subtree.GetData()))
+                        canonicalSubsets.Add(subtree);
+                } else if (pathsDiverge) {  // Else we will have duplicates
+                    for (int i = rangeSplitPathIndex + 1; i < rangeMaxPath.Count; i++) {
+                        (int direction, RangeTreeNode subtree) = rangeMaxPath[i];
+
+                        // Delete me
+                        Console.WriteLine($"\n\nDim {currDim} - High range recursion on");
+                        RangeTreeHelper.VisualizeTree(subtree);
+                        //
                         
                         // At this point, last canonical subset may be the lowest element
                         // with location greater than rangeMax
                         if (subtree.IsLeaf() && InRange(subtree.GetData())) {
                             canonicalSubsets.Add(subtree);
-                        } else if (step == 1 && subtree.Left() != null) {
-                            // CoordNode lastNode = subtree.Left().GetLastCoordNode();
-                            // if (lastNode.GetAttr(currDim) > highRange)
-                            //     outOfRangeNodes.Add(lastNode);
-
+                        } else if (direction == 1 && subtree.Left() != null) {
                             canonicalSubsets.Add(subtree.Left());
                         }
                     }
+
+                    // Delete me
+                    // Console.WriteLine($"\n\nSUPPP - {currDim}\n{canonicalSubsets.Last().GetCoordNodeList().Last()}\n\\\\\\\n");
                 }
 
                 // Handle edge case where no nodes are in range
@@ -231,13 +243,6 @@ namespace Fractional_Cascading {
                 nodesInSearchRange.AddRange(rtNode.GetCoordNodeList());
             }
 
-            // // Complete me..
-            // var outOfRangeEnumerator = outOfRangeNodes.GetEnumerator();
-            // while (outOfRangeEnumerator.MoveNext()) {
-            //     Console.WriteLine("Removing: " + outOfRangeEnumerator.Current + "\t Dim:");
-            //     nodesInSearchRange.Remove(outOfRangeEnumerator.Current);
-            // }
-
             // Return
             CoordNode[] nodesInSearchRangeArray = nodesInSearchRange.ToArray();
             if (sortOnDataAfterQuery && nodesInSearchRangeArray.Length > 1)
@@ -253,9 +258,6 @@ namespace Fractional_Cascading {
             // Build range tree for next dimension
             if (currentDim < Dimensionality)
                 thisNode.SetNextDimRoot(BuildRangeTree(coordSubset, currentDim + 1));
-                
-            // Sort coordSubset based on location in currentDim
-            msn.Sort(coordSubset, currentDim);
 
             // Base case - check if leaf
             if (coordSubset.Length == 1) {
@@ -263,18 +265,21 @@ namespace Fractional_Cascading {
                 return thisNode;
             }
 
+            // Sort coordSubset based on location in currentDim
+            msn.Sort(coordSubset, currentDim);
+
             // Else recurse on left and right subsets of coordSubset
             int highestIndex = coordSubset.Length - 1;
             int midIndex = (int)Math.Floor((double)(highestIndex) / 2);
 
             CoordNode[] leftCoordSubset =     // Left side
-                ArrayUtils.ArraySubset(coordSubset, 0, midIndex);
+                ArrayUtils.Subset(coordSubset, 0, midIndex);
             RangeTreeNode leftChild = BuildRangeTree(leftCoordSubset, currentDim);
             thisNode.SetLeft(leftChild);
             leftChild.SetParent(thisNode);
 
             CoordNode[] rightCoordSubset =    // Right side
-                ArrayUtils.ArraySubset(coordSubset, midIndex + 1, highestIndex);
+                ArrayUtils.Subset(coordSubset, midIndex + 1, highestIndex);
             RangeTreeNode rightChild = BuildRangeTree(rightCoordSubset, currentDim);
             thisNode.SetRight(rightChild);
             rightChild.SetParent(thisNode);

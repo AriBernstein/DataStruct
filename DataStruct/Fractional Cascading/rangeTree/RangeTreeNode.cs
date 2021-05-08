@@ -52,10 +52,6 @@ namespace Fractional_Cascading {
             return RightChild;
         }
 
-        public int GetDim() {
-            return Dimension;
-        }
-
         public bool IsLeaf() {
             return Data.Length == 1;
         }
@@ -66,10 +62,6 @@ namespace Fractional_Cascading {
 
         public CoordNode[] GetCoordNodeList() {
             return Data;
-        }
-
-        public CoordNode GetLastCoordNode() {
-            return Data[Data.Length - 1];
         }
 
         public string VisualizerString(bool print=false) {
@@ -99,8 +91,8 @@ namespace Fractional_Cascading {
 
         public override string ToString() {
             if (IsLeaf()) return $"Leaf: {Data[0].ToString()}";
-            else return $"[Size: {Data.Length}, Index range: " +
-                        $"location range: ({Data[0].GetAttr(Dimension)}, " +
+            else return $"[Size: {Data.Length}, location range: " +
+                        $"({Data[0].GetAttr(Dimension)}, " +
                         $"{Data[Data.Length - 1].GetAttr(Dimension)})]";
         }
     }

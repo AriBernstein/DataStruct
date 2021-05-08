@@ -28,31 +28,31 @@ namespace Fractional_Cascading {
             
             // Build range tree
 
-            // List<CoordNode> newNodes = new List<CoordNode>();
-            // newNodes.Add(new CoordNode(56, 10, 79));
-            // newNodes.Add(new CoordNode(41, 30, 39));
-            // newNodes.Add(new CoordNode(70, 34, 41));
-            // newNodes.Add(new CoordNode(28, 42, 62));
-            // newNodes.Add(new CoordNode(76, 45, 83));
-            // newNodes.Add(new CoordNode(87, 52, 15));
-            // newNodes.Add(new CoordNode(49, 55, 18));
-            // newNodes.Add(new CoordNode(10, 61, 45));
-            // newNodes.Add(new CoordNode(50, 71, 67));
-            // newNodes.Add(new CoordNode(74, 83, 27));
-            // CoordNode[] nodes = newNodes.ToArray();
-
             List<CoordNode> newNodes = new List<CoordNode>();
-            newNodes.Add(new CoordNode(1, 56, 61));
-            newNodes.Add(new CoordNode(2, 41, 22));
-            newNodes.Add(new CoordNode(3, 70, 50));
-            newNodes.Add(new CoordNode(4, 28, 31));
-            newNodes.Add(new CoordNode(5, 69, 38));
-            newNodes.Add(new CoordNode(6, 87, 44));
-            newNodes.Add(new CoordNode(7, 49, 53));
-            newNodes.Add(new CoordNode(8, 10, 54));
-            newNodes.Add(new CoordNode(9, 50, 55));
-            newNodes.Add(new CoordNode(10, 74, 71));
+            newNodes.Add(new CoordNode(56, 10, 79));
+            newNodes.Add(new CoordNode(41, 30, 39));
+            newNodes.Add(new CoordNode(70, 50, 70));
+            newNodes.Add(new CoordNode(28, 51, 62));
+            newNodes.Add(new CoordNode(76, 45, 83));
+            newNodes.Add(new CoordNode(87, 52, 63));
+            newNodes.Add(new CoordNode(49, 55, 18));
+            newNodes.Add(new CoordNode(10, 61, 45));
+            newNodes.Add(new CoordNode(50, 70, 67));
+            newNodes.Add(new CoordNode(74, 83, 27));
             CoordNode[] nodes = newNodes.ToArray();
+
+            // List<CoordNode> newNodes = new List<CoordNode>();
+            // newNodes.Add(new CoordNode(1, 56, 61));
+            // newNodes.Add(new CoordNode(2, 41, 22));
+            // newNodes.Add(new CoordNode(3, 70, 50));
+            // newNodes.Add(new CoordNode(4, 28, 31));
+            // newNodes.Add(new CoordNode(5, 69, 38));
+            // newNodes.Add(new CoordNode(6, 87, 44));
+            // newNodes.Add(new CoordNode(7, 49, 53));
+            // newNodes.Add(new CoordNode(8, 10, 54));
+            // newNodes.Add(new CoordNode(9, 50, 55));
+            // newNodes.Add(new CoordNode(10, 74, 71));
+            // CoordNode[] nodes = newNodes.ToArray();
 
             // CoordNode[] nodes = 
             //     NodeGenerator.GetCoordNodeList(n, sort:false, dimensions:dim,
@@ -60,7 +60,7 @@ namespace Fractional_Cascading {
             //                                    locRangeMin:locMin, locRangeMax:locMax,
             //                                    randomSeed:-1);
             
-            ArrayUtils.PrintArray(nodes, sep: "\n");
+            ArrayUtils.Print(nodes, sep: "\n");
 
             RangeTree rt = new RangeTree(nodes, dim);
             
@@ -68,7 +68,7 @@ namespace Fractional_Cascading {
             if (n <= 30) {
                 for (int i = 1; i <= dim; i++) {
                     Console.WriteLine($"\n\nDimension {i} {u.Separator(85, 0)}");
-                    RangeTreeHelper.VisualizeTree(rt.GetRootByDimension(i), 2, 10);
+                    RangeTreeHelper.VisualizeTree(rt.GetRootByDimension(i), 1, 10);
                 }
             }
 
@@ -100,7 +100,7 @@ namespace Fractional_Cascading {
             // int searchFor = rt.GetRoot().GetCoordNodeList()[3].GetAttr(1) + 1;
             // Console.WriteLine($"Searching for {searchFor}");
             // Console.WriteLine(rt.FindNode(rt.GetRoot(), searchFor));
-            ArrayUtils.PrintArray(rt.OrthogonalRangeSearch(rangeMins, rangeMaxes), sep: "\n");
+            ArrayUtils.Print(rt.OrthogonalRangeSearch(rangeMins, rangeMaxes), sep: "\n");
         }
     }
 }
