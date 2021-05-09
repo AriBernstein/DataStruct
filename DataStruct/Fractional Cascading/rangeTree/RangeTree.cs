@@ -81,6 +81,17 @@ namespace Fractional_Cascading {
                 Return: Canonical subsets of the subtree root which are in range    */
                 
                 int rangeMin, rangeMax;
+                if (currDim == 1) {
+                    rangeMin = x1;
+                    rangeMax = x2;
+                } else if (currDim == 2) {
+                    rangeMin = y1;
+                    rangeMax = y2;
+                } else {
+                    rangeMin = z1;
+                    rangeMax = z2;
+                }
+
                 var rangeMinPath = new List<(int, RangeTreeNode)>();
                 var rangeMaxPath = new List<(int, RangeTreeNode)>();
 
@@ -88,14 +99,6 @@ namespace Fractional_Cascading {
                 // -> If current dimension is less than dimensionality, recurse on each.
                 // -> Else return canonical subset (representing nodes in final dimension)
                 var canonicalSubsets = new List<RangeTreeNode>();
-                
-                if (currDim == 1) {
-                    rangeMin = x1;  rangeMax = x2;
-                } else if (currDim == 2) {
-                    rangeMin = y1;  rangeMax = y2;
-                } else {
-                    rangeMin = z1;  rangeMax = z2;
-                }
 
                 bool InRange(int data) {
                     return (rangeMin <= data && data <= rangeMax);
@@ -109,52 +112,62 @@ namespace Fractional_Cascading {
                 //       greater than lowRange or equal to it.
                 RangeTreeNode rangeMinNode = FindNode(root, rangeMin, rangeMinPath);
                 RangeTreeNode rangeMaxNode = FindNode(root, rangeMax, rangeMaxPath);
+                bool pathsDiverge = rangeMinNode.GetData() != rangeMaxNode.GetData();
                 
                 // Delete me?
                 // rangeMaxNodeInRange = InRange(rangeMaxNode.GetData());
 
                 // Find rangeSplitNode (node at which lowRange & highRange paths diverge)
-                int rangeSplitPathIndex = 0;
-                int shortestPathLen = u.Minimum(rangeMinPath.Count, rangeMaxPath.Count);
-                for (int i = 0; i < (shortestPathLen - 1); i++) {
-                    (int minStep, RangeTreeNode currentMinNode) = rangeMinPath[i];
-                    (int maxStep, RangeTreeNode currentMaxNode) = rangeMaxPath[i];
-                    
-                    // in this case, currentMinNode == currentMaxNode
-                    if (minStep == maxStep && i < rangeMinPath.Count)
-                        rangeSplitPathIndex = i;
-                    else break;
+                int pathsDivergeIndex = 0;
+                if (!(pathsDiverge)) pathsDivergeIndex = rangeMinPath.Count - 2;
+                else {
+                    int shortestPathLen = u.Minimum(rangeMinPath.Count, rangeMaxPath.Count);
+                    for (int i = 0; i < shortestPathLen; i++) {
+                        (int minStep, RangeTreeNode currentMinNode) = rangeMinPath[i];
+                        (int maxStep, RangeTreeNode currentMaxNode) = rangeMaxPath[i];
+                        
+                        if (currentMinNode.IsLeaf() || currentMaxNode.IsLeaf()) break;
+                        else if (minStep == maxStep) pathsDivergeIndex = i + 1;
+                        else break;
+                    }
                 }
 
-                // // Delete me
-                // Console.WriteLine("V SPLIT INDEX: " + rangeSplitPathIndex);
-                // Console.WriteLine($"Min Tree Path: (dim {currDim})");
-                // foreach((int step, RangeTreeNode rt) in rangeMinPath)
-                //     Console.WriteLine($"{step} - {rt}");
+                // Delete me
+                Console.WriteLine($"\n\nV SPLIT INDEX: {pathsDivergeIndex}\t(dim {currDim})");
+                Console.WriteLine("\nMin tree root");
+                (_, RangeTreeNode rtn) = rangeMinPath[0];
+                RangeTreeHelper.VisualizeTree(rtn);
 
-                // Console.WriteLine($"\nMax Tree Path: (dim {currDim})");
-                // foreach((int step, RangeTreeNode rt) in rangeMaxPath)
-                //     Console.WriteLine($"{step} - {rt}");                
-                // ////
+                Console.WriteLine($"\nMin Tree Path:");
+                foreach((int step, RangeTreeNode rt) in rangeMinPath)
+                    Console.WriteLine($"{step} - {rt}");
+
+                Console.WriteLine("\nMax tree root");
+                (_, RangeTreeNode rt2) = rangeMaxPath[0];
+                RangeTreeHelper.VisualizeTree(rt2);
+                Console.WriteLine($"\nMax Tree Path:");
+                foreach((int step, RangeTreeNode rt) in rangeMaxPath)
+                    Console.WriteLine($"{step} - {rt}");                
+                ////
 
                 // Find canonical subsets by separately traversing the left and right
                 // subtrees of rangeSplitNode
 
-                // Check for edge cases
-                // 1. rangeMin = rangeMax
-                // 2. rangeMin and rangeMax paths are the same until they hit leaf nodes
-                bool pathsDiverge = true;
-                if (rangeMinNode.GetData() == rangeMaxNode.GetData() || (
-                    shortestPathLen > 1 &&
-                    rangeMinPath.GetRange(0, shortestPathLen).SequenceEqual(
-                    rangeMaxPath.GetRange(0, shortestPathLen)))) {
-                    
-                    // Delete me
-                    Console.WriteLine(
-                        "Paths do not diverge, will not look for canonical subsets for " +
-                        $"high range (dim {currDim}).");
-                    pathsDiverge = false;
-                }
+                // // Check for edge cases
+                // // 1. paths aren't identical
+                // // 2. rangeMin and rangeMax paths are the same until they hit leaf nodes
+                // bool pathsDiverge = true;
+                // // if (rangeMinNode.GetData() == rangeMaxNode.GetData() ||
+                // //     (shortestPathLen > 1 &&
+                // //     rangeMinPath.GetRange(0, shortestPathLen).SequenceEqual(
+                // //     rangeMaxPath.GetRange(0, shortestPathLen)))) {
+                // if (rangeMinNode.GetData() == rangeMaxNode.GetData()) {    
+                //     // Delete me
+                //     Console.WriteLine(
+                //         "Paths do not diverge, will not look for canonical subsets for " +
+                //         $"high range (dim {currDim}).");
+                //     pathsDiverge = false;
+                // }
                 
                 // Handle low range
                 // -> check for edge case of one leaf node in path
@@ -164,7 +177,7 @@ namespace Fractional_Cascading {
                     if (subtree.IsLeaf() && InRange(subtree.GetData()))
                         canonicalSubsets.Add(subtree);
                 } else {
-                    for (int i = rangeSplitPathIndex + 1; i < rangeMinPath.Count; i++) {
+                    for (int i = pathsDivergeIndex + 1; i < rangeMinPath.Count; i++) {
                         (int direction, RangeTreeNode subtree) = rangeMinPath[i];
                         
                         // Delete me
@@ -184,25 +197,29 @@ namespace Fractional_Cascading {
                 }
 
                 // Handle high range
-                // -> check for edge case of one leaf node in path
                 // -> save coordNodes from left subtrees when path veers right
-                if (rangeMaxPath.Count == 1 && pathsDiverge) {
-                    (int _, RangeTreeNode subtree) = rangeMaxPath[0];
-                    if (subtree.IsLeaf() && InRange(subtree.GetData()))
-                        canonicalSubsets.Add(subtree);
-                } else if (pathsDiverge) {  // Else we will have duplicates
-                    for (int i = rangeSplitPathIndex + 1; i < rangeMaxPath.Count; i++) {
-                        (int direction, RangeTreeNode subtree) = rangeMaxPath[i];
-
-                        // Delete me
-                        Console.WriteLine($"\n\nDim {currDim} - High range recursion on");
-                        RangeTreeHelper.VisualizeTree(subtree);
-                        //
-                    
-                        if (subtree.IsLeaf() && InRange(subtree.GetData())) {
+                // -> before doing this, ensure that paths aren't identical (ie all of the
+                //    work hasn't already been finished in low range traversal)
+                if (pathsDiverge) {
+                    if (rangeMaxPath.Count == 1) {
+                        // To avoid scenario where rightmost node is out of range
+                        (int _, RangeTreeNode subtree) = rangeMaxPath[0];
+                        if (subtree.IsLeaf() && InRange(subtree.GetData()))
                             canonicalSubsets.Add(subtree);
-                        } else if (direction == 1 && subtree.Left() != null) {
-                            canonicalSubsets.Add(subtree.Left());
+                    } else {
+                        for (int i = pathsDivergeIndex + 1; i < rangeMaxPath.Count; i++) {
+                            (int direction, RangeTreeNode subtree) = rangeMaxPath[i];
+
+                            // Delete me
+                            Console.WriteLine($"\n\nDim {currDim} - High range recursion on");
+                            RangeTreeHelper.VisualizeTree(subtree);
+                            //
+                        
+                            if (subtree.IsLeaf() && InRange(subtree.GetData())) {
+                                canonicalSubsets.Add(subtree);
+                            } else if (direction == 1 && subtree.Left() != null) {
+                                canonicalSubsets.Add(subtree.Left());
+                            }
                         }
                     }
                 }
@@ -240,6 +257,9 @@ namespace Fractional_Cascading {
             CoordNode[] nodesInSearchRangeArray = nodesInSearchRange.ToArray();
             if (sortOnDataAfterQuery && nodesInSearchRangeArray.Length > 1)
                 msn.Sort(nodesInSearchRangeArray, 0);
+            
+            // Delete me
+            Console.WriteLine("//////////\n\n");
             return nodesInSearchRangeArray;
         }
 
