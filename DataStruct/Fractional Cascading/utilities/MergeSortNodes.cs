@@ -49,10 +49,18 @@ namespace Fractional_Cascading {
         }
 
         public void Sort(Node[] unsortedArr, int sortAttributeCode) {
+            /**
+            Recursively sort unsortedArr on node.GetAttr(sortAttributeCode). Throw error
+            if unsortedArr is empty.    */
+
+            // Check if we should bother doing any work
             if (unsortedArr.Length == 0) throw new Exception("unsortedArr is empty");
+            if (unsortedArr.Length == 1) return;
+            
+            // Oh well...
             int lIndex = 0;
             int rIndex = unsortedArr.Length - 1;
-            MergeSort(unsortedArr, lIndex, rIndex, sortAttributeCode); 
+            MergeSort(unsortedArr, lIndex, rIndex, sortAttributeCode);             
         }
     }
 }

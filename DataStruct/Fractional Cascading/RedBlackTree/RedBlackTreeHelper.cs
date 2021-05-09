@@ -49,8 +49,8 @@ namespace Fractional_Cascading {
             } else if (order == 3) {
                 Console.Write("Postorder traversal: ");
                 PrintPostOrder(treeRoot);
-            } else throw new Exception($"Invalid order parameter {order} when "+
-                                       "calling traverse.");
+            } else throw new Exception(
+                $"Invalid order parameter {order} when calling traverse.");
             
             // store string & remove trailing comma & space
             String output = sw.ToString();

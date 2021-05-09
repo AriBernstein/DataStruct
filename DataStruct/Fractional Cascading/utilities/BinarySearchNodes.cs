@@ -14,8 +14,8 @@ namespace Fractional_Cascading {
                     attrCode:       node[i].getAttr(attrCode) returns the attrubute by
                                     which nodeArray is ordered
 
-                Return: index of searchValue in nodeArray, or -1 if node not found
-            */
+                Return: index of searchValue in nodeArray, or -1 if node not found  */
+                
             if (nodeArray.Length == 0)
                 throw new Exception("Attempting binarySearch on empty array");
             return BinarySearch(nodeArray, 0, nodeArray.Length-1, searchValue, attrCode);

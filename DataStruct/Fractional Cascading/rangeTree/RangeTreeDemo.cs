@@ -9,25 +9,35 @@ namespace Fractional_Cascading {
                              int insertXValue=-1, int insertYValue=-1,
                              int insertZValue=-1, int randomSeed=-1) {
             // Check arguments - if any are wrong, this can explode and I'm a pacifist
-            if (n < 1) throw new Exception("n parameter must be greater than 0.");
-            if (locMin > locMax)
-                throw new Exception($"locMin value ({locMin}) must be less than or " +
-                                    $"equal to locMax value ({locMax}).");
-            if (locMax - locMin < n)
-                throw new Exception($"Space between locMin ({locMin}) and " +
-                                    $"locMax ({locMax} must be greater than or " +
-                                    $"equal to n ({n})).");
-            if (rangeMins.Length < dim || rangeMaxes.Length < dim)
-                throw new Exception($"Sizes of arrays lowRanges ({rangeMins.Length}) " +
-                                    $"and highRanges must equal dimensionality ({dim}).");
-            for (int i = 0; i < dim; i++)
-                if (rangeMins[i] >= rangeMaxes[i])
-                    throw new Exception($"Minimum ({rangeMins[i]}) in orthogonal range " +
-                                        "search must be less than or equal to maximum " +
-                                        $"({rangeMaxes[i]}) in dimension {dim}.");
-            
+            if (n < 1) {
+                throw new Exception("n parameter must be greater than 0.");
+            } else if (locMin > locMax) {
+                throw new Exception(
+                    $"locMin value ({locMin}) must be less than or equal to locMax " +
+                    $"value ({locMax}).");
+            } else if (locMax - locMin < n) {
+                throw new Exception(
+                    $"Space between locMin ({locMin}) and locMax ({locMax} must be " +
+                    $"greater than or equal to n ({n})).");
+            } else if (rangeMins.Length != rangeMaxes.Length) {
+                throw new Exception(
+                    $"Sizes of arrays rangeMins ({rangeMins.Length}) and rangeMaxes " +
+                    $"({rangeMaxes.Length}) must be equal.");
+            } else if (rangeMins.Length < dim || rangeMaxes.Length < dim) {
+                throw new Exception(
+                    $"Sizes of arrays rangeMins and rangeMaxes ({rangeMins.Length}) " +
+                    $"must be less than or equal to dimensionality ({dim}).");
+            } else {
+                for (int i = 0; i < dim; i++) {
+                    if (rangeMins[i] >= rangeMaxes[i])
+                        throw new Exception(
+                            $"Minimum ({rangeMins[i]}) in orthogonal range search must " +
+                            $"be less than maximum ({rangeMaxes[i]}) - dimension {dim}.");
+                }
+            }
+                
             // Build range tree
-
+            // Test cases which failed during process
 
             // List<CoordNode> newNodes = new List<CoordNode>();
             // newNodes.Add(new CoordNode(56, 57, 78));
@@ -96,38 +106,36 @@ namespace Fractional_Cascading {
             if (n <= 30) {
                 for (int i = 1; i <= dim; i++) {
                     Console.WriteLine($"\n\nDimension {i} {u.Separator(85, 0)}");
-                    RangeTreeHelper.VisualizeTree(rt.GetRootByDimension(i), 1, 10);
+                    RangeTreeHelper.Visualize(rt.GetRootByDimension(i), 1, 10);
                 }
             }
 
-            // // Delete me - or maybe use as demo to show different next dim roots for each non leaf
-            // // Print non leaf node and its next dimension pointer
+            // Delete me - or maybe use as demo to show different next dim roots for each non leaf
+            // Print non leaf node and its next dimension pointer
             // Console.WriteLine("//////////");
             // ArrayUtils.PrintArray(rt.GetRoot().Left().GetCoordNodeList(), sep :"\n");
             // Console.WriteLine("---------- Dimension 1, root.Left()");
-            // RangeTreeHelper.VisualizeTree(rt.GetRoot().Left(), 1, 10);
+            // RangeTreeHelper.Visualize(rt.GetRoot().Left(), 1, 10);
             // Console.WriteLine("\n\n---------- Dimension 2");
-            // RangeTreeHelper.VisualizeTree(rt.GetRoot().Left().NextDimRoot(), 1, 10);
+            // RangeTreeHelper.Visualize(rt.GetRoot().Left().NextDimRoot(), 1, 10);
             // Console.WriteLine("//////////");
 
             // Show orthogonal range search
             Console.WriteLine(u.Separator());
             if (dim == 1) 
-                Console.WriteLine($"CoordNodes located in range: x: ({rangeMins[0]}, {rangeMaxes[0]})");
+                Console.WriteLine("CoordNodes located in range: " +
+                                  $"x: ({rangeMins[0]}, {rangeMaxes[0]})");
             if (dim == 2)
-                Console.WriteLine($"CoordNodes located in range:\n" +
+                Console.WriteLine("CoordNodes located in range:\n" +
                                   $"\tx: ({rangeMins[0]}, {rangeMaxes[0]}), " +
                                   $"\ty: ({rangeMins[1]}, {rangeMaxes[1]})");
             if (dim == 3)
-                Console.WriteLine($"CoordNodes located in range:\n" +
+                Console.WriteLine("CoordNodes located in range:\n" +
                                   $"\tx: ({rangeMins[0]}, {rangeMaxes[0]}), " +
                                   $"\ty: ({rangeMins[1]}, {rangeMaxes[1]}), " +
                                   $"\tz: ({rangeMins[2]}, {rangeMaxes[2]})");
             
-            // Delete me
-            // int searchFor = rt.GetRoot().GetCoordNodeList()[3].GetAttr(1) + 1;
-            // Console.WriteLine($"Searching for {searchFor}");
-            // Console.WriteLine(rt.FindNode(rt.GetRoot(), searchFor));
+            // Perform Search
             ArrayUtils.Print(rt.OrthogonalRangeSearch(rangeMins, rangeMaxes), sep: "\n");
         }
     }

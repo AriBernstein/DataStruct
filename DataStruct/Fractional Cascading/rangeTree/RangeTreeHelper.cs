@@ -3,9 +3,9 @@ using System.Text;
 
 namespace Fractional_Cascading {
     static class RangeTreeHelper {
-        public static string VisualizeTree(RangeTreeNode node, int verticalSpacing=2,
-                                           int indentPerLevel=10, bool print=true, 
-                                           bool safeChars=true) {
+        public static string Visualize(RangeTreeNode node, int verticalSpacing=2,
+                                       int indentPerLevel=10, bool print=true, 
+                                       bool safeChars=true) {
             /**
             Parameters:
                 node:   RBTree node treated as the root in the visualization

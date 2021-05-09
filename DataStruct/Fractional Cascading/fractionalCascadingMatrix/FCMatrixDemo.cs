@@ -35,8 +35,11 @@ namespace Fractional_Cascading {
             Console.WriteLine(u.Separator(12, newLinesBelow:0));
             Console.WriteLine("n: " + n + ", " + "\tk: " + k + "\tx: " + x);
             Console.WriteLine($"Execution Time of trivial solution: {trivialMS} ms");
-            Console.WriteLine($"Execution Time of fractional cascading solution: {fcMS} ms");
-            Console.WriteLine($"Ratio of duration of FC solution vs trivial: {(float)fcMS / trivialMS}\n\n");
+            Console.WriteLine(
+                $"Execution Time of fractional cascading solution: {fcMS} ms");
+            Console.WriteLine(
+                "Ratio of duration of FC solution vs trivial: " +
+                $"{(float)fcMS / trivialMS}\n\n");
         }
 
         public void CSV_Loop(String CSVFileName,
@@ -59,7 +62,7 @@ namespace Fractional_Cascading {
                         watch.Start();
                         fcmq.TrivialSolution(x);
                         watch.Stop();
-                        float trivTime = watch.ElapsedMilliseconds;
+                        float trivialTime = watch.ElapsedMilliseconds;
                         
                         // Fractional Cascading solution
                         watch.Reset();
@@ -67,11 +70,12 @@ namespace Fractional_Cascading {
                         fcmq.FractionalCascadeSearch(x);
                         watch.Stop();
                         float FCTime = watch.ElapsedMilliseconds;
-                        float ratio = FCTime / trivTime;
+                        float ratio = FCTime / trivialTime;
 
-                        Record rec = new Record(n, k, x, trivTime, FCTime, ratio);
-                        Console.WriteLine($"\n\nn: {n}\tk: {k}\tx: {x}\nTrivial: " +
-                            $"{trivTime} ms\tFC: {FCTime} ms\tFC:Trivial Ratio: {ratio}");
+                        Record rec = new Record(n, k, x, trivialTime, FCTime, ratio);
+                        Console.WriteLine(
+                            $"\n\nn: {n}\tk: {k}\tx: {x}\nTrivial: {trivialTime} ms\t " + 
+                            $"FC: {FCTime} ms\tFC:Trivial Ratio: {ratio}");
                         fractionalCascadingStats.Add(rec);
                 }
             }

@@ -125,8 +125,8 @@ namespace Fractional_Cascading {
             NodeMatrixPrime = new FCNode[k][];
             
             // Convert coordNodes -> FCNodes
-            if (print) Console.WriteLine("Instantiating (not-yet-promoted) FCNodes " +
-                                        "from coordNode data.");
+            if (print) Console.WriteLine(
+                "Instantiating (not-yet-promoted) FCNodes from coordNode data.");
             for (int i = 0; i < k; i++) {
                 NodeMatrixPrime[i] = new FCNode[n];
                 for (int j = 0; j < n; j++) {
@@ -137,8 +137,8 @@ namespace Fractional_Cascading {
             }
             
             // Begin Fractional Cascading Transformation
-            if (print) Console.WriteLine("Performing Fractional Cascading transformation" +
-                                        " on FCNode matrix.");
+            if (print) Console.WriteLine(
+                "Performing Fractional Cascading transformation on FCNode matrix.");
 
             // Perform transformation on all lists in reverse order
             // Re. i = (k-2): as nodes are always promoted from higher dimensions into
@@ -191,9 +191,9 @@ namespace Fractional_Cascading {
             
             // Convert coordNodeMatrix to one of FCNodes, assign as nodeMatrix
             // -> start with matrix of coordNodes sorted by their location (xLoc)
-            if (print) Console.WriteLine($"Generating matrix of {k} sorted lists of {n}" +
-                                         " randomly generated coordNodes (totalling " +
-                                         $"{new Utils().PrettyNumApprox(k*n)} nodes).");
+            if (print) Console.WriteLine(
+                $"Generating matrix of {k} sorted lists of {n} randomly generated " +
+                $"coordNodes (totalling {new Utils().PrettyNumApprox(k*n)} nodes).");
             SetCoordMatrix(insertData);
 
             // Build and assign nodeMatrixPrime from just-assigned nodeMatrix
