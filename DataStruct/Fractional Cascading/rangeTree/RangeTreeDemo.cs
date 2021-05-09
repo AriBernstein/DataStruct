@@ -66,18 +66,18 @@ namespace Fractional_Cascading {
             // newNodes.Add(new CoordNode(74, 66, 39));
             // CoordNode[] nodes = newNodes.ToArray();
 
-            // List<CoordNode> newNodes = new List<CoordNode>();
-            // newNodes.Add(new CoordNode(56, 10, 79));
-            // newNodes.Add(new CoordNode(41, 30, 39));
-            // newNodes.Add(new CoordNode(70, 50, 70)); //
-            // newNodes.Add(new CoordNode(28, 51, 62)); //
-            // newNodes.Add(new CoordNode(76, 45, 83));
-            // newNodes.Add(new CoordNode(87, 52, 63)); //
-            // newNodes.Add(new CoordNode(49, 55, 18));
-            // newNodes.Add(new CoordNode(10, 61, 45));
-            // newNodes.Add(new CoordNode(50, 70, 67)); // 
-            // newNodes.Add(new CoordNode(74, 83, 27));
-            // CoordNode[] nodes = newNodes.ToArray();
+            List<CoordNode> newNodes = new List<CoordNode>();
+            newNodes.Add(new CoordNode(56, 10, 79));
+            newNodes.Add(new CoordNode(41, 30, 39));
+            newNodes.Add(new CoordNode(70, 50, 70)); //
+            newNodes.Add(new CoordNode(28, 51, 62)); //
+            newNodes.Add(new CoordNode(76, 45, 83));
+            newNodes.Add(new CoordNode(87, 52, 63)); //
+            newNodes.Add(new CoordNode(49, 55, 18));
+            newNodes.Add(new CoordNode(10, 61, 45));
+            newNodes.Add(new CoordNode(50, 70, 67)); // 
+            newNodes.Add(new CoordNode(74, 83, 27));
+            CoordNode[] nodes = newNodes.ToArray();
 
             // List<CoordNode> newNodes = new List<CoordNode>();
             // newNodes.Add(new CoordNode(1, 56, 61)); //
@@ -92,11 +92,11 @@ namespace Fractional_Cascading {
             // newNodes.Add(new CoordNode(10, 74, 71));
             // CoordNode[] nodes = newNodes.ToArray();
 
-            CoordNode[] nodes = 
-                NodeGenerator.GetCoordNodeList(n, sort:false, dimensions:dim,
-                                               dataRangeMin:locMin, dataRangeMax:locMax,
-                                               locRangeMin:locMin, locRangeMax:locMax,
-                                               randomSeed:-1);
+            // CoordNode[] nodes = 
+            //     NodeGenerator.GetCoordNodeList(n, sort:false, dimensions:dim,
+            //                                    dataRangeMin:locMin, dataRangeMax:locMax,
+            //                                    locRangeMin:locMin, locRangeMax:locMax,
+            //                                    randomSeed:-1);
             
             ArrayUtils.Print(nodes, sep: "\n");
 
@@ -106,19 +106,19 @@ namespace Fractional_Cascading {
             if (n <= 30) {
                 for (int i = 1; i <= dim; i++) {
                     Console.WriteLine($"\n\nDimension {i} {u.Separator(85, 0)}");
-                    RangeTreeHelper.Visualize(rt.GetRootByDimension(i), 1, 10);
+                    RangeTreeHelper.Visualize(rt.GetRootByDimension(i), 0, 10);
                 }
             }
 
             // Delete me - or maybe use as demo to show different next dim roots for each non leaf
             // Print non leaf node and its next dimension pointer
-            // Console.WriteLine("//////////");
-            // ArrayUtils.PrintArray(rt.GetRoot().Left().GetCoordNodeList(), sep :"\n");
-            // Console.WriteLine("---------- Dimension 1, root.Left()");
-            // RangeTreeHelper.Visualize(rt.GetRoot().Left(), 1, 10);
-            // Console.WriteLine("\n\n---------- Dimension 2");
-            // RangeTreeHelper.Visualize(rt.GetRoot().Left().NextDimRoot(), 1, 10);
-            // Console.WriteLine("//////////");
+            Console.WriteLine("//////////");
+            ArrayUtils.Print(rt.GetRoot().Left().GetCoordNodeList(), sep :"\n");
+            Console.WriteLine("---------- Dimension 1, root.Left()");
+            RangeTreeHelper.Visualize(rt.GetRoot().Left(), 0, 10);
+            Console.WriteLine("\n\n---------- Dimension 2");
+            RangeTreeHelper.Visualize(rt.GetRoot().Left().NextDimRoot(), 0, 10);
+            Console.WriteLine("//////////");
 
             // Show orthogonal range search
             Console.WriteLine(u.Separator());

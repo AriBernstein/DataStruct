@@ -19,14 +19,15 @@ namespace Fractional_Cascading {
             return Root;
         }
 
-        public RangeTreeNode FindNode(RangeTreeNode root, int data,
+        public RangeTreeNode FindNode(RangeTreeNode root, int target,
                                       List<(int, RangeTreeNode)> pathList=null) {
             /**
             Search RangeTreeNode for node with Location value of key or its successor
             
             Parameters:
                 root: the root of the current subtree in which we are searching
-                data:  the location value in the node for which we are searching
+                target: the location value in the current dimension node for which we are
+                        searching
                 pathList: list containing (int, RangeTreeNode) to denote search route
                           int = 0 -> recurse left, int = 1 -> recurse right
                           RangeTreeNode - node on which we are recursing left or right
@@ -35,12 +36,12 @@ namespace Fractional_Cascading {
             if (root.IsLeaf()) {
                 if (pathList != null) pathList.Add((-1, root));
                 return root;
-            } else if (data <= root.GetData()) {
+            } else if (target <= root.GetData()) {
                 if (pathList != null) pathList.Add((left, root));
-                return FindNode(root.Left(), data, pathList);
+                return FindNode(root.Left(), target, pathList);
             } else {
                 if (pathList != null) pathList.Add((right, root));
-                return FindNode(root.Right(), data, pathList);
+                return FindNode(root.Right(), target, pathList);
             }
         }
 
@@ -60,7 +61,7 @@ namespace Fractional_Cascading {
                 Helper function responsible for most of the search functionality.
                 
                 Parameters:
-                    root: the root of the subtree on which we are searching
+                    root: the root of the subtree in which we are searching
                     currDim: the current dimension in which we are searching
                     
                 Return: Canonical subsets of the subtree root which are in range    */
@@ -77,14 +78,6 @@ namespace Fractional_Cascading {
                     rangeMax = rangeMaxes[1];
                 }
 
-                var rangeMinPath = new List<(int, RangeTreeNode)>();
-                var rangeMaxPath = new List<(int, RangeTreeNode)>();
-
-                // Lists of RangeTreeNodes representing canonical subsets
-                // -> If current dimension is less than dimensionality, recurse on each.
-                // -> Else return canonical subset (representing nodes in final dimension)
-                var canonicalSubsets = new List<RangeTreeNode>();
-
                 bool InRange(int data) {
                     return (rangeMin <= data && data <= rangeMax);
                 }
@@ -92,6 +85,8 @@ namespace Fractional_Cascading {
                 // Find leftmost and rightmost nodes in range and populate path lists
                 // Note: rangeMaxNode will either be the smallest node with location
                 //       greater than lowRange or equal to it.
+                var rangeMinPath = new List<(int, RangeTreeNode)>();
+                var rangeMaxPath = new List<(int, RangeTreeNode)>();
                 RangeTreeNode rangeMinNode = FindNode(root, rangeMin, rangeMinPath);
                 RangeTreeNode rangeMaxNode = FindNode(root, rangeMax, rangeMaxPath);
                 bool pathsDiverge = rangeMinNode.GetData() != rangeMaxNode.GetData();
@@ -112,6 +107,10 @@ namespace Fractional_Cascading {
                     }
                 }
 
+                // Lists of RangeTreeNodes representing canonical subsets
+                // -> If current dimension is less than dimensionality, recurse on each.
+                // -> Else return canonical subset (representing nodes in final dimension)
+                var canonicalSubsets = new List<RangeTreeNode>();
 
                 // Find canonical subsets by separately traversing the left and right
                 // subtrees of rangeSplitNode
@@ -163,8 +162,7 @@ namespace Fractional_Cascading {
 
                 // Handle edge case where no nodes are in range
                 if (canonicalSubsets.Count == 1 && canonicalSubsets[0].IsLeaf()) {
-                    int singleNodeLocation = canonicalSubsets[0].GetData();
-                    if (!(InRange(singleNodeLocation)))
+                    if (!(InRange(canonicalSubsets[0].GetData())))
                         canonicalSubsets = new List<RangeTreeNode>();
                 }
 
