@@ -12,19 +12,21 @@ namespace Fractional_Cascading {
         // Global variables
         private int Dimensionality;
         private RangeTreeNode Root; // Of lowest dimension
+        private readonly int left = 0;  // represent direction in traversal paths
+        private readonly int right = 1;
         
         public RangeTreeNode GetRoot() {
             return Root;
         }
 
-        public RangeTreeNode FindNode(RangeTreeNode root, int key,
+        public RangeTreeNode FindNode(RangeTreeNode root, int data,
                                       List<(int, RangeTreeNode)> pathList=null) {
             /**
             Search RangeTreeNode for node with Location value of key or its successor
             
             Parameters:
                 root: the root of the current subtree in which we are searching
-                key:  the location value in the node for which we are searching
+                data:  the location value in the node for which we are searching
                 pathList: list containing (int, RangeTreeNode) to denote search route
                           int = 0 -> recurse left, int = 1 -> recurse right
                           RangeTreeNode - node on which we are recursing left or right
@@ -33,12 +35,12 @@ namespace Fractional_Cascading {
             if (root.IsLeaf()) {
                 if (pathList != null) pathList.Add((-1, root));
                 return root;
-            } else if (key <= root.GetData()) {
-                if (pathList != null) pathList.Add((0, root));
-                return FindNode(root.Left(), key, pathList);
+            } else if (data <= root.GetData()) {
+                if (pathList != null) pathList.Add((left, root));
+                return FindNode(root.Left(), data, pathList);
             } else {
-                if (pathList != null) pathList.Add((1, root));
-                return FindNode(root.Right(), key, pathList);
+                if (pathList != null) pathList.Add((right, root));
+                return FindNode(root.Right(), data, pathList);
             }
         }
 
@@ -96,8 +98,9 @@ namespace Fractional_Cascading {
 
                 // Find rangeSplitNode (node at which lowRange & highRange paths diverge)
                 int pathsDivergeIndex = 0;
-                if (!(pathsDiverge)) pathsDivergeIndex = rangeMinPath.Count - 2;
-                else {
+                if (!(pathsDiverge)) {
+                    pathsDivergeIndex = rangeMinPath.Count - 2;
+                } else {
                     int shortestPathLen = u.Minimum(rangeMinPath.Count, rangeMaxPath.Count);
                     for (int i = 0; i < shortestPathLen; i++) {
                         (int minStep, RangeTreeNode currentMinNode) = rangeMinPath[i];
@@ -129,7 +132,7 @@ namespace Fractional_Cascading {
                             canonicalSubsets.Add(subtree);
 
                         // Regular case
-                        } else if (direction == 0 && subtree.Right() != null) {
+                        } else if (direction == left && subtree.Right() != null) {
                             canonicalSubsets.Add(subtree.Right());
                         }
                     }
@@ -151,7 +154,7 @@ namespace Fractional_Cascading {
                         
                             if (subtree.IsLeaf() && InRange(subtree.GetData())) {
                                 canonicalSubsets.Add(subtree);
-                            } else if (direction == 1 && subtree.Left() != null) {
+                            } else if (direction == right && subtree.Left() != null) {
                                 canonicalSubsets.Add(subtree.Left());
                             }
                         }
@@ -192,23 +195,23 @@ namespace Fractional_Cascading {
             return nodesInSearchRangeArray;
         }
 
-        private RangeTreeNode BuildRangeTree(CoordNode[] coordSubset, int currentDim) {
+        private RangeTreeNode BuildRangeTree(CoordNode[] coordSubset, int currDim) {
 
             // Instantiate current Node
-            RangeTreeNode thisNode = new RangeTreeNode(coordSubset, currentDim);
+            RangeTreeNode thisNode = new RangeTreeNode(coordSubset, currDim);
 
             // Build range tree for next dimension
-            if (currentDim < Dimensionality)
-                thisNode.SetNextDimRoot(BuildRangeTree(coordSubset, currentDim + 1));
+            if (currDim < Dimensionality)
+                thisNode.SetNextDimRoot(BuildRangeTree(coordSubset, currDim + 1));
 
             // Base case - check if leaf
             if (coordSubset.Length == 1) {
-                thisNode.SetLocation(thisNode.GetCoordNodeList()[0].GetAttr(currentDim));
+                thisNode.SetLocation(thisNode.GetCoordNodeList()[0].GetAttr(currDim));
                 return thisNode;
             }
 
-            // Sort coordSubset based on location in currentDim
-            msn.Sort(coordSubset, currentDim);
+            // Sort coordSubset based on location in currDim
+            msn.Sort(coordSubset, currDim);
 
             // Else recurse on left and right subsets of coordSubset
             int highestIndex = coordSubset.Length - 1;
@@ -216,19 +219,19 @@ namespace Fractional_Cascading {
 
             CoordNode[] leftCoordSubset =     // Left side
                 ArrayUtils.Subset(coordSubset, 0, midIndex);
-            RangeTreeNode leftChild = BuildRangeTree(leftCoordSubset, currentDim);
+            RangeTreeNode leftChild = BuildRangeTree(leftCoordSubset, currDim);
             thisNode.SetLeft(leftChild);
             leftChild.SetParent(thisNode);
 
             CoordNode[] rightCoordSubset =    // Right side
                 ArrayUtils.Subset(coordSubset, midIndex + 1, highestIndex);
-            RangeTreeNode rightChild = BuildRangeTree(rightCoordSubset, currentDim);
+            RangeTreeNode rightChild = BuildRangeTree(rightCoordSubset, currDim);
             thisNode.SetRight(rightChild);
             rightChild.SetParent(thisNode);
 
             // Sort value = highest location in leftChild subtree
             int sortAttribute =
-                leftCoordSubset[leftCoordSubset.Length - 1].GetAttr(currentDim);
+                leftCoordSubset[leftCoordSubset.Length - 1].GetAttr(currDim);
             thisNode.SetLocation(sortAttribute);
 
             return thisNode;
