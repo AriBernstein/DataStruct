@@ -11,26 +11,36 @@ namespace Fractional_Cascading {
         }
 
         public int RoundInt(int num, int place) {
-            return (num + 50) / place * place;
+            /**
+            Round an integer to the nearest place.
+            ie. num = 543, place = 1, return 500
+                           place = 2, return 550    */
+
+            int numDigits = (int)Math.Floor(Math.Log((double)num, 10)) + 1;
+            int roundingDenominator = Int32.Parse("1" + new String('0', (numDigits)));
+            double tempNum = (double)num / roundingDenominator;
+            return (int)(Math.Round(tempNum, place) * roundingDenominator);
         }
         
         public string PrettyNumApprox(int n) {
             /**
             Generate string with approximation of large number
-            ex. n = 5001243, return "5 million" */
+            ex. n = 5001243, return "5 million"
+            ex. n = 5901243, return "6 million" */
             double num = (double)n;
 
-            if (num <= 9999) return num.ToString();   // to small for this
+            if (num <= 999) return num.ToString();   // to small for this
             
             double numDigits = Math.Floor(Math.Log(num, 10)) + 1;
             double numLeadingVals = numDigits % 3;
             
             // Round num to the nearest place that would affect the leading vals, update n
             double numTrailingVals = (int)(numDigits - numLeadingVals);
-            n = RoundInt(n, Int32.Parse('1' + new String('0', (int)numTrailingVals -1)));
             numDigits = Math.Floor(Math.Log(num, 10)) + 1;
             numLeadingVals = numDigits % 3;
             numTrailingVals = numDigits - numLeadingVals;
+            n = RoundInt(n, (int)numLeadingVals);
+            
 
             // Handle case where numDigits is evenly divisible by three
             if (numLeadingVals == 0) numLeadingVals = 3;
