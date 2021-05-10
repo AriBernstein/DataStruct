@@ -27,8 +27,8 @@ namespace Fractional_Cascading {
             watch.Reset();
             watch.Start();
             if (k <= 100)
-                u.PrintDataLocationDict(fcmq.FractionalCascadeSearch(x), x.ToString());
-            else fcmq.FractionalCascadeSearch(x);
+                u.PrintDataLocationDict(fcmq.FractionalCascadingSearch(x), x.ToString());
+            else fcmq.FractionalCascadingSearch(x);
             watch.Stop();
             int fcMS = (int)watch.ElapsedMilliseconds;
 
@@ -67,7 +67,7 @@ namespace Fractional_Cascading {
                         // Fractional Cascading solution
                         watch.Reset();
                         watch.Start();
-                        fcmq.FractionalCascadeSearch(x);
+                        fcmq.FractionalCascadingSearch(x);
                         watch.Stop();
                         float FCTime = watch.ElapsedMilliseconds;
                         float ratio = FCTime / trivialTime;

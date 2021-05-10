@@ -42,7 +42,7 @@ namespace Fractional_Cascading {
 
             // Nested function to handle pointer assignment
             FCNode lastPromotedNode = null;    FCNode lastNotPromotedNode = null;
-            void setPointers(FCNode currentNode) {
+            void SetPointers(FCNode currentNode) {
                 // Assign prev and next pointers to closest non-promoted nodes
                 if (currentNode.IsPromoted()) {
                     lastPromotedNode = currentNode;
@@ -65,9 +65,7 @@ namespace Fractional_Cascading {
             // Instantiate promoted list
             int numPromotedNodes =
                     (int)(Math.Ceiling(FCNodeList2.Length / (double)unitFracDen));
-
-            int FCNodeListPrimeSize = n + numPromotedNodes;       
-            FCNode[] FCNodeListPrime = new FCNode[FCNodeListPrimeSize];
+            FCNode[] FCNodeListPrime = new FCNode[n + numPromotedNodes];
 
             // Populate w/ every 2nd elem in FCNodeList2 to be merged into FCNodeListPrime
             FCNode[] nodesToPromote = new FCNode[numPromotedNodes];
@@ -94,19 +92,19 @@ namespace Fractional_Cascading {
                     FCNodeListPrime[j] = FCNodeList1[d++].MakeCopy();
                 } else FCNodeListPrime[j] = nodesToPromote[c++];
                 
-                setPointers(FCNodeListPrime[j]);
+                SetPointers(FCNodeListPrime[j]);
                 j++;
             }
 
             // Add leftover values to augmented list:
             while(c < nodesToPromote.Length) {
                 FCNodeListPrime[j] = nodesToPromote[c++];
-                setPointers(FCNodeListPrime[j]);
+                SetPointers(FCNodeListPrime[j]);
                 j++;
             }
             while(d < n) {
                 FCNodeListPrime[j] = FCNodeList1[d++].MakeCopy();
-                setPointers(FCNodeListPrime[j]);
+                SetPointers(FCNodeListPrime[j]);
                 j++;
             }
 
@@ -120,7 +118,7 @@ namespace Fractional_Cascading {
 
             Parameter:
                 unitFracDen: denominator of the unit fraction indicating the size of the
-                             subset promoted list (d-1)' into list d'   */
+                             subset of promoted list (d-1)' into list d'   */
 
             NodeMatrixPrime = new FCNode[k][];
             

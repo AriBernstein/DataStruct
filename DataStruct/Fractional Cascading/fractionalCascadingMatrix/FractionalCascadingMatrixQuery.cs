@@ -12,10 +12,11 @@ namespace Fractional_Cascading {
         
         private CoordNode[][] InputCoordMatrix;
         private FCNode[][] NodeMatrixPrime;
-        private int n; // number of elements in each list in nodeMatrix
-        private int k; // number of lists
+        private readonly int n; // number of elements in each list in nodeMatrix
+        private readonly int k; // number of lists
+        private readonly int nLimit; // if n > nLimit, do not save locations from search
 
-        public Dictionary<int, int> TrivialSolution(int data) {
+        public Dictionary<int, int> TrivialSolution(int location) {
             /**
             Iterate through each list of coordinate nodes, perform binary
             search to find index holding node with data, extract location
@@ -26,12 +27,12 @@ namespace Fractional_Cascading {
             BinarySearchNodes bsn = new BinarySearchNodes();
             for (int i = 0; i < k; i++) {
                 CoordNode[] arr = InputCoordMatrix[i];
-                int nodeIndex = bsn.BinarySearch(arr, data, 0);
+                int nodeIndex = bsn.BinarySearch(arr, location, 0);
                 int nodeData = arr[nodeIndex].GetAttr(1);
                 
                 // Memory issues, this is a stupid amount of space especially
                 // when we're only trying to record function timing
-                if (k < 10000) locationsOfData.Add(i + 1, nodeData);
+                if (k < nLimit) locationsOfData.Add(i + 1, nodeData);
             }
 
             return locationsOfData;
@@ -90,7 +91,7 @@ namespace Fractional_Cascading {
         }
 
 
-        public Dictionary<int, int> FractionalCascadeSearch(int data) {
+        public Dictionary<int, int> FractionalCascadingSearch(int data) {
             /**
             Perform binary search to find data in first dimension. Then iteratively use
             the previous and/or next pointers to search the (tiny) range of the next
@@ -109,7 +110,7 @@ namespace Fractional_Cascading {
             dataIndex = bsn.BinarySearch(NodeMatrixPrime[0], data, 0);
             dataNode = NodeMatrixPrime[0][dataIndex];
             
-            // Ensure that dataNode is in the correct dimension - if not check neghbors
+            // Ensure that dataNode is in the correct dimension - if not check neighbors
             if (dataNode.GetDim() != currentDim) {
                 FCNode next = dataNode.GetNextPointer();
                 FCNode prev = dataNode.GetPrevPointer();
@@ -126,17 +127,16 @@ namespace Fractional_Cascading {
                 }
             }
 
-            if (k < 10000) // This takes up too much memory
+            if (k < nLimit) // This takes up too much memory
                 // Assign first dimension location in return dictionary
                 locationsOfData[currentDim] = dataNode.GetAttr(1);
 
             for (int i = 1; i < NodeMatrixPrime.Length; i++) {
                 // Walk through promoted node pointers, starting with the list 2' until
-                // list (k-1)', then do a final check on list k (not prime)
-                // -> This logic is handled in findNodeFromPointerRange
+                // list (k)'
                 currentDim++ ;
                 dataNode = FindNodeFromPointerRange(dataNode, currentDim);
-                locationsOfData[currentDim] = dataNode.GetAttr(1);
+                if (k < nLimit) locationsOfData[currentDim] = dataNode.GetAttr(1);
             }
 
             return locationsOfData;
@@ -149,6 +149,7 @@ namespace Fractional_Cascading {
             FractionalCascadingMatrix fcm;
             n = numValsPerList;
             k = numLists;
+            nLimit = 10000;
             fcm = new FractionalCascadingMatrix(n, k, insertData: insertData, print:print,
                                                 randNodeAttrOrders: randNodeAttrOrders);
             InputCoordMatrix = fcm.GetInputCoordMatrix();
