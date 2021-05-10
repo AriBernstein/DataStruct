@@ -22,7 +22,7 @@ namespace Fractional_Cascading {
         which make for faster insertion and deletion.   */
 
         private RBTreeNode Root = null;
-        private RBTreeNode EmptyNode = new RBTreeNode();
+        private readonly RBTreeNode Leaf = new RBTreeNode(); // Empty node colored BLACK
         private RBTreeHelper h = new RBTreeHelper();
 
         private void RotateRight(RBTreeNode y) {
@@ -141,8 +141,8 @@ namespace Fractional_Cascading {
                         RotateRight(node.Parent());
                         s = node.Parent().Left();
                     }
-                    if (s.Right() == null) s.SetRight(EmptyNode);
-                    if (s.Left() == null) s.SetLeft(EmptyNode);
+                    if (s.Right() == null) s.SetRight(Leaf);
+                    if (s.Left() == null) s.SetLeft(Leaf);
                     if (s.Right().IsBlack() && s.Left().IsBlack()) {
                         s.SetRed();
                         node = node.Parent();
@@ -189,13 +189,13 @@ namespace Fractional_Cascading {
             // If nodeToDelete only has left children, replace with its left subtree
             if (nodeToDelete.Left() == null || nodeToDelete.Left().IsEmpty()) {
                 x = nodeToDelete.Right();
-                if (x == null) x = EmptyNode;
+                if (x == null) x = Leaf;
                 Transplant(nodeToDelete, x);
 
             // If nodeToDelete only has right children, replace with its right subtree
             } else if (nodeToDelete.Right() == null || nodeToDelete.Right().IsEmpty()) {
                 x = nodeToDelete.Left();
-                if (x == null) x = EmptyNode;
+                if (x == null) x = Leaf;
                 Transplant(nodeToDelete, x);
             
             } else {    // nodeToDelete either has two children or is a leaf
@@ -207,7 +207,7 @@ namespace Fractional_Cascading {
 
                 // x = subtree root with values greater than y
                 x = y.Right();
-                if (x == null) x = EmptyNode;
+                if (x == null) x = Leaf;
                 
                 // if y is a child of nodeToDelete, x is already stored in the right place
                 if (y.Parent() == nodeToDelete) {
@@ -334,10 +334,11 @@ namespace Fractional_Cascading {
                 return;
             } 
 
-            newNode = new RBTreeNode(data);
+            newNode = new RBTreeNode(data); // Instantiate as Red node
             x = Root;
 
-            //  Traverse with x until y is a leaf node
+            //  Traverse until y is a leaf in a location where x doesn’t violate
+            //  the tree’s ordering
             while (x != null) {
                 y = x;
                 if (newNode < x) x = x.Left();
