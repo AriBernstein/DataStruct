@@ -1,5 +1,3 @@
-using System;
-
 namespace Fractional_Cascading {
     class RBTree {
         /**
@@ -21,7 +19,7 @@ namespace Fractional_Cascading {
         note that this slight imbalance comes with the advantage of fewer rotations,
         which make for faster insertion and deletion.   */
 
-        private RBTreeNode Root = null;
+        private RBTreeNode Root;
         private readonly RBTreeNode Leaf = new RBTreeNode(); // Empty node colored BLACK
         private RBTreeHelper h = new RBTreeHelper();
 

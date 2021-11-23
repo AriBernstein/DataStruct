@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic; 
-
-namespace Fractional_Cascading {
+﻿namespace Fractional_Cascading {
     public class FCNode : Node {        
         private CoordNode BaseCoordNode; // attr codes [0, 3]
         private int Index; // attr code 4

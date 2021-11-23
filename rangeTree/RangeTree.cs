@@ -1,7 +1,3 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
-
 namespace Fractional_Cascading {
     class RangeTree {
 
@@ -247,12 +243,12 @@ namespace Fractional_Cascading {
         }
 
         public RangeTree(CoordNode[] coordNodes, int dimensionality) {
-            Dimensionality = dimensionality;
             if (coordNodes.Length == 0)
                 throw new Exception("coordNodes is an empty list!");
-            if (Dimensionality < 1 || Dimensionality > 3)
+            if (dimensionality < 1 || dimensionality > 3)
                 throw new Exception("coordNodes has invalid dimensionality.");
 
+            Dimensionality = dimensionality;
             Root = BuildRangeTree(coordNodes, 1);
         }
     }

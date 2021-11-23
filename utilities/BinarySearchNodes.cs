@@ -1,5 +1,3 @@
-using System;
-
 namespace Fractional_Cascading {
     // C# program for using Binary Search to find location of a node in a list by a
     // given attribute

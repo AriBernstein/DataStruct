@@ -32,10 +32,7 @@ namespace Fractional_Cascading {
             ParentNode = parent;
         }
 
-        public RangeTreeNode Parent() {
-            return ParentNode;
-        }
-        
+
         public void SetLeft(RangeTreeNode leftChildNode)  {
             LeftChild = leftChildNode;
         }

@@ -1,5 +1,4 @@
-﻿using System;
-namespace Fractional_Cascading {
+﻿namespace Fractional_Cascading {
     public class CoordNode : Node {
         private DataNode Data; // attr code 0
 

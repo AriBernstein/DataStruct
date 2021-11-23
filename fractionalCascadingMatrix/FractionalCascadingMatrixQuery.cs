@@ -1,8 +1,3 @@
-using System;
-using System.Linq;
-using System.Collections.Generic; 
-
-
 namespace Fractional_Cascading {
     /**
     Search for an element x located in inputCoordMatrix in k lists using 2

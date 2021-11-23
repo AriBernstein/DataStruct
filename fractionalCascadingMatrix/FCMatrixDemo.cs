@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace Fractional_Cascading {
     class FCMatrixDemo {
         Utils u = new Utils();

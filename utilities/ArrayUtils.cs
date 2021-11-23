@@ -1,5 +1,3 @@
-using System;
-
 namespace Fractional_Cascading {
     public static class ArrayUtils {
         public static T[] Subset<T>(this T[] array, int startIndex, int endIndex) {

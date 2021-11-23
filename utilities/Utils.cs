@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace Fractional_Cascading {
     public class Utils {
         public String Separator(int separatorLength=10, int newLinesAbove=1,
@@ -17,9 +14,7 @@ namespace Fractional_Cascading {
                            place = 2, return 550    */
 
             int numDigits = (int)Math.Floor(Math.Log((double)num, 10)) + 1;
-            String sss =  "1" + new String('0', (numDigits));
-            int ssss = 2;
-            int roundingDenominator = Int32.Parse(sss);
+            int roundingDenominator = Int32.Parse("1" + new String('0', (numDigits)));
             double tempNum = (double)num / roundingDenominator;
             return (int)(Math.Round(tempNum, place) * roundingDenominator);
         }
@@ -88,19 +83,5 @@ namespace Fractional_Cascading {
             if (x < y) return x;
             else return y;
         }
-
-        // public SingleCoordNode[] ExtractSingleCoordNodes(CoordNode[] coordNodes,
-        //                                                  int dimension) {
-        //     int n = coordNodes.Length;
-        //     SingleCoordNode[] singleCoordNodes = new SingleCoordNode[n];
-
-        //     for (int i = 0; i < n; i++)
-        //         singleCoordNodes[i] =
-        //             new SingleCoordNode(coordNodes[i].GetDataNode(),
-        //                                 coordNodes[i].GetAttr(dimension));
-            
-        //     new MergeSortNodes().Sort(singleCoordNodes, dimension);
-        //     return singleCoordNodes;
-        // }
     }
 }

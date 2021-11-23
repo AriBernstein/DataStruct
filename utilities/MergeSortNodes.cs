@@ -1,6 +1,3 @@
-// C# program for Merge Sorting lists of CoordinateNode objects by a given dimension
-using System;
-
 namespace Fractional_Cascading {
     public class MergeSortNodes {
         

@@ -1,5 +1,4 @@
-﻿using System;
-namespace Fractional_Cascading {
+﻿namespace Fractional_Cascading {
     public class DataNode : Node {
         private int Data; // attr code 0
 

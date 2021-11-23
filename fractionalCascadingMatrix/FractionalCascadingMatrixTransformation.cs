@@ -1,5 +1,3 @@
-using System;
-
 namespace Fractional_Cascading {
     /**
     Fractional Cascading implementation of search for all locations of
