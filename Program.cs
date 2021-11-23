@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Fractional_Cascading {
+﻿namespace Fractional_Cascading {
     class TestingClass {
         static void Main(string[] args) {
             
@@ -10,8 +8,8 @@ namespace Fractional_Cascading {
             int k1 = 1000;
             int x1 = (n1 * k1) / 3;
             // --------------------
-            FCMatrixDemo f = new FCMatrixDemo();
-            f.Demo(x1, n1, k1);
+            FCMatrixDemo fcmd = new FCMatrixDemo();
+            fcmd.Demo(x1, n1, k1);
 
 
             // Demo for RangeTree
@@ -24,6 +22,7 @@ namespace Fractional_Cascading {
             int[] rangeMaxes = new int[] {n2 * 2, n2 * 2, n2 * 2};
             // --------------------
             RangeTreeDemo rtd = new RangeTreeDemo(n2, k2, locMin, locMax, rangeMins, rangeMaxes);
+            rtd.demo();
 
         }
     }

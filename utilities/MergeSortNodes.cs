@@ -54,8 +54,7 @@ namespace Fractional_Cascading {
             if unsortedArr is empty.    */
 
             // Check if we should bother doing any work
-            if (unsortedArr.Length == 0) throw new Exception("unsortedArr is empty");
-            if (unsortedArr.Length == 1) return;
+            if (unsortedArr.Length <= 1) return;
             
             // Oh well...
             int lIndex = 0;
