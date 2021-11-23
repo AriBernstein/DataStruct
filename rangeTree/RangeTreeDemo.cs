@@ -23,7 +23,7 @@ namespace Fractional_Cascading {
                 throw new Exception(
                     $"Sizes of arrays rangeMins ({rangeMins.Length}) and rangeMaxes " +
                     $"({rangeMaxes.Length}) must be equal.");
-            } else if (rangeMins.Length < dim || rangeMaxes.Length < dim) {
+            } else if (rangeMins.Length < dim) {
                 throw new Exception(
                     $"Sizes of arrays rangeMins and rangeMaxes ({rangeMins.Length}) " +
                     $"must be less than or equal to dimensionality ({dim}).");
@@ -66,18 +66,18 @@ namespace Fractional_Cascading {
             // newNodes.Add(new CoordNode(74, 66, 39));
             // CoordNode[] nodes = newNodes.ToArray();
 
-            List<CoordNode> newNodes = new List<CoordNode>();
-            newNodes.Add(new CoordNode(56, 10, 79));
-            newNodes.Add(new CoordNode(41, 30, 39));
-            newNodes.Add(new CoordNode(70, 50, 70)); //
-            newNodes.Add(new CoordNode(28, 51, 62)); //
-            newNodes.Add(new CoordNode(76, 45, 83));
-            newNodes.Add(new CoordNode(87, 52, 63)); //
-            newNodes.Add(new CoordNode(49, 55, 18));
-            newNodes.Add(new CoordNode(10, 61, 45));
-            newNodes.Add(new CoordNode(50, 70, 67)); // 
-            newNodes.Add(new CoordNode(74, 83, 27));
-            CoordNode[] nodes = newNodes.ToArray();
+            // List<CoordNode> newNodes = new List<CoordNode>();
+            // newNodes.Add(new CoordNode(56, 10, 79));
+            // newNodes.Add(new CoordNode(41, 30, 39));
+            // newNodes.Add(new CoordNode(70, 50, 70)); //
+            // newNodes.Add(new CoordNode(28, 51, 62)); //
+            // newNodes.Add(new CoordNode(76, 45, 83));
+            // newNodes.Add(new CoordNode(87, 52, 63)); //
+            // newNodes.Add(new CoordNode(49, 55, 18));
+            // newNodes.Add(new CoordNode(10, 61, 45));
+            // newNodes.Add(new CoordNode(50, 70, 67)); // 
+            // newNodes.Add(new CoordNode(74, 83, 27));
+            // CoordNode[] nodes = newNodes.ToArray();
 
             // List<CoordNode> newNodes = new List<CoordNode>();
             // newNodes.Add(new CoordNode(1, 56, 61)); //
@@ -92,11 +92,11 @@ namespace Fractional_Cascading {
             // newNodes.Add(new CoordNode(10, 74, 71));
             // CoordNode[] nodes = newNodes.ToArray();
 
-            // CoordNode[] nodes = 
-            //     NodeGenerator.GetCoordNodeList(n, sort:false, dimensions:dim,
-            //                                    dataRangeMin:locMin, dataRangeMax:locMax,
-            //                                    locRangeMin:locMin, locRangeMax:locMax,
-            //                                    randomSeed:-1);
+            CoordNode[] nodes = 
+                NodeGenerator.GetCoordNodeList(n, sort:false, dimensions:dim,
+                                               dataRangeMin:locMin, dataRangeMax:locMax,
+                                               locRangeMin:locMin, locRangeMax:locMax,
+                                               randomSeed:-1);
             
             ArrayUtils.Print(nodes, sep: "\n");
 

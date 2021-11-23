@@ -191,7 +191,8 @@ namespace Fractional_Cascading {
             // -> start with matrix of coordNodes sorted by their location (xLoc)
             if (print) Console.WriteLine(
                 $"Generating matrix of {k} sorted lists of {n} randomly generated " +
-                $"coordNodes (totalling {new Utils().PrettyNumApprox(k*n)} nodes).");
+                $"coordNodes (totalling {k * n} nodes).");
+                // $"coordNodes (totalling {new Utils().PrettyNumApprox(k*n)} nodes).");
             SetCoordMatrix(insertData);
 
             // Build and assign nodeMatrixPrime from just-assigned nodeMatrix

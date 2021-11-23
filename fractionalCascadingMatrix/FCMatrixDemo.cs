@@ -74,7 +74,7 @@ namespace Fractional_Cascading {
 
                         Record rec = new Record(n, k, x, trivialTime, FCTime, ratio);
                         Console.WriteLine(
-                            $"\n\nn: {n}\tk: {k}\tx: {x}\nTrivial: {trivialTime} ms\t " + 
+                            $"\nn: {n}, k: {k}, x: {x}\nTrivial: {trivialTime} ms\t " + 
                             $"FC: {FCTime} ms\tFC:Trivial Ratio: {ratio}");
                         fractionalCascadingStats.Add(rec);
                 }

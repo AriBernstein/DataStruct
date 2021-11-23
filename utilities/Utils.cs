@@ -17,7 +17,9 @@ namespace Fractional_Cascading {
                            place = 2, return 550    */
 
             int numDigits = (int)Math.Floor(Math.Log((double)num, 10)) + 1;
-            int roundingDenominator = Int32.Parse("1" + new String('0', (numDigits)));
+            String sss =  "1" + new String('0', (numDigits));
+            int ssss = 2;
+            int roundingDenominator = Int32.Parse(sss);
             double tempNum = (double)num / roundingDenominator;
             return (int)(Math.Round(tempNum, place) * roundingDenominator);
         }
@@ -87,18 +89,18 @@ namespace Fractional_Cascading {
             else return y;
         }
 
-        public SingleCoordNode[] ExtractSingleCoordNodes(CoordNode[] coordNodes,
-                                                         int dimension) {
-            int n = coordNodes.Length;
-            SingleCoordNode[] singleCoordNodes = new SingleCoordNode[n];
+        // public SingleCoordNode[] ExtractSingleCoordNodes(CoordNode[] coordNodes,
+        //                                                  int dimension) {
+        //     int n = coordNodes.Length;
+        //     SingleCoordNode[] singleCoordNodes = new SingleCoordNode[n];
 
-            for (int i = 0; i < n; i++)
-                singleCoordNodes[i] =
-                    new SingleCoordNode(coordNodes[i].GetDataNode(),
-                                        coordNodes[i].GetAttr(dimension));
+        //     for (int i = 0; i < n; i++)
+        //         singleCoordNodes[i] =
+        //             new SingleCoordNode(coordNodes[i].GetDataNode(),
+        //                                 coordNodes[i].GetAttr(dimension));
             
-            new MergeSortNodes().Sort(singleCoordNodes, dimension);
-            return singleCoordNodes;
-        }
+        //     new MergeSortNodes().Sort(singleCoordNodes, dimension);
+        //     return singleCoordNodes;
+        // }
     }
 }
