@@ -62,17 +62,8 @@ namespace Fractional_Cascading {
                     
                 Return: Canonical subsets of the subtree root which are in range    */
                 
-                int rangeMin, rangeMax;
-                if (currDim == 1) {
-                    rangeMin = rangeMins[0];
-                    rangeMax = rangeMaxes[0];
-                } else if (currDim == 2) {
-                    rangeMin = rangeMins[1];
-                    rangeMax = rangeMaxes[1];
-                } else {
-                    rangeMin = rangeMins[2];
-                    rangeMax = rangeMaxes[1];
-                }
+                int rangeMin = rangeMins[currDim - 1];
+                int rangeMax = rangeMaxes[currDim - 1];
 
                 bool InRange(int data) {
                     return (rangeMin <= data && data <= rangeMax);

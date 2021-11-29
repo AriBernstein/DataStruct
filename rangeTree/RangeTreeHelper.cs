@@ -7,7 +7,7 @@ namespace Fractional_Cascading {
                                        bool safeChars=true) {
             /**
             Parameters:
-                node:   RBTree node treated as the root in the visualization
+                node:   RangeTreeNode treated as the root in the visualization
                 verticalSpacing: number of lines between each displayed node
                 indentPerLevel: width of the line separating each level of the tree
                 print: if true, write output to console
